@@ -25,7 +25,8 @@
       "Added REST API endpoints for message CRUD operations",
       "Uploaded profile photos and chat files to Supabase Storage",
       "Updated photo URLs in database to point to cloud Storage",
-      "Fixed Supabase CDN to jsdelivr for reliable loading"
+      "Fixed Supabase CDN to jsdelivr for reliable loading",
+      "Updated homepage hero text: 'Real conversations start here.' and subtitle: 'Meet people who match your vibe.'"
     ]
   },
   {
