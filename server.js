@@ -459,6 +459,42 @@ app.delete('/api/logs', adminAuth, (req, res) => {
   }
 });
 
+// ── Message CRUD (REST API for Supabase Realtime) ────────────────────────────
+app.post('/api/messages/send', authMiddleware, async (req, res) => {
+  try {
+    const { receiverId, content, type, fileName } = req.body;
+    if (!receiverId || (!content?.trim() && type !== 'image' && type !== 'file'))
+      return res.status(400).json({ error: 'Invalid message' });
+    const { data: message, error } = await supabase.from('messages').insert({
+      sender_id: req.user.id, receiver_id: parseInt(receiverId),
+      content: content?.trim() || '', type: type || 'text', fileName: fileName || null
+    }).select('*').single();
+    if (error) throw error;
+    const { data: user } = await supabase.from('users').select('username').eq('id', req.user.id).single();
+    res.json({ ...message, sender_name: user?.username });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.put('/api/messages/:id', authMiddleware, async (req, res) => {
+  try {
+    const { content } = req.body;
+    if (!content?.trim()) return res.status(400).json({ error: 'Content required' });
+    const { data: msg } = await supabase.from('messages').select('receiver_id').eq('id', req.params.id).eq('sender_id', req.user.id).single();
+    if (!msg) return res.status(404).json({ error: 'Message not found' });
+    await supabase.from('messages').update({ content: content.trim(), edited: true }).eq('id', req.params.id);
+    res.json({ success: true, messageId: parseInt(req.params.id), content: content.trim() });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.delete('/api/messages/:id', authMiddleware, async (req, res) => {
+  try {
+    const { data: msg } = await supabase.from('messages').select('receiver_id').eq('id', req.params.id).eq('sender_id', req.user.id).single();
+    if (!msg) return res.status(404).json({ error: 'Message not found' });
+    await supabase.from('messages').delete().eq('id', req.params.id);
+    res.json({ success: true, messageId: parseInt(req.params.id) });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 // ── Error handling middleware ─────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   logger.error(`Route error: ${req.method} ${req.path}`, err.stack || err.message);

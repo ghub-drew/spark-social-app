@@ -457,7 +457,7 @@
     </div>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="global.js"></script>
   <script>
     if (!localStorage.getItem('token')) window.location.href = 'index.html';
@@ -465,42 +465,72 @@
     const token = localStorage.getItem('token');
     const myId = parseInt(localStorage.getItem('userId'));
     let currentPartnerId = null;
-    const unreadCounts = {}; // { senderId: count }
+    const unreadCounts = {};
+    const sentMessageIds = new Set();
 
-    const socket = io({ auth: { token } });
+    const supabaseUrl = 'https://hpezaqvtufrvvczyixwc.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDk5MTksImV4cCI6MjA5MzcyNTkxOX0.WzUQH4ZGn33Omv02m0ZtQgdYCXihGnHsOuhJmwGPXXI';
+    const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-    socket.on('new_message', (msg) => {
-      const isActiveChat =
-        (msg.sender_id === currentPartnerId && msg.receiver_id === myId) ||
-        (msg.sender_id === myId && msg.receiver_id === currentPartnerId);
-
-      if (isActiveChat) {
-        appendMessage(msg);
-      } else if (msg.sender_id !== myId) {
-        // Incoming message from someone not currently open — count it
-        unreadCounts[msg.sender_id] = (unreadCounts[msg.sender_id] || 0) + 1;
-        updateNavBadge();
-        // Desktop notification + tab title flash
-        if (typeof window.showMessageNotification === 'function') {
-          window.showMessageNotification(msg);
+    // Subscribe to realtime changes on messages table
+    const channel = _supabase.channel('messages')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+        const msg = payload.new;
+        // Only process if we're sender or receiver
+        if (msg.sender_id !== myId && msg.receiver_id !== myId) return;
+        // Skip if we sent it (already handled by sendMessage response)
+        if (sentMessageIds.has(msg.id)) {
+          sentMessageIds.delete(msg.id);
+          return;
         }
-      }
-      loadConversations();
-    });
+        const isActiveChat =
+          (msg.sender_id === currentPartnerId && msg.receiver_id === myId) ||
+          (msg.sender_id === myId && msg.receiver_id === currentPartnerId);
+        if (isActiveChat) {
+          // Fetch with sender name
+          fetch(`/api/messages/${currentPartnerId}`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(r => r.json())
+            .then(msgs => {
+              const latest = msgs[msgs.length - 1];
+              if (latest && latest.id === msg.id) appendMessage(latest);
+            });
+        } else if (msg.sender_id !== myId) {
+          unreadCounts[msg.sender_id] = (unreadCounts[msg.sender_id] || 0) + 1;
+          updateNavBadge();
+          // Fetch sender name for notification
+          fetch('/api/members', { headers: { Authorization: `Bearer ${token}` } })
+            .then(r => r.json())
+            .then(members => {
+              const sender = members.find(m => m.id === msg.sender_id);
+              if (typeof window.showMessageNotification === 'function') {
+                window.showMessageNotification({ ...msg, sender_name: sender?.name || sender?.username || 'Someone' });
+              }
+            });
+        }
+        loadConversations();
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'messages' }, payload => {
+        const { id, content, edited } = payload.new;
+        const div = document.querySelector(`.message[data-msg-id="${id}"]`);
+        if (!div) return;
+        div.dataset.msgContent = content;
+        div.querySelector('.bubble').innerHTML = escapeHtml(content);
+        const time = div.querySelector('.msg-time');
+        if (edited && time && !time.querySelector('.edited-tag')) {
+          time.insertAdjacentHTML('beforeend', '<span class="edited-tag">(edited)</span>');
+        }
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, payload => {
+        const { id } = payload.old;
+        const div = document.querySelector(`.message[data-msg-id="${id}"]`);
+        if (div) div.remove();
+      })
+      .subscribe();
 
     // Stop title flash when user focuses the chat window
     window.addEventListener('focus', () => {
       if (typeof window.stopTitleFlash === 'function') window.stopTitleFlash();
     });
-
-    socket.on('connect_error', () => {
-      console.warn('Socket connection failed');
-    });
-
-    // Live online/offline updates
-    socket.on('user_status', ({ userId, online, lastSeen }) => {
-      // Update sidebar dot
-      const convoItem = document.querySelector(`.convo-item[onclick*="openChat(${userId},"]`);
       if (convoItem) {
         const dot = convoItem.querySelector('.status-dot');
         if (dot) { dot.className = `status-dot ${online ? 'online' : 'offline'}`; }
@@ -704,13 +734,19 @@
       });
     }
 
-    function confirmEdit(msgId) {
+    async function confirmEdit(msgId) {
       const div = document.querySelector(`.message[data-msg-id="${msgId}"]`);
       if (!div) return;
       const input = div.querySelector('.edit-input');
       const newContent = input?.value.trim();
       if (!newContent) return;
-      socket.emit('edit_message', { messageId: msgId, content: newContent });
+      try {
+        await fetch(`/api/messages/${msgId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ content: newContent })
+        });
+      } catch (err) { console.error('Edit failed:', err); }
     }
 
     function cancelEdit(msgId, original) {
@@ -720,27 +756,15 @@
       bubble.innerHTML = escapeHtml(original);
     }
 
-    function confirmDelete(msgId) {
+    async function confirmDelete(msgId) {
       if (!confirm('Delete this message?')) return;
-      socket.emit('delete_message', { messageId: msgId });
+      try {
+        await fetch(`/api/messages/${msgId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (err) { console.error('Delete failed:', err); }
     }
-
-    // Real-time edit/delete from socket
-    socket.on('message_edited', ({ messageId, content }) => {
-      const div = document.querySelector(`.message[data-msg-id="${messageId}"]`);
-      if (!div) return;
-      div.dataset.msgContent = content;
-      div.querySelector('.bubble').innerHTML = escapeHtml(content);
-      const time = div.querySelector('.msg-time');
-      if (time && !time.querySelector('.edited-tag')) {
-        time.insertAdjacentHTML('beforeend', '<span class="edited-tag">(edited)</span>');
-      }
-    });
-
-    socket.on('message_deleted', ({ messageId }) => {
-      const div = document.querySelector(`.message[data-msg-id="${messageId}"]`);
-      if (div) div.remove();
-    });
 
     // ── File attach ──────────────────────────────────────────────
     let pendingFile = null; // { url, type, fileName }
@@ -797,26 +821,42 @@
       document.getElementById('filePreviewContent').innerHTML = '';
     }
 
-    function sendMessage(e) {
+    async function sendMessage(e) {
       e.preventDefault();
       if (!currentPartnerId) return;
 
-      if (pendingFile) {
-        socket.emit('send_message', {
-          receiverId: currentPartnerId,
-          content: pendingFile.url,
-          type: pendingFile.type,
-          fileName: pendingFile.fileName
-        });
-        cancelFile();
-        return;
-      }
-
       const input = document.getElementById('messageInput');
       const content = input.value.trim();
-      if (!content) return;
-      socket.emit('send_message', { receiverId: currentPartnerId, content, type: 'text' });
-      input.value = '';
+
+      let payload = { receiverId: currentPartnerId };
+
+      if (pendingFile) {
+        payload.content = pendingFile.url;
+        payload.type = pendingFile.type;
+        payload.fileName = pendingFile.fileName;
+        cancelFile();
+      } else {
+        if (!content) return;
+        payload.content = content;
+        payload.type = 'text';
+      }
+
+      try {
+        const res = await fetch('/api/messages/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok) {
+          sentMessageIds.add(data.id);
+          // Optimistically append
+          appendMessage(data);
+          input.value = '';
+        }
+      } catch (err) {
+        console.error('Send failed:', err);
+      }
     }
 
     function formatTime(iso) {
