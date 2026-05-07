@@ -130,11 +130,10 @@
     <div class="wf-step">
       <div class="wf-step-num">2</div>
       <div class="wf-step-content">
-        <h3>Test locally (optional)</h3>
-        <p>If you want to preview before deploying, start the local server:</p>
-        <div class="wf-code">node server.js</div>
-        <p>Then open <strong>http://localhost:3000</strong>. This connects to your <strong>cloud Supabase</strong> database, so data is shared with the live site.</p>
-        <div class="wf-note">Press <strong>Ctrl + C</strong> in the terminal to stop the server when done testing.</div>
+        <h3>Review on localhost first</h3>
+        <p>Reasonix will start the local server at <strong>http://localhost:3000</strong> so you can preview changes before they go live. This connects to your <strong>cloud Supabase</strong> database, so data is shared with the live site.</p>
+        <p><strong>Important:</strong> Nothing is pushed to GitHub or deployed until you give the go-ahead.</p>
+        <div class="wf-note">Press <strong>Ctrl + C</strong> to stop the local server when done reviewing.</div>
       </div>
     </div>
 
@@ -143,8 +142,16 @@
     <div class="wf-step">
       <div class="wf-step-num">1</div>
       <div class="wf-step-content">
+        <h3>Only push when you say so</h3>
+        <p>Reasonix does NOT commit or push anything without your explicit command. When you're ready, tell Reasonix <strong>"push it"</strong> or <strong>"deploy"</strong>.</p>
+      </div>
+    </div>
+
+    <div class="wf-step">
+      <div class="wf-step-num">2</div>
+      <div class="wf-step-content">
         <h3>Commit and push to GitHub</h3>
-        <p>Tell Reasonix to push the changes. It will run:</p>
+        <p>Reasonix will run:</p>
         <div class="wf-code">git add -A
 git commit -m "description of changes"
 git push origin main</div>
@@ -152,7 +159,7 @@ git push origin main</div>
     </div>
 
     <div class="wf-step">
-      <div class="wf-step-num">2</div>
+      <div class="wf-step-num">3</div>
       <div class="wf-step-content">
         <h3>Vercel auto-deploys</h3>
         <p>Within 1-2 minutes, Vercel detects the push, builds the project, and deploys it. Your live site updates automatically.</p>
@@ -160,7 +167,7 @@ git push origin main</div>
     </div>
 
     <div class="wf-step">
-      <div class="wf-step-num">3</div>
+      <div class="wf-step-num">4</div>
       <div class="wf-step-content">
         <h3>Verify the live site</h3>
         <p>Check your changes at <strong>https://spark-social-app-ys49.vercel.app</strong></p>

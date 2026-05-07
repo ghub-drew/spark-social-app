@@ -141,12 +141,12 @@
     }
 
     function parseLine(raw) {
-      // Format: [2026-05-06T...] [LEVEL] Message — details
-      const match = raw.match(/^\[([^\]]+)\]\s+\[(\w+)\]\s+(.+?)(?:\s+—\s+(.+))?$/);
+      // Format: [2026-05-06T...] [LEVEL] Message  -  details
+      const match = raw.match(/^\[([^\]]+)\]\s+\[(\w+)\]\s+(.+?)(?:\s+ - \s+(.+))?$/);
       if (match) {
         const [, ts, level, msg, detail] = match;
         const cls = `log-line lvl-${level}`;
-        const detailHtml = detail ? ` <span class="detail">— ${esc(detail)}</span>` : '';
+        const detailHtml = detail ? ` <span class="detail"> -  ${esc(detail)}</span>` : '';
         return `<div class="log-line"><span class="ts">${esc(ts)}</span> <span class="lvl ${level}">${esc(level)}</span> <span class="msg">${esc(msg)}</span>${detailHtml}</div>`;
       }
       return `<div class="log-line">${esc(raw)}</div>`;
