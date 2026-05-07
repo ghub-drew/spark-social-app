@@ -9,8 +9,9 @@ const supabase = require('./database');
 const logger = require('./logger');
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const isVercel = !!process.env.VERCEL;
+const server = isVercel ? null : http.createServer(app);
+const io = isVercel ? null : new Server(server);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'social-app-secret-key-change-in-prod';
 const PORT = 3000;
@@ -455,9 +456,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// ── Socket.io ────────────────────────────────────────────────────────────────
+// ── Socket.io (local only - not on Vercel) ──────────────────────────────────
 const onlineUsers = new Map();
 
+if (isVercel) {
+  // On Vercel, online presence is simplified - no WebSocket
+  console.log('Running on Vercel - Socket.io disabled');
+} else {
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
   try {
@@ -549,6 +554,7 @@ io.on('connection', (socket) => {
     io.emit('user_status', { userId, online: false, lastSeen });
   });
 });
+} // end of Vercel conditional
 
 // ── Global error handlers ─────────────────────────────────────────────────────
 process.on('uncaughtException', (err) => {
@@ -563,10 +569,12 @@ process.on('unhandledRejection', (reason) => {
 });
 
 // Local development
-server.listen(PORT, () => {
-  console.log(`Social app running at http://localhost:${PORT}`);
-  logger.info('Server started', `Port: ${PORT}`);
-});
+if (!isVercel) {
+  server.listen(PORT, () => {
+    console.log(`Social app running at http://localhost:${PORT}`);
+    logger.info('Server started', `Port: ${PORT}`);
+  });
+}
 
 // Vercel serverless export
 module.exports = app;
