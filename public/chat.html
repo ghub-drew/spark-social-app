@@ -538,13 +538,6 @@
     window.addEventListener('focus', () => {
       if (typeof window.stopTitleFlash === 'function') window.stopTitleFlash();
     });
-      if (convoItem) {
-        const dot = convoItem.querySelector('.status-dot');
-        if (dot) { dot.className = `status-dot ${online ? 'online' : 'offline'}`; }
-      }
-      // Update chat header if this is the active partner
-      if (userId === currentPartnerId) updateChatStatus(online, lastSeen);
-    });
 
     function updateChatStatus(online, lastSeen) {
       const dot = document.getElementById('chatPartnerDot');
