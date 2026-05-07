@@ -28,7 +28,7 @@ const PORT = 3000;
 if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://hpezaqvtufrvvczyixwc.supabase.co';
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE0OTkxOSwiZXhwIjoyMDkzNzI1OTE5fQ.MVu922CHYeNp0DWzZ73WfL_5lDMpd8xV4Qe-kuUaukA';
+const ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDk5MTksImV4cCI6MjA5MzcyNTkxOX0.WzUQH4ZGn33Omv02m0ZtQgdYCXihGnHsOuhJmwGPXXI';
 const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/uploads`;
 
 async function uploadToSupabase(file, prefix = '') {
@@ -37,7 +37,7 @@ async function uploadToSupabase(file, prefix = '') {
   const url = `${SUPABASE_URL}/storage/v1/object/uploads/${filename}`;
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${SERVICE_KEY}`, 'Content-Type': file.mimetype },
+    headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}`, 'Content-Type': file.mimetype },
     body: file.buffer
   });
   if (!res.ok) {
