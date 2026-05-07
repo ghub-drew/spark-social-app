@@ -209,7 +209,7 @@
       </div>
       <p style="margin-top:20px;color:var(--muted);font-size:13px;">
         This document covers the complete Spark social app  -  built with Node.js,<br>
-        Socket.io, and a plain-HTML frontend. Re-run <code>node generate_docs.js</code> to update.
+        Supabase Realtime, and a plain-HTML frontend. Re-run <code>node generate_docs.js</code> to update.
       </p>
     </div>
 
@@ -241,7 +241,7 @@
           </thead>
           <tbody>
             <tr><td><strong>Backend</strong></td><td>Node.js + Express 4</td><td>REST API + static file serving</td></tr>
-            <tr><td><strong>Real-time</strong></td><td>Socket.io</td><td>Instant messaging, online presence</td></tr>
+            <tr><td><strong>Real-time</strong></td><td>Supabase Realtime</td><td>Instant messaging via DB subscriptions</td></tr>
             <tr><td><strong>Database</strong></td><td>Supabase (PostgreSQL)</td><td>Cloud Postgres + Realtime + Storage</td></tr>
             <tr><td><strong>Auth</strong></td><td>JWT + bcryptjs</td><td>7-day tokens stored in localStorage</td></tr>
             <tr><td><strong>File Uploads</strong></td><td>Multer</td><td>Profile photos (5 MB), chat files (10 MB)</td></tr>
@@ -316,7 +316,7 @@ npm install</div>
       <h3>3.4 Real-Time Chat</h3>
       <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/chat.html &middot; server.js</p>
       <ul>
-        <li>Instant messaging via Socket.io  -  no page refresh needed</li>
+        <li>Instant messaging via Supabase Realtime  -  no page refresh needed</li>
         <li>Conversation sidebar with last-message preview and per-conversation unread badge</li>
         <li>Emoji picker with 7 categories: Smileys, Hearts, Hands, Nature, Food, Activity, Symbols</li>
         <li>File &amp; image sharing up to 10 MB; images shown inline, other files as download links</li>
@@ -413,10 +413,11 @@ npm install</div>
       </div>
     </div>
 
-    <!-- ═══════════════ 5. SOCKET.IO EVENTS ═══════════════ -->
+    <!-- ═══════════════ 5. SOCKET EVENTS ═══════════════ -->
     <div class="doc-section" id="socket-events">
-      <h2>5. Socket.io Events</h2>
-      <p>All socket connections pass <code>auth: { token }</code> in the handshake on port 3000.</p>
+      <h2>5. Socket Events</h2>
+      <p>Real-time messaging uses <strong>Supabase Realtime</strong> (PostgreSQL logical replication). No persistent WebSocket connections needed.</p>
+      <p>The following events are handled via REST API endpoints and Supabase Realtime subscriptions:</p>
       <div class="doc-table-wrap">
         <table class="doc-table">
           <thead>
@@ -445,7 +446,7 @@ npm install</div>
           </thead>
           <tbody>
             <tr><td class="route">Code App/</td><td>-- project root</td></tr>
-            <tr><td class="route">&nbsp;&nbsp;server.js</td><td>Express API + Socket.io + Logger (all backend logic)</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;server.js</td><td>Express API + Logger (all backend logic)</td></tr>
             <tr><td class="route">&nbsp;&nbsp;logger.js</td><td>Error logging module  -  writes timestamped entries to error.log</td></tr>
             <tr><td class="route">&nbsp;&nbsp;error.log</td><td>Auto-generated log file (created at runtime)</td></tr>
             <tr><td class="route">&nbsp;&nbsp;database.js</td><td>Supabase client setup  -  exports @supabase/supabase-js instance</td></tr>
