@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Developer Workflow</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .wf-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .wf-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .wf-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
+    .wf-page h2 {
+      font-size: 18px; font-weight: 800; color: var(--primary);
+      margin: 32px 0 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .wf-page h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 6px; }
+    .wf-page p { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 10px; }
+    .wf-page ul { margin: 6px 0 12px 20px; }
+    .wf-page li { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 4px; }
+    .wf-code {
+      background: #f1f5f9; border-left: 3px solid var(--primary);
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-family: monospace; font-size: 13px; line-height: 1.6;
+      margin: 8px 0 12px; white-space: pre; overflow-x: auto;
+    }
+    .wf-note {
+      background: #f0fdf4; border-left: 3px solid var(--primary);
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-size: 13px; line-height: 1.5; margin: 12px 0; color: #166534;
+    }
+    .wf-step {
+      display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start;
+    }
+    .wf-step-num {
+      background: var(--primary); color: white; width: 28px; height: 28px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+    }
+    .wf-step-content { flex: 1; }
+    .wf-step-content h3 { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
+    .wf-step-content p { margin: 0 0 6px; font-size: 14px; line-height: 1.6; }
+    .wf-step-content .wf-code { margin: 6px 0; }
+    .wf-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0 16px; }
+    .wf-table th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid #e5e7eb; }
+    .wf-table td { padding: 9px 12px; border-bottom: 1px solid #e5e7eb; }
+    .wf-footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 40px; }
+    .arrow { color: var(--primary); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="doc-topbar" style="background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;font-weight:800;color:var(--primary);">✦ Spark</span>
+      <span style="background:#f0fdf4;color:var(--primary);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #86efac;">Workflow</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button onclick="window.open('admin.html','_self')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">← Admin</button>
+      <button onclick="window.open('documentation.html','_blank')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">📖 Full Docs</button>
+    </div>
+  </div>
+
+  <div class="wf-page">
+    <h1>🚀 Developer Workflow Guide</h1>
+    <p class="subtitle">How to develop, test, and deploy Spark from start to finish.</p>
+
+    <h2>📋 Overview</h2>
+    <p>Spark is deployed on <strong>Vercel</strong> with a <strong>Supabase</strong> cloud backend. The code lives on <strong>GitHub</strong>. You develop locally, push to GitHub, and Vercel auto-deploys.</p>
+
+    <div style="background:#f8fafc;border-radius:12px;padding:20px;margin:16px 0;text-align:center;font-size:14px;line-height:2;border:1px solid #e5e7eb;">
+      💻 <strong>Local Code</strong> <span class="arrow">→</span> 
+      🐙 <strong>GitHub Push</strong> <span class="arrow">→</span> 
+      ▲ <strong>Vercel Auto-Deploy</strong> <span class="arrow">→</span> 
+      🌐 <strong>Live Site</strong>
+    </div>
+
+    <h2>📥 Starting a New Session</h2>
+
+    <div class="wf-step">
+      <div class="wf-step-num">1</div>
+      <div class="wf-step-content">
+        <h3>Open Command Prompt</h3>
+        <p>Press <kbd>Win + R</kbd>, type <code>cmd</code>, press Enter.</p>
+      </div>
+    </div>
+
+    <div class="wf-step">
+      <div class="wf-step-num">2</div>
+      <div class="wf-step-content">
+        <h3>Navigate to project folder</h3>
+        <div class="wf-code">cd C:\Users\andre\Documents\Deepseek\Code App</div>
+      </div>
+    </div>
+
+    <div class="wf-step">
+      <div class="wf-step-num">3</div>
+      <div class="wf-step-content">
+        <h3>Pull the latest code from GitHub</h3>
+        <p>This ensures your local code matches what's deployed on Vercel.</p>
+        <div class="wf-code">git pull origin main</div>
+        <div class="wf-note">If you get an error about uncommitted changes, run <code>git stash</code> first, then pull.</div>
+      </div>
+    </div>
+
+    <div class="wf-step">
+      <div class="wf-step-num">4</div>
+      <div class="wf-step-content">
+        <h3>Start Reasonix</h3>
+        <div class="wf-code">npx reasonix@latest code</div>
+        <p>Then <code>/preset max</code> for Pro model, <code>/stats</code> to check.</p>
+      </div>
+    </div>
+
+    <h2>💻 Making Changes</h2>
+
+    <div class="wf-step">
+      <div class="wf-step-num">1</div>
+      <div class="wf-step-content">
+        <h3>Tell Reasonix what to change</h3>
+        <p>Describe the feature or fix you want. Reasonix will read the relevant files, propose edits, and apply them.</p>
+      </div>
+    </div>
+
+    <div class="wf-step">
+      <div class="wf-step-num">2</div>
+      <div class="wf-step-content">
+        <h3>Test locally (optional)</h3>
+        <p>If you want to preview before deploying, start the local server:</p>
+        <div class="wf-code">node server.js</div>
+        <p>Then open <strong>http://localhost:3000</strong>. This connects to your <strong>cloud Supabase</strong> database, so data is shared with the live site.</p>
+        <div class="wf-note">Press <strong>Ctrl + C</strong> in the terminal to stop the server when done testing.</div>
+      </div>
+    </div>
+
+    <h2>🚀 Deploying Changes</h2>
+
+    <div class="wf-step">
+      <div class="wf-step-num">1</div>
+      <div class="wf-step-content">
+        <h3>Commit and push to GitHub</h3>
+        <p>Tell Reasonix to push the changes. It will run:</p>
+        <div class="wf-code">git add -A
+git commit -m "description of changes"
+git push origin main</div>
+      </div>
+    </div>
+
+    <div class="wf-step">
+      <div class="wf-step-num">2</div>
+      <div class="wf-step-content">
+        <h3>Vercel auto-deploys</h3>
+        <p>Within 1-2 minutes, Vercel detects the push, builds the project, and deploys it. Your live site updates automatically.</p>
+      </div>
+    </div>
+
+    <div class="wf-step">
+      <div class="wf-step-num">3</div>
+      <div class="wf-step-content">
+        <h3>Verify the live site</h3>
+        <p>Check your changes at <strong>https://spark-social-app-ys49.vercel.app</strong></p>
+      </div>
+    </div>
+
+    <h2>🗄️ Database Notes</h2>
+    <p>Your database is <strong>Supabase PostgreSQL</strong> in the cloud. All data (users, messages, photos) is shared between your local dev server and the live site.</p>
+    <table class="wf-table">
+      <thead><tr><th>Service</th><th>URL / Path</th></tr></thead>
+      <tbody>
+        <tr><td>Supabase Dashboard</td><td><a href="https://supabase.com/dashboard" target="_blank">https://supabase.com/dashboard</a></td></tr>
+        <tr><td>Project name</td><td>CWD</td></tr>
+        <tr><td>Project URL</td><td><code>https://hpezaqvtufrvvczyixwc.supabase.co</code></td></tr>
+        <tr><td>Storage (file uploads)</td><td>Supabase Storage - <code>uploads</code> bucket</td></tr>
+        <tr><td>Local Supabase (dev only)</td><td>http://127.0.0.1:54323</td></tr>
+      </tbody>
+    </table>
+    <div class="wf-note">⚠️ Editing data in Supabase dashboard (via SQL Editor or Table Editor) will affect your live app immediately.</div>
+
+    <h2>📁 Key Files</h2>
+    <table class="wf-table">
+      <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>server.js</code></td><td>Local Express server (for development testing)</td></tr>
+        <tr><td><code>api/index.js</code></td><td>Vercel serverless handler (what runs on the live site)</td></tr>
+        <tr><td><code>database.js</code></td><td>Supabase client config (reads env vars)</td></tr>
+        <tr><td><code>public/</code></td><td>All HTML, CSS, JS frontend files</td></tr>
+        <tr><td><code>vercel.json</code></td><td>Vercel deployment configuration</td></tr>
+        <tr><td><code>.env</code></td><td>Environment variables (gitignored — not pushed to GitHub)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>⚠️ Common Pitfalls</h2>
+    <ul>
+      <li><strong>Don't edit .env values</strong> without also updating Vercel's Environment Variables</li>
+      <li><strong>Always git pull first</strong> when starting a new session — your local code might be behind</li>
+      <li><strong>Supabase keys are sensitive</strong> — never commit them to GitHub</li>
+      <li><strong>Socket.io won't work on Vercel</strong> — chat uses Supabase Realtime instead</li>
+      <li><strong>Photo uploads</strong> now go to Supabase Storage, not local <code>uploads/</code> folder</li>
+    </ul>
+
+    <div class="wf-footer">
+      Spark - Social App | Workflow Guide v1.0
+    </div>
+  </div>
+</body>
+</html>

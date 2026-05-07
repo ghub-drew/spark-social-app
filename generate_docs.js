@@ -237,7 +237,7 @@ CHIPS.forEach(([num, lbl]) => {
 doc.fontSize(8.5).fillColor(DARK).font('Helvetica')
    .text(
      'This document covers the complete Spark social app  -  built with Node.js,\n' +
-     'Socket.io, and a plain-HTML frontend.  Re-run  node generate_docs.js  to update.',
+     'Supabase Realtime, and a plain-HTML frontend.  Re-run  node generate_docs.js  to update.',
      MARGIN + 40, CY2 + 68,
      { width: CONTENT_W - 80, align: 'center', lineGap: 2 }
    );
@@ -290,8 +290,8 @@ table(
   ],
   [
     ['Backend',      'Node.js + Express 4',     'REST API + static file serving'],
-    ['Real-time',    'Socket.io',               'Instant messaging, online presence'],
-    ['Database',     'Supabase (PostgreSQL)',    'Managed Postgres via local Docker instance'],
+    ['Real-time',    'Supabase Realtime',        'Instant messaging via DB subscriptions'],
+    ['Database',     'Supabase (PostgreSQL)',    'Cloud Postgres + Realtime + Storage'],
     ['Auth',         'JWT + bcryptjs',           '7-day tokens stored in localStorage'],
     ['File Uploads', 'Multer',                   'Profile photos (5 MB), chat files (10 MB)'],
     ['Frontend',     'HTML + CSS + Vanilla JS', 'No framework  -  zero build step'],
@@ -771,7 +771,7 @@ const PLAN = [
   'Phase 3 -- Migrated 5 users, 19 messages, 2 contacts from db.json   ✅',
   'Phase 4 -- Replaced all lowdb queries with Supabase   ✅',
   'Phase 5 -- File uploads moved to Supabase Storage   ✅',
-  'Phase 6 -- Deploy to Vercel (pending -- cloud Supabase configured and ready)',
+  'Phase 6 -- Deploy to Vercel   ✅  -- live at spark-social-app-ys49.vercel.app',
 ];
 PLAN.forEach((step, i) => {
   doc.text(`${i + 1}.  ${step}`, { indent: 12, lineGap: 2, paragraphGap: 3 });

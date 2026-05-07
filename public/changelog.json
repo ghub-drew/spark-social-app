@@ -17,7 +17,15 @@
       "Migrated data from local Supabase to cloud Supabase PostgreSQL",
       "Created cloud Storage bucket for file uploads",
       "Updated database.js and server.js with cloud Supabase credentials",
-      "App fully connected to cloud Supabase via localhost:3000"
+      "App fully connected to cloud Supabase via localhost:3000",
+      "Created cloud Supabase project (CWD) for production",
+      "Migrated data and storage to cloud Supabase",
+      "Deployed app to Vercel at https://spark-social-app-ys49.vercel.app",
+      "Replaced Socket.io with Supabase Realtime for live chat messages",
+      "Added REST API endpoints for message CRUD operations",
+      "Uploaded profile photos and chat files to Supabase Storage",
+      "Updated photo URLs in database to point to cloud Storage",
+      "Fixed Supabase CDN to jsdelivr for reliable loading"
     ]
   },
   {
