@@ -75,13 +75,32 @@
             <h2>${escapeHtml(entry.version)}</h2>
             <div class="date">${escapeHtml(entry.date)}</div>
             <ul>
-              ${entry.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
+              ${entry.items.map(item => `<li>${formatItem(escapeHtml(item))}</li>`).join('')}
             </ul>
           </div>
         `).join('');
       } catch (err) {
         document.getElementById('changelogContainer').innerHTML = '<div class="cl-empty">Failed to load changelog.</div>';
       }
+    }
+
+    function formatItem(s) {
+      // Wrap URLs
+      s = s.replace(/\bhttps?:\/\/[^\s]+/g, '<code>$&</code>');
+      // Wrap standalone filenames like server.js, db.json, style.css
+      s = s.replace(/\b([a-z0-9_-]+\.(js|json|css|html|png|jpg|jsx|ts|tsx|sql))\b/gi, '<code>$&</code>');
+      // Wrap parenthesized code references like (logger.js, /api/logs, logs.html)
+      s = s.replace(/\(([^)]+)\)/g, function(m) {
+        var parts = m.slice(1, -1).split(', ');
+        var formatted = parts.map(function(p) {
+          p = p.trim();
+          if (/^[a-z0-9_.\/-]+\.[a-z]{2,4}$/i.test(p)) return '<code>' + p + '</code>';
+          if (/^\/[a-z0-9_\/-]+$/i.test(p)) return '<code>' + p + '</code>';
+          return p;
+        });
+        return '(' + formatted.join(', ') + ')';
+      });
+      return s;
     }
 
     function escapeHtml(s) {
