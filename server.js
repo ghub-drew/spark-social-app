@@ -1,6 +1,13 @@
 const express = require('express');
 const http = require('http');
-const { Server } = require('socket.io');
+let Server;
+let io = null;
+let server = null;
+try {
+  Server = require('socket.io').Server;
+} catch (e) {
+  console.log('Socket.io not available:', e.message);
+}
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
@@ -10,8 +17,10 @@ const logger = require('./logger');
 
 const app = express();
 const isVercel = !!process.env.VERCEL;
-const server = isVercel ? null : http.createServer(app);
-const io = isVercel ? null : new Server(server);
+if (!isVercel && Server) {
+  server = http.createServer(app);
+  io = new Server(server);
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'social-app-secret-key-change-in-prod';
 const PORT = 3000;
