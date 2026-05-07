@@ -562,7 +562,11 @@ process.on('unhandledRejection', (reason) => {
   console.error('Unhandled rejection:', reason);
 });
 
+// Local development
 server.listen(PORT, () => {
   console.log(`Social app running at http://localhost:${PORT}`);
   logger.info('Server started', `Port: ${PORT}`);
 });
+
+// Vercel serverless export
+module.exports = app;
