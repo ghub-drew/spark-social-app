@@ -64,7 +64,8 @@
     if (typeof supabase === 'undefined') return;
     const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-    _supabase.channel('global-notifications')
+    try {
+      _supabase.channel('global-notifications')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
         const msg = payload.new;
         const myId = parseInt(localStorage.getItem('userId'));
@@ -82,6 +83,11 @@
             }
           });
       })
-      .subscribe();
+      .subscribe((status) => {
+        if (status !== 'SUBSCRIBED') console.warn('Realtime status:', status);
+      });
+    } catch (e) {
+      console.error('Realtime setup failed:', e);
+    }
   }
 })();
