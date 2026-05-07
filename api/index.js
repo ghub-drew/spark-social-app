@@ -1,11 +1,14 @@
 const express = require('express');
+const app = express();
+
+// Minimal health check that doesn't require any imports
+app.get('/api/health', (req, res) => res.json({ ok: true, env: !!process.env.SUPABASE_URL }));
+
+// Only load heavy deps if we need them
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const multer = require('multer');
 const supabase = require('../database');
 const logger = require('../logger');
-
-const app = express();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'social-app-secret-key-change-in-prod';
 
@@ -34,9 +37,6 @@ function adminAuth(req, res, next) {
     res.status(401).json({ error: 'Unauthorized' });
   }
 }
-
-// Health check
-app.get('/api/health', (req, res) => res.json({ ok: true, env: !!process.env.SUPABASE_URL }));
 
 // Admin login
 app.post('/api/admin/login', (req, res) => {
