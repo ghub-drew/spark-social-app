@@ -190,16 +190,16 @@ git push origin main</div>
         <tr><td><code>database.js</code></td><td>Supabase client config (reads env vars)</td></tr>
         <tr><td><code>public/</code></td><td>All HTML, CSS, JS frontend files</td></tr>
         <tr><td><code>vercel.json</code></td><td>Vercel deployment configuration</td></tr>
-        <tr><td><code>.env</code></td><td>Environment variables (gitignored — not pushed to GitHub)</td></tr>
+        <tr><td><code>.env</code></td><td>Environment variables (gitignored  -  not pushed to GitHub)</td></tr>
       </tbody>
     </table>
 
     <h2>⚠️ Common Pitfalls</h2>
     <ul>
       <li><strong>Don't edit .env values</strong> without also updating Vercel's Environment Variables</li>
-      <li><strong>Always git pull first</strong> when starting a new session — your local code might be behind</li>
-      <li><strong>Supabase keys are sensitive</strong> — never commit them to GitHub</li>
-      <li><strong>Socket.io won't work on Vercel</strong> — chat uses Supabase Realtime instead</li>
+      <li><strong>Always git pull first</strong> when starting a new session  -  your local code might be behind</li>
+      <li><strong>Supabase keys are sensitive</strong>  -  never commit them to GitHub</li>
+      <li><strong>Socket.io won't work on Vercel</strong>  -  chat uses Supabase Realtime instead</li>
       <li><strong>Photo uploads</strong> now go to Supabase Storage, not local <code>uploads/</code> folder</li>
     </ul>
 
