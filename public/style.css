@@ -558,10 +558,41 @@ textarea { resize: vertical; }
 }
 .modal-close:hover { background: #f3f4f6; color: var(--text); }
 
-@media (max-width: 600px) {
-  .chat-sidebar { width: 80px; min-width: 80px; }
+@media (max-width: 640px) {
+  .navbar { padding: 0 16px; height: 56px; }
+  .logo-small { font-size: 17px; }
+  .nav-links a { padding: 6px 10px; font-size: 12px; }
+  .nav-user { padding: 3px 8px 3px 5px; gap: 4px; }
+  .nav-user-name { font-size: 12px; }
+  .btn-logout { padding: 5px 10px; font-size: 12px; }
+
+  .page-container { padding: 24px 16px 40px; }
+
+  .chat-sidebar { width: 70px; min-width: 70px; }
   .sidebar-header h3, .convo-info { display: none; }
-  .convo-item { justify-content: center; padding: 12px 8px; }
+  .sidebar-header { padding: 16px 10px; }
+  .new-chat-btn { width: 28px; height: 28px; font-size: 14px; }
+  .convo-item { justify-content: center; padding: 10px 6px; gap: 0; }
+  .convo-item img { width: 36px; height: 36px; }
+  .message-input-area { padding: 8px 10px; gap: 6px; }
+  .input-wrapper input { height: 42px; font-size: 13px; padding: 10px 12px; }
+  .btn-send { min-width: 70px; height: 42px; font-size: 13px; padding: 0 16px; }
+  .btn-emoji, .btn-attach { width: 34px; height: 34px; font-size: 15px; }
+
+  .members-grid { grid-template-columns: 1fr; gap: 14px; }
+  .browse-header h2 { font-size: 22px; }
+  .member-card { border-radius: 16px; }
+  .member-photo-wrap { margin: 18px auto 6px; }
+  .member-photo { width: 80px; height: 80px; }
+  .member-info h3 { font-size: 16px; }
+
+  .profile-edit-card { padding: 24px 16px; border-radius: 16px; }
   .form-row { grid-template-columns: 1fr; }
-  .profile-edit-card { padding: 24px 16px; }
+  input, select, textarea { padding: 11px 14px; font-size: 14px; }
+  .btn-primary { padding: 13px 16px; font-size: 15px; }
+
+  .message { max-width: 85%; }
+  .chat-header { padding: 10px 14px; }
+  .messages-area { padding: 16px 14px; }
+  .mine .bubble, .theirs .bubble { padding: 10px 14px; font-size: 13px; }
 }
