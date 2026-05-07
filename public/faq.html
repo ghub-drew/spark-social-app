@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - FAQ & Troubleshooting</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .faq-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .faq-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .faq-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 32px; }
+    .faq-page h2 { font-size: 17px; font-weight: 700; color: var(--text); margin: 28px 0 8px; display: flex; align-items: center; gap: 8px; }
+    .faq-page h3 { font-size: 14px; font-weight: 700; color: var(--text); margin: 20px 0 6px; }
+    .faq-page p { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 10px; }
+    .faq-page ul { margin: 6px 0 12px 20px; }
+    .faq-page li { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 4px; }
+    .faq-page .qa-item { margin-bottom: 20px; }
+    .faq-page .qa-q { font-weight: 700; color: var(--primary); margin-bottom: 2px; font-size: 14px; }
+    .faq-page .qa-a { font-size: 14px; line-height: 1.6; color: var(--text); }
+    .faq-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0 16px; }
+    .faq-table th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 700; color: var(--text); border-bottom: 2px solid var(--border); }
+    .faq-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+    .faq-table tr:last-child td { border-bottom: none; }
+    .faq-footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 40px; }
+    .faq-footer a { color: var(--muted); text-decoration: none; }
+    .faq-footer a:hover { color: var(--primary); text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="browse.html" class="logo-small">✦ Spark</a>
+    <div class="nav-links">
+      <a href="browse.html">Browse</a>
+      <a href="chat.html">Chat</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <div class="faq-page">
+    <h1>FAQ &amp; Troubleshooting</h1>
+    <p class="subtitle">Last updated: May 7, 2026</p>
+
+    <!-- ═══════════ TROUBLESHOOTING ═══════════ -->
+    <h2>🔧 Quick Troubleshooting Guide</h2>
+
+    <table class="faq-table">
+      <thead>
+        <tr><th style="width:35%">Problem</th><th>Fix</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>App shows blank page or "Cannot reach server"</td><td>Make sure you open <strong>http://localhost:3000</strong> in the browser, not the file directly via <code>file://</code></td></tr>
+        <tr><td>"Invalid token" error</td><td>Your session expired. Log out and log in again. Tokens last 7 days.</td></tr>
+        <tr><td>Profile photo not uploading</td><td>Check that the file is JPEG or PNG and under 5 MB in size.</td></tr>
+        <tr><td>Chat messages not sending</td><td>Check your internet connection. The server must be running (<code>node server.js</code>).</td></tr>
+        <tr><td>Cannot log in / forgot password</td><td>Use the "Forgot password?" link on the login page to reset via email verification.</td></tr>
+        <tr><td>Admin login not working</td><td>Default password is <code>admin1234</code>. Check that caps lock is off.</td></tr>
+        <tr><td>File upload keeps failing</td><td>Profile photos max 5 MB, chat files max 10 MB. Only images are allowed for profile photos.</td></tr>
+        <tr><td>'npx' not recognised when starting Reasonix</td><td>Node.js is not installed or not on your PATH. Download from <a href="https://nodejs.org" target="_blank">nodejs.org</a>.</td></tr>
+        <tr><td>Still using Flash model after config change</td><td>v0.28.0 ignores config model/preset. Run <code>/preset max</code> manually every session.</td></tr>
+        <tr><td>Server crashed or hung</td><td>Check the terminal running the server. Press <code>Ctrl + C</code> and run <code>node server.js</code> again. Check <code>error.log</code> for details.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════ FAQ ═══════════ -->
+    <h2>❓ Frequently Asked Questions</h2>
+
+    <div class="qa-item">
+      <div class="qa-q">How do I delete my account?</div>
+      <div class="qa-a">Contact the administrator through the Admin panel or use the Contact form on your Profile page. Provide your username and the admin will delete your account and all associated data.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">How do I reset my password?</div>
+      <div class="qa-a">Click "Forgot password?" on the login page. Enter your email, then follow the instructions to set a new password (minimum 6 characters).</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">Can I change my username?</div>
+      <div class="qa-a">Usernames are set at registration and cannot be changed. You can update your display name on the Profile page.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">Can I delete a message I sent?</div>
+      <div class="qa-a">Yes. Hover over your message in the chat and click the delete button. The message is removed instantly for both you and the recipient.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">Can I edit a message?</div>
+      <div class="qa-a">Yes. Hover over your message and click the edit button. Press Enter to confirm. A "(edited)" label will appear on the message.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">Who can see my profile?</div>
+      <div class="qa-a">All registered users can see your profile (name, age, gender, bio, photo). Messages are private between you and the recipient.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">Is my password safe?</div>
+      <div class="qa-a">Yes. Passwords are hashed using bcrypt (a strong, one-way hash) and are never stored in plain text. They are never returned by any API route.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">Can I use the app on my phone?</div>
+      <div class="qa-a">The app is built with responsive CSS and works in mobile browsers, but there is no native mobile app. Open http://localhost:3000 in your phone browser on the same network.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">How do I report a problem?</div>
+      <div class="qa-a">Use the Contact form on your Profile page, or check the error logs in the Admin panel for technical issues.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">What happens if the server goes down?</div>
+      <div class="qa-a">All data is persisted in <code>db.json</code>. When you restart the server with <code>node server.js</code>, everything is restored.</div>
+    </div>
+
+    <div class="faq-footer">
+      <a href="terms.html">Terms &amp; Conditions</a> <span style="color:var(--border);">|</span>
+      <a href="privacy.html">Privacy Policy</a> <span style="color:var(--border);">|</span>
+      <a href="documentation.html">Documentation</a>
+    </div>
+  </div>
+
+  <script src="nav.js"></script>
+</body>
+</html>

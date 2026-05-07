@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Technical Documentation</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .doc-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .doc-cover {
+      text-align: center;
+      padding: 60px 20px 40px;
+      margin-bottom: 40px;
+      border-bottom: 2px solid var(--border);
+    }
+    .doc-cover .logo-icon { font-size: 56px; }
+    .doc-cover h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 12px 0 4px;
+    }
+    .doc-cover p {
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .doc-cover .meta {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .doc-cover .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .doc-cover .badge-row span {
+      background: var(--primary);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .doc-section {
+      margin-bottom: 40px;
+    }
+    .doc-section h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      color: white;
+      padding: 8px 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .doc-section h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 20px 0 8px;
+    }
+    .doc-section h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 16px 0 6px;
+    }
+    .doc-section p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .doc-section ul {
+      margin: 8px 0 12px 20px;
+    }
+    .doc-section li {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .doc-table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .doc-table th {
+      background: #f8fafc;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+    }
+    .doc-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .doc-table tr:last-child td { border-bottom: none; }
+    .doc-table .center { text-align: center; }
+    .doc-table .method { font-family: monospace; font-weight: 600; font-size: 12px; }
+    .doc-table .route  { font-family: monospace; font-size: 12px; }
+    .doc-table .auth-no    { color: #16a34a; font-weight: 600; }
+    .doc-table .auth-yes   { color: #2563eb; font-weight: 600; }
+    .doc-table .auth-admin { color: #dc2626; font-weight: 600; }
+    .doc-code {
+      background: #f1f5f9;
+      border-left: 3px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 8px 0 12px;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .doc-note {
+      background: #f0fdf4;
+      border-left: 3px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 12px 0;
+      color: #166534;
+    }
+    .doc-note strong { color: var(--primary-dark); }
+    .doc-footer {
+      text-align: center;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 40px;
+    }
+    .toc {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+    }
+    .toc h3 { margin: 0 0 12px; color: var(--primary); }
+    .toc ol { margin: 0 0 0 20px; }
+    .toc li { margin-bottom: 4px; }
+    .toc a { color: var(--primary); text-decoration: none; font-size: 14px; }
+    .toc a:hover { text-decoration: underline; }
+
+    .doc-topbar {
+      background: white; border-bottom: 1px solid #e5e7eb;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; height: 58px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .doc-topbar-left { display: flex; align-items: center; gap: 10px; }
+    .doc-logo { font-size: 18px; font-weight: 800; color: var(--primary); }
+    .doc-badge { background: #f0fdf4; color: var(--primary); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; border: 1px solid #86efac; }
+    .doc-topbar button { background: none; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 14px; font-size: 13px; cursor: pointer; color: #6b7280; }
+    .doc-topbar button:hover { border-color: var(--primary); color: var(--primary); }
+
+    @media (max-width: 600px) {
+      .doc-page { padding: 20px 12px 40px; }
+      .doc-cover h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="doc-topbar">
+    <div class="doc-topbar-left">
+      <span class="doc-logo">✦ Spark</span>
+      <span class="doc-badge">Docs</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button onclick="window.open('admin.html','_self')">← Admin</button>
+      <button onclick="window.open('logs.html','_blank')">📋 Logs</button>
+    </div>
+  </div>
+
+  <div class="doc-page">
+
+    <!-- ═══════════════ COVER ═══════════════ -->
+    <div class="doc-cover">
+      <div class="logo-icon">✦</div>
+      <h1>Spark</h1>
+      <p>Social App  -  Technical Documentation</p>
+      <div class="meta">Generated: May 5, 2026</div>
+      <div class="badge-row">
+        <span>9 Features</span>
+        <span>17 API Routes</span>
+        <span>6 Socket Events</span>
+        <span>5 Pages</span>
+      </div>
+      <p style="margin-top:20px;color:var(--muted);font-size:13px;">
+        This document covers the complete Spark social app  -  built with Node.js,<br>
+        Socket.io, and a plain-HTML frontend. Re-run <code>node generate_docs.js</code> to update.
+      </p>
+    </div>
+
+    <!-- ═══════════════ TOC ═══════════════ -->
+    <div class="toc">
+      <h3>Contents</h3>
+      <ol>
+        <li><a href="#tech-stack">Tech Stack</a></li>
+        <li><a href="#how-to-run">How to Run</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#api-endpoints">API Endpoints</a></li>
+        <li><a href="#socket-events">Socket.io Events</a></li>
+        <li><a href="#file-structure">File Structure</a></li>
+        <li><a href="#credentials">Credentials &amp; Config</a></li>
+        <li><a href="#data-models">Data Models</a></li>
+        <li><a href="#reasonix-setup">Reasonix Setup</a></li>
+        <li><a href="#supabase">Supabase Local Setup</a></li>
+      </ol>
+    </div>
+
+    <!-- ═══════════════ 1. TECH STACK ═══════════════ -->
+    <div class="doc-section" id="tech-stack">
+      <h2>1. Tech Stack</h2>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Layer</th><th>Technology</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Backend</strong></td><td>Node.js + Express 4</td><td>REST API + static file serving</td></tr>
+            <tr><td><strong>Real-time</strong></td><td>Socket.io</td><td>Instant messaging, online presence</td></tr>
+            <tr><td><strong>Database</strong></td><td>Supabase (PostgreSQL)</td><td>Managed Postgres via local Docker instance</td></tr>
+            <tr><td><strong>Auth</strong></td><td>JWT + bcryptjs</td><td>7-day tokens stored in localStorage</td></tr>
+            <tr><td><strong>File Uploads</strong></td><td>Multer</td><td>Profile photos (5 MB), chat files (10 MB)</td></tr>
+            <tr><td><strong>Frontend</strong></td><td>HTML + CSS + Vanilla JS</td><td>No framework  -  zero build step</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════ 2. HOW TO RUN ═══════════════ -->
+    <div class="doc-section" id="how-to-run">
+      <h2>2. How to Run</h2>
+
+      <h3>Prerequisites</h3>
+      <ul>
+        <li>Node.js v16 or later (<a href="https://nodejs.org" target="_blank">nodejs.org</a>)</li>
+        <li>A terminal / command prompt</li>
+      </ul>
+
+      <h3>First-time setup</h3>
+      <p>Open a terminal in the project folder and run:</p>
+      <div class="doc-code">cd "C:\Users\andre\Documents\Deepseek\Code App"
+npm install</div>
+
+      <h3>Start the server</h3>
+      <div class="doc-code">node server.js</div>
+
+      <h3>Open in browser</h3>
+      <ul>
+        <li>Navigate to <strong>http://localhost:3000</strong></li>
+        <li>Register an account, complete your profile, then start browsing.</li>
+        <li>Admin panel: <strong>http://localhost:3000/admin.html</strong></li>
+      </ul>
+      <div class="doc-note">
+        <strong>⚠ Always use http://localhost:3000</strong>  -  opening the HTML file directly via <code>file://</code> will not work.
+      </div>
+    </div>
+
+    <!-- ═══════════════ 3. FEATURES ═══════════════ -->
+    <div class="doc-section" id="features">
+      <h2>3. Features</h2>
+
+      <h3>3.1 Authentication</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/index.html &middot; server.js</p>
+      <ul>
+        <li>Register with username, email, and password (bcrypt-hashed  -  never stored plain)</li>
+        <li>Login returns a 7-day JWT stored in localStorage</li>
+        <li>Forgot password  -  2-step: verify email, then set a new password (no email server needed)</li>
+        <li>Change password on the Profile page (current password required)</li>
+        <li>Clear error shown when app is opened as <code>file://</code> instead of <code>http://localhost:3000</code></li>
+      </ul>
+
+      <h3>3.2 Profile</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/profile.html &middot; server.js</p>
+      <ul>
+        <li>Upload a profile photo (JPEG / PNG, max 5 MB) shown as a circular thumbnail</li>
+        <li>Set display name, age, gender, and bio (300-character counter)</li>
+        <li>Email shown read-only</li>
+        <li>Navbar chip shows name and avatar on all pages; falls back to initial letter</li>
+      </ul>
+
+      <h3>3.3 Discover / Browse</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/browse.html &middot; server.js</p>
+      <ul>
+        <li>Responsive card grid of all members who completed their profile</li>
+        <li>88 px circular photo with a live green/grey online status dot</li>
+        <li>Shows name, age, gender, bio, and last-seen time</li>
+        <li>Click any card or the Message button to open a chat with that person</li>
+        <li>Your own card is included and always shows Online while you are logged in</li>
+      </ul>
+
+      <h3>3.4 Real-Time Chat</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/chat.html &middot; server.js</p>
+      <ul>
+        <li>Instant messaging via Socket.io  -  no page refresh needed</li>
+        <li>Conversation sidebar with last-message preview and per-conversation unread badge</li>
+        <li>Emoji picker with 7 categories: Smileys, Hearts, Hands, Nature, Food, Activity, Symbols</li>
+        <li>File &amp; image sharing up to 10 MB; images shown inline, other files as download links</li>
+        <li>Preview bar before sending with X to cancel</li>
+        <li>Edit own messages  -  hover to reveal button, confirm with Enter; shows "(edited)"</li>
+        <li>Delete own messages  -  removed instantly for both sender and receiver</li>
+      </ul>
+
+      <h3>3.5 Online / Offline Presence</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/global.js &middot; server.js &middot; browse.html &middot; chat.html</p>
+      <ul>
+        <li>Green = online, grey = offline on every member card and in the chat header</li>
+        <li>Updates in real time via <code>user_status</code> socket event  -  no page reload needed</li>
+        <li>Shows "Online" when connected, "Offline &middot; Xm ago" after disconnect</li>
+        <li>Global: user stays online while on Browse, Profile, or any other authenticated page</li>
+        <li>Last-seen timestamp saved to db.json on socket disconnect</li>
+      </ul>
+
+      <h3>3.6 Unread Badges &amp; Browser Notifications</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/chat.html &middot; public/global.js</p>
+      <ul>
+        <li>Red badge counter per conversation in the sidebar</li>
+        <li>Nav-bar badge showing total unread count across all conversations</li>
+        <li>Desktop browser notifications when a message arrives (requires user permission)</li>
+        <li>Clicking a notification opens the relevant chat directly</li>
+        <li>Browser tab title flashes with the sender name when the window is not focused</li>
+      </ul>
+
+      <h3>3.7 Admin Panel</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/admin.html &middot; server.js</p>
+      <ul>
+        <li>Separate password-protected dashboard at /admin.html</li>
+        <li>Stats bar: total users, complete profiles, users with photos, total messages</li>
+        <li>Users tab: searchable table with all fields and a delete button per row</li>
+        <li>Messages tab: full log with sender, receiver, content, timestamp; delete per row</li>
+        <li>Refresh button reloads live data without a page reload</li>
+        <li>One-click link to Error Logs page</li>
+      </ul>
+
+      <h3>3.8 Error Logging</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">logger.js &middot; server.js &middot; public/logs.html</p>
+      <ul>
+        <li>All uncaught exceptions and unhandled promise rejections are written to error.log</li>
+        <li>Route errors, failed login attempts, and admin login events are also logged</li>
+        <li>Admin-only <code>/api/logs</code> endpoint to read the log file</li>
+        <li>Admin-only <code>DELETE /api/logs</code> to clear the log</li>
+        <li>Dedicated log viewer at /logs.html with dark terminal theme</li>
+        <li>Auto-refresh every 5 seconds  -  no page reload needed</li>
+        <li>Color-coded entries: INFO (green), WARN (amber), ERROR (red) with full stack traces</li>
+      </ul>
+
+      <h3>3.9 Contact Form</h3>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/profile.html &middot; server.js</p>
+      <ul>
+        <li>Send Message button on the Profile page opens a modal contact form</li>
+        <li>Fields: Your Name, Subject, Message (1000-character limit with counter)</li>
+        <li>Messages are sent via Formspree API to the developer's email</li>
+        <li>Success confirmation on submission, auto-closes after 2 seconds</li>
+        <li>No login required to submit - accessible to all authenticated users</li>
+      </ul>
+    </div>
+
+    <!-- ═══════════════ 4. API ENDPOINTS ═══════════════ -->
+    <div class="doc-section" id="api-endpoints">
+      <h2>4. API Endpoints</h2>
+      <p>All routes are relative to <strong>http://localhost:3000</strong>. Auth = Bearer token required. Admin = admin JWT required.</p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Method</th><th>Route</th><th>Auth?</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="method">POST</td><td class="route">/api/register</td><td class="center auth-no">No</td><td>Create a new account</td></tr>
+            <tr><td class="method">POST</td><td class="route">/api/login</td><td class="center auth-no">No</td><td>Login  -  returns JWT + userId</td></tr>
+            <tr><td class="method">POST</td><td class="route">/api/forgot-password</td><td class="center auth-no">No</td><td>Verify email exists, return reset token (15 min TTL)</td></tr>
+            <tr><td class="method">POST</td><td class="route">/api/reset-password</td><td class="center auth-no">No</td><td>Set new password using reset token</td></tr>
+            <tr><td class="method">PUT</td><td class="route">/api/change-password</td><td class="center auth-yes">Yes</td><td>Change password (current password required)</td></tr>
+            <tr><td class="method">PUT</td><td class="route">/api/profile</td><td class="center auth-yes">Yes</td><td>Update profile fields + optional photo upload</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/profile/me</td><td class="center auth-yes">Yes</td><td>Get own profile data</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/members</td><td class="center auth-yes">Yes</td><td>List all members with complete profiles</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/messages/:otherId</td><td class="center auth-yes">Yes</td><td>Message history with another user</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/conversations</td><td class="center auth-yes">Yes</td><td>Conversation list with last-message preview</td></tr>
+            <tr><td class="method">POST</td><td class="route">/api/chat/upload</td><td class="center auth-yes">Yes</td><td>Upload a file for use in chat</td></tr>
+            <tr><td class="method">POST</td><td class="route">/api/admin/login</td><td class="center auth-no">No</td><td>Admin login  -  returns admin JWT</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/admin/users</td><td class="center auth-admin">Admin</td><td>All users (passwords excluded)</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/admin/messages</td><td class="center auth-admin">Admin</td><td>Full message log with sender/receiver names</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/admin/stats</td><td class="center auth-admin">Admin</td><td>Aggregate stats (users, messages, etc.)</td></tr>
+            <tr><td class="method">DELETE</td><td class="route">/api/admin/users/:id</td><td class="center auth-admin">Admin</td><td>Delete user and all their messages</td></tr>
+            <tr><td class="method">DELETE</td><td class="route">/api/admin/messages/:id</td><td class="center auth-admin">Admin</td><td>Delete a single message</td></tr>
+            <tr><td class="method">GET</td><td class="route">/api/logs</td><td class="center auth-admin">Admin</td><td>Read the server error log file</td></tr>
+            <tr><td class="method">DELETE</td><td class="route">/api/logs</td><td class="center auth-admin">Admin</td><td>Clear the error log file</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════ 5. SOCKET.IO EVENTS ═══════════════ -->
+    <div class="doc-section" id="socket-events">
+      <h2>5. Socket.io Events</h2>
+      <p>All socket connections pass <code>auth: { token }</code> in the handshake on port 3000.</p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Event</th><th>Direction</th><th>Payload Fields</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="route">send_message</td><td>Client &rarr; Server</td><td>receiverId, content, type, fileName</td><td>Send message; server saves + routes it</td></tr>
+            <tr><td class="route">new_message</td><td>Server &rarr; Client</td><td>id, sender_id, receiver_id, content, type, sender_name</td><td>Delivered to sender and receiver</td></tr>
+            <tr><td class="route">edit_message</td><td>Client &rarr; Server</td><td>messageId, content</td><td>Edit own message</td></tr>
+            <tr><td class="route">message_edited</td><td>Server &rarr; Client</td><td>messageId, content</td><td>Both parties update the message text</td></tr>
+            <tr><td class="route">delete_message</td><td>Client &rarr; Server</td><td>messageId</td><td>Delete own message</td></tr>
+            <tr><td class="route">message_deleted</td><td>Server &rarr; Client</td><td>messageId</td><td>Both parties remove the message</td></tr>
+            <tr><td class="route">user_status</td><td>Server &rarr; All</td><td>userId, online, lastSeen</td><td>Emitted on every connect / disconnect</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════ 6. FILE STRUCTURE ═══════════════ -->
+    <div class="doc-section" id="file-structure">
+      <h2>6. File Structure</h2>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Path</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="route">Code App/</td><td>-- project root</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;server.js</td><td>Express API + Socket.io + Logger (all backend logic)</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;logger.js</td><td>Error logging module  -  writes timestamped entries to error.log</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;error.log</td><td>Auto-generated log file (created at runtime)</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;database.js</td><td>Supabase client setup  -  exports @supabase/supabase-js instance</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;db.json</td><td>Legacy JSON database (archived - Supabase now active)</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;generate_docs.js</td><td>Script to regenerate this documentation</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;package.json</td><td>npm dependency manifest</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;public/</td><td>-- static frontend files served by Express</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;index.html</td><td>Login, Register, Forgot Password</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;profile.html</td><td>Profile editing + Change Password</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;browse.html</td><td>Discover member grid</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;chat.html</td><td>Real-time chat UI</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;admin.html</td><td>Admin dashboard</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;logs.html</td><td>Error log viewer (admin-only, auto-refresh)</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;documentation.html</td><td>This page  -  technical documentation</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;nav.js</td><td>Shared navbar chip (name + avatar)</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;global.js</td><td>Persistent socket, notifications, tab-title flash</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;style.css</td><td>All styles for all pages</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;uploads/</td><td>Profile photos + chat files (exclude from git)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════ 7. CREDENTIALS & CONFIG ═══════════════ -->
+    <div class="doc-section" id="credentials">
+      <h2>7. Credentials &amp; Configuration</h2>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Setting</th><th>Value</th><th>Where to change</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Server port</td><td class="route">3000</td><td>server.js  -  const PORT</td></tr>
+            <tr><td>JWT secret</td><td class="route">social-app-secret-key-change-in-prod</td><td>server.js  -  const JWT_SECRET</td></tr>
+            <tr><td>JWT expiry</td><td>7 days</td><td>server.js  -  jwt.sign expiresIn</td></tr>
+            <tr><td>Admin password</td><td class="route">admin1234</td><td>server.js  -  const ADMIN_PASSWORD</td></tr>
+            <tr><td>Profile photo limit</td><td>5 MB</td><td>server.js  -  upload multer config</td></tr>
+            <tr><td>Chat file limit</td><td>10 MB</td><td>server.js  -  uploadChat multer config</td></tr>
+            <tr><td>Database</td><td>Supabase PostgreSQL</td><td>database.js  -  Supabase client config</td></tr>
+            <tr><td>Supabase URL</td><td class="route">http://127.0.0.1:54321</td><td>Local Supabase API endpoint</td></tr>
+            <tr><td>Supabase Studio</td><td class="route">http://127.0.0.1:54323</td><td>Web UI for database management</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-note">
+        <strong>Security note:</strong> Change <code>JWT_SECRET</code> and <code>ADMIN_PASSWORD</code> before deploying to any public server.
+      </div>
+    </div>
+
+    <!-- ═══════════════ 8. DATA MODELS ═══════════════ -->
+    <div class="doc-section" id="data-models">
+      <h2>8. Data Models (Supabase PostgreSQL)</h2>
+
+      <h3>User</h3>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="route">id</td><td>number</td><td>Auto-incrementing primary key</td></tr>
+            <tr><td class="route">username</td><td>string</td><td>Unique; chosen at registration</td></tr>
+            <tr><td class="route">email</td><td>string</td><td>Unique email address</td></tr>
+            <tr><td class="route">password</td><td>string</td><td>bcrypt hash  -  never returned by any API route</td></tr>
+            <tr><td class="route">name</td><td>string | null</td><td>Display name set on Profile page</td></tr>
+            <tr><td class="route">age</td><td>number | null</td><td>Age set on Profile page</td></tr>
+            <tr><td class="route">gender</td><td>string | null</td><td>Gender set on Profile page</td></tr>
+            <tr><td class="route">bio</td><td>string | null</td><td>Short bio, max 300 characters</td></tr>
+            <tr><td class="route">photo</td><td>string | null</td><td>Server path, e.g. /uploads/photo.jpg</td></tr>
+            <tr><td class="route">created_at</td><td>ISO string</td><td>Registration timestamp</td></tr>
+            <tr><td class="route">lastSeen</td><td>ISO string</td><td>Updated on socket disconnect</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Message</h3>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="route">id</td><td>number</td><td>Auto-incrementing primary key</td></tr>
+            <tr><td class="route">sender_id</td><td>number</td><td>ID of the sending user</td></tr>
+            <tr><td class="route">receiver_id</td><td>number</td><td>ID of the recipient</td></tr>
+            <tr><td class="route">content</td><td>string</td><td>Message text or /uploads/... path for files</td></tr>
+            <tr><td>type</td><td>"text" | "image" | "file"</td><td>Defaults to "text"</td></tr>
+            <tr><td class="route">fileName</td><td>string | null</td><td>Original filename for attachments</td></tr>
+            <tr><td class="route">edited</td><td>boolean</td><td>true if the sender edited this message</td></tr>
+            <tr><td class="route">created_at</td><td>ISO string</td><td>Send timestamp (server time)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══════════════ 9. REASONIX SETUP ═══════════════ -->
+    <div class="doc-section" id="reasonix-setup">
+      <h2>9. Reasonix Setup</h2>
+      <p>Reasonix is a DeepSeek-native coding agent that runs in the terminal. It's designed around DeepSeek's API directly  -  cache-first loop, flash-first cost control, and automatic tool-call repair.</p>
+
+      <h3>Prerequisites</h3>
+      <ul>
+        <li><strong>Node.js 20.10+</strong>  -  verify with <code>node --version</code></li>
+        <li><strong>DeepSeek API key</strong>  -  obtain from <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a> under API Keys</li>
+        <li><strong>Git for Windows</strong> (Windows users only)</li>
+      </ul>
+
+      <h3>Step-by-Step Setup</h3>
+      <ol style="margin:8px 0 12px 20px;font-size:14px;line-height:1.8;">
+        <li><strong>Open Command Prompt</strong>  -  press <kbd>Win + R</kbd>, type <code>cmd</code>, press Enter</li>
+        <li><strong>Navigate to project folder</strong>  -  <code>cd C:\Users\andre\Documents\Deepseek\Code App</code></li>
+        <li><strong>Run Reasonix</strong>  -  <code>npx reasonix@latest code</code> (first run prompts for your API key)</li>
+        <li><strong>Enter your API key</strong> when prompted  -  it's saved automatically to <code>C:\Users\andre\.reasonix\config.json</code></li>
+        <li><strong>(Optional)</strong> Customise config  -  <code>notepad C:\Users\andre\.reasonix\config.json</code></li>
+      </ol>
+
+      <h3>Cost Comparison</h3>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Model</th><th>Cost / Turn</th><th>Turns for $4.98</th><th>Best For</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Flash</strong> (default)</td><td>~$0.0006</td><td>~8,000</td><td>Quick edits, exploration</td></tr>
+            <tr><td><strong>Pro</strong> (<code>/preset max</code>)</td><td>~$0.01&ndash;0.03</td><td>~200</td><td>Complex reasoning tasks</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Key Commands</h3>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Shortcut / Command</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Ctrl + L</code></td><td>Clear terminal</td></tr>
+            <tr><td><code>Ctrl + C</code></td><td>Exit Reasonix</td></tr>
+            <tr><td><code>Shift + Tab</code></td><td>Auto-apply all suggestions</td></tr>
+            <tr><td><code>y / n</code></td><td>Accept or discard a change</td></tr>
+            <tr><td><code>/preset max</code></td><td>Switch to DeepSeek Pro model</td></tr>
+            <tr><td><code>/stats</code></td><td>Show token/cost statistics</td></tr>
+            <tr><td><code>/cost</code></td><td>Show running cost</td></tr>
+            <tr><td><code>/clear</code></td><td>Clear conversation context</td></tr>
+            <tr><td><code>/help</code></td><td>Show all commands</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-note">
+        <strong>Tip:</strong> Use Flash for quick exploration and iterative work; switch to Pro with <code>/preset max</code> when you need deep reasoning. In v0.28.0, the model/preset fields in config.json are ignored  -  you must run <code>/preset max</code> manually each session.
+      </div>
+
+      <h3>Quick-Start Cheat Sheet</h3>
+      <p>Every session, run these four lines:</p>
+      <div class="doc-code">cd C:\Users\andre\Documents\Deepseek\Code App
+npx reasonix@latest code
+/preset max
+/stats</div>
+    </div>
+
+    <!-- ═══════════════ 10. SUPABASE LOCAL SETUP ═══════════════ -->
+    <div class="doc-section" id="supabase">
+      <h2>10. Supabase Local Setup</h2>
+      <p>Spark has migrated from lowdb (JSON file) to Supabase (PostgreSQL) for better scalability and Vercel deployment readiness.</p>
+
+      <h3>Prerequisites</h3>
+      <ul>
+        <li><strong>Docker Desktop</strong> — install from <a href="https://docs.docker.com/desktop/setup/install/windows-install/" target="_blank">docker.com</a></li>
+        <li><strong>Supabase CLI</strong> — installed via npx (no global install needed)</li>
+      </ul>
+
+      <h3>Local Setup</h3>
+      <div class="doc-code">cd C:\Users\andre\Documents\Deepseek\Code App
+npx supabase init
+npx supabase start</div>
+      <p>This spins up PostgreSQL + Supabase Studio + all supporting services locally via Docker.</p>
+
+      <h3>Local URLs</h3>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Service</th><th>URL</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Supabase Studio (web UI)</td><td class="route">http://127.0.0.1:54323</td></tr>
+            <tr><td>API Endpoint</td><td class="route">http://127.0.0.1:54321</td></tr>
+            <tr><td>Database URL</td><td class="route">postgresql://postgres:postgres@127.0.0.1:54322/postgres</td></tr>
+            <tr><td>Mailpit (test emails)</td><td class="route">http://127.0.0.1:54324</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Cloud Supabase</h3>
+      <p>Spark uses a cloud Supabase project (<strong>CWD</strong>) at <code>https://hpezaqvtufrvvczyixwc.supabase.co</code> for production data. The local Supabase instance is used for development and testing.</p>
+
+      <h3>Migration Complete</h3>
+      <div class="doc-note">
+        <strong>All phases completed!</strong> Spark now runs entirely on Supabase PostgreSQL.
+      </div>
+      <ol style="margin:8px 0 12px 20px;font-size:14px;line-height:1.8;">
+        <li><strong>Phase 1</strong> — Set up Supabase locally ✅</li>
+        <li><strong>Phase 2</strong> — Create tables (users, messages, contacts) ✅</li>
+        <li><strong>Phase 3</strong> — Migrated 5 users, 19 messages, 2 contacts from db.json ✅</li>
+        <li><strong>Phase 4</strong> — Replaced all lowdb queries with Supabase ✅</li>
+        <li><strong>Phase 5</strong> — File uploads moved to Supabase Storage ✅</li>
+        <li><strong>Phase 6</strong> — Deploy to Vercel (pending - cloud Supabase configured and ready)</li>
+      </ol>
+    </div>
+
+    <div class="doc-footer">
+      Spark  -  Social App | Documentation v1.2
+    </div>
+
+  </div>
+
+  <script src="nav.js"></script>
+</body>
+</html>

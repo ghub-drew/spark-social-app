@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - My Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="browse.html" class="logo-small">✦ Spark</a>
+    <div class="nav-links">
+      <a href="browse.html">Browse</a>
+      <a href="chat.html">Chat</a>
+      <a href="profile.html" class="active">Profile</a>
+      <div class="nav-user">
+        <div class="nav-user-avatar-placeholder" id="navInitial">?</div>
+        <span class="nav-user-name" id="navName">...</span>
+      </div>
+      <button onclick="logout()" class="btn-logout">Logout</button>
+    </div>
+  </nav>
+
+  <div class="page-container">
+    <div class="profile-edit-card">
+      <h2>My Profile</h2>
+      <p class="subtitle">Tell others about yourself</p>
+
+      <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
+        <img id="photoPreview" src="/uploads/default.png" alt="Profile photo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23f0f0f0%22/><text y=%22.9em%22 font-size=%2260%22 x=%2210%22>👤</text></svg>'">
+        <div class="photo-overlay">
+          <span>Change Photo</span>
+        </div>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" hidden onchange="previewPhoto(event)">
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="emailDisplay" disabled style="background:#f9fafb;color:#888;cursor:default;">
+      </div>
+
+      <form id="profileForm" onsubmit="saveProfile(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Display Name</label>
+            <input type="text" id="name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label>Age</label>
+            <input type="number" id="age" placeholder="25" min="18" max="100" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="gender" required>
+            <option value="">Select...</option>
+            <option value="Man">Man</option>
+            <option value="Woman">Woman</option>
+            <option value="Non-binary">Non-binary</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Bio</label>
+          <textarea id="bio" placeholder="Write a short bio about yourself..." rows="4" maxlength="300"></textarea>
+          <span class="char-count"><span id="bioCount">0</span>/300</span>
+        </div>
+
+        <div id="profileError" class="error-msg hidden"></div>
+        <div id="profileSuccess" class="success-msg hidden">Profile saved!</div>
+
+        <button type="submit" class="btn-primary">Save Profile</button>
+      </form>
+
+      <div class="section-divider"></div>
+
+      <div class="contact-section">
+        <h3>Contact</h3>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:10px;">Questions or feedback? Send us a message.</p>
+        <button type="button" class="btn-primary" onclick="openContactModal()" style="max-width:200px;">Send Message</button>
+      </div>
+
+      <!-- Contact Modal -->
+      <div id="contactModal" class="modal-overlay hidden" onclick="closeContactModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <div class="modal-header">
+            <h3>Send a Message</h3>
+            <button type="button" class="modal-close" onclick="closeContactModal()">✕</button>
+          </div>
+          <form id="contactForm" onsubmit="submitContact(event)">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" id="contactName" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <input type="text" id="contactSubject" placeholder="What's this about?" required>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea id="contactMessage" rows="5" placeholder="Write your message..." required maxlength="1000"></textarea>
+              <span class="char-count"><span id="contactMsgCount">0</span>/1000</span>
+            </div>
+            <div id="contactError" class="error-msg hidden"></div>
+            <div id="contactSuccess" class="success-msg hidden">Message sent! We'll get back to you soon.</div>
+            <button type="submit" class="btn-primary" id="contactSubmitBtn">Send Message</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="change-password-section">
+        <h3>Change Password</h3>
+        <p class="subtitle">Leave blank if you don't want to change it.</p>
+
+        <div class="form-group">
+          <label>Current Password</label>
+          <input type="password" id="currentPassword" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" id="changeNewPassword" placeholder="Min. 6 characters">
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <input type="password" id="changeConfirmPassword" placeholder="Repeat new password">
+        </div>
+        <div id="pwError" class="error-msg hidden"></div>
+        <div id="pwSuccess" class="success-msg hidden">Password changed successfully!</div>
+        <button type="button" class="btn-secondary" onclick="changePassword()">Update Password</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    if (!localStorage.getItem('token')) window.location.href = 'index.html';
+
+    const token = localStorage.getItem('token');
+
+    // Load existing profile
+    fetch('/api/profile/me', { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json())
+      .then(user => {
+        if (user.email) document.getElementById('emailDisplay').value = user.email;
+        if (user.name) document.getElementById('name').value = user.name;
+        if (user.age) document.getElementById('age').value = user.age;
+        if (user.gender) document.getElementById('gender').value = user.gender;
+        if (user.bio) { document.getElementById('bio').value = user.bio; updateCount(); }
+        if (user.photo) document.getElementById('photoPreview').src = user.photo;
+      });
+
+    document.getElementById('bio').addEventListener('input', updateCount);
+    function updateCount() {
+      document.getElementById('bioCount').textContent = document.getElementById('bio').value.length;
+    }
+
+    function previewPhoto(e) {
+      const file = e.target.files[0];
+      if (file) document.getElementById('photoPreview').src = URL.createObjectURL(file);
+    }
+
+    async function saveProfile(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Saving...';
+      document.getElementById('profileError').classList.add('hidden');
+      document.getElementById('profileSuccess').classList.add('hidden');
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('name').value);
+      formData.append('age', document.getElementById('age').value);
+      formData.append('gender', document.getElementById('gender').value);
+      formData.append('bio', document.getElementById('bio').value);
+      const photoFile = document.getElementById('photoInput').files[0];
+      if (photoFile) formData.append('photo', photoFile);
+
+      try {
+        const res = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        document.getElementById('profileSuccess').classList.remove('hidden');
+        setTimeout(() => window.location.href = 'browse.html', 1000);
+      } catch (err) {
+        document.getElementById('profileError').textContent = err.message;
+        document.getElementById('profileError').classList.remove('hidden');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Save Profile';
+      }
+    }
+
+    async function changePassword() {
+      const current = document.getElementById('currentPassword').value;
+      const newPw = document.getElementById('changeNewPassword').value;
+      const confirm = document.getElementById('changeConfirmPassword').value;
+      const errEl = document.getElementById('pwError');
+      const okEl = document.getElementById('pwSuccess');
+      errEl.classList.add('hidden');
+      okEl.classList.add('hidden');
+
+      if (!current || !newPw || !confirm) { errEl.textContent = 'All fields are required'; errEl.classList.remove('hidden'); return; }
+      if (newPw.length < 6) { errEl.textContent = 'New password must be at least 6 characters'; errEl.classList.remove('hidden'); return; }
+      if (newPw !== confirm) { errEl.textContent = 'Passwords do not match'; errEl.classList.remove('hidden'); return; }
+
+      try {
+        const res = await fetch('/api/change-password', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ currentPassword: current, newPassword: newPw })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        okEl.classList.remove('hidden');
+        document.getElementById('currentPassword').value = '';
+        document.getElementById('changeNewPassword').value = '';
+        document.getElementById('changeConfirmPassword').value = '';
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    // ── Contact modal ──────────────────────────────────────────────
+    function openContactModal() {
+      document.getElementById('contactModal').classList.remove('hidden');
+    }
+
+    function closeContactModal(e) {
+      if (e && e.target !== e.currentTarget) return;
+      document.getElementById('contactModal').classList.add('hidden');
+      document.getElementById('contactError').classList.add('hidden');
+      document.getElementById('contactSuccess').classList.add('hidden');
+    }
+
+    // Character counter
+    document.addEventListener('DOMContentLoaded', () => {
+      const ta = document.getElementById('contactMessage');
+      if (ta) ta.addEventListener('input', () => {
+        document.getElementById('contactMsgCount').textContent = ta.value.length;
+      });
+    });
+
+    async function submitContact(e) {
+      e.preventDefault();
+      const btn = document.getElementById('contactSubmitBtn');
+      const errEl = document.getElementById('contactError');
+      const okEl = document.getElementById('contactSuccess');
+      errEl.classList.add('hidden');
+      okEl.classList.add('hidden');
+
+      const name = document.getElementById('contactName').value.trim();
+      const subject = document.getElementById('contactSubject').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+
+      if (!name || !subject || !message) {
+        errEl.textContent = 'All fields are required';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('https://formspree.io/f/xqenlwrw', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, subject, message, _replyto: '' })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to send');
+        okEl.classList.remove('hidden');
+        document.getElementById('contactForm').reset();
+        document.getElementById('contactMsgCount').textContent = '0';
+        setTimeout(() => closeContactModal(), 2000);
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  </script>
+  <script src="nav.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="global.js"></script>
+  <div class="page-footer">
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <span style="color:var(--border);margin:0 8px;">|</span>
+    <a href="privacy.html">Privacy</a>
+    <span style="color:var(--border);margin:0 8px;">|</span>
+    <a href="faq.html">FAQ</a>
+  </div>
+</body>
+</html>

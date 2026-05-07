@@ -1,0 +1,63 @@
+[
+  {
+    "version": "v1.2",
+    "date": "May 7, 2026",
+    "items": [
+      "Phase 1 - Supabase local setup: installed Docker Desktop and initialized local Supabase instance",
+      "Supabase running at http://127.0.0.1:54323 (Studio), port 54321 (API), 54322 (PostgreSQL)",
+      "Migration plan from lowdb (JSON) to Supabase (PostgreSQL) established",
+      "Project backup created before migration",
+      "Phase 2 - Created Supabase tables: users, messages, contacts",
+      "Phase 3 - Migrated existing data from db.json to Supabase (5 users, 19 messages, 2 contacts)",
+      "Phase 4 - Replaced all lowdb queries with @supabase/supabase-js across all routes and socket events",
+      "Phase 5 - Moved file uploads to Supabase Storage (profile photos, chat files)",
+      "Removed lowdb dependency from project",
+      "lowdb JSON database fully replaced by Supabase PostgreSQL",
+      "Created cloud Supabase project (CWD) at hpezaqvtufrvvczyixwc.supabase.co",
+      "Migrated data from local Supabase to cloud Supabase PostgreSQL",
+      "Created cloud Storage bucket for file uploads",
+      "Updated database.js and server.js with cloud Supabase credentials",
+      "App fully connected to cloud Supabase via localhost:3000"
+    ]
+  },
+  {
+    "version": "v1.1",
+    "date": "May 7, 2026",
+    "items": [
+      "Changed theme from pink to green (brand colors, hover effects, auth gradient)",
+      "Renamed nav label \"Messages\" to \"Chat\"",
+      "Renamed app from \"dating\" to \"social\" throughout",
+      "Added error logging system (logger.js, /api/logs, logs.html)",
+      "Added contact form on Profile page with Formspree integration",
+      "Added documentation.html - full HTML technical docs",
+      "Added Terms & Conditions page (terms.html)",
+      "Added Privacy Policy page (privacy.html)",
+      "Added FAQ & Troubleshooting page (faq.html)",
+      "Added auto edit mode for Reasonix",
+      "Fixed PDF generator alignment for feature sections",
+      "Moved Docs link from navbar to Admin panel",
+      "Replaced all em dashes with regular dashes across docs",
+      "Premium UI redesign - glassmorphism, ambient blobs, floating elements, noise texture",
+      "Improved login page with cinematic gradient, animated glow, premium card",
+      "Improved browse page with premium member cards, hover lift, soft background",
+      "Improved chat page - neutral background, message animations, online pulse, better bubbles",
+      "Fixed send button compression and avatar loading in chat",
+      "Added consistent ambient backgrounds across all pages via style.css"
+    ]
+  },
+  {
+    "version": "v1.0",
+    "date": "May 5, 2026",
+    "items": [
+      "Initial release of Spark social app",
+      "User authentication (register, login, forgot/reset password, change password)",
+      "User profiles with photo upload, name, age, gender, bio",
+      "Member discovery with online/offline presence indicators",
+      "Real-time chat with emoji picker, file sharing, edit/delete messages",
+      "Unread badges and browser notifications",
+      "Admin panel with stats, user management, message logs",
+      "lowdb JSON database, Socket.io, JWT + bcrypt auth",
+      "Responsive frontend (HTML + CSS + Vanilla JS)"
+    ]
+  }
+]

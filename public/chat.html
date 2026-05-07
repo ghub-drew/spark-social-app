@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Messages</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Neutral chat background ── */
+    body {
+      background: #f5f5f5;
+    }
+
+    /* ── Subtle green ambient accents ── */
+    body::before {
+      content: '';
+      position: fixed;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(34,197,94,0.05), transparent 70%);
+      top: -150px; left: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(134,239,172,0.05), transparent 70%);
+      bottom: -100px; right: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Chat layout panels ── */
+    .chat-layout {
+      position: relative;
+      z-index: 1;
+      gap: 0;
+      background: transparent;
+    }
+
+    .chat-sidebar {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(229,231,235,0.5);
+    }
+
+    .sidebar-header {
+      padding: 20px 16px 12px;
+      border-bottom: 1px solid rgba(229,231,235,0.4);
+    }
+    .sidebar-header h3 { font-size: 18px; font-weight: 800; color: #1a1a2e; }
+
+    .new-chat-btn {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      font-size: 18px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .new-chat-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+    }
+
+    .conversation-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+
+    .convo-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 0;
+      margin: 0;
+      position: relative;
+    }
+    .convo-item:hover {
+      background: rgba(240,253,244,0.6);
+      padding-left: 20px;
+    }
+    .convo-item.active {
+      background: rgba(240,253,244,0.9);
+    }
+    .convo-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 3px;
+      background: #16a34a;
+      border-radius: 0 4px 4px 0;
+    }
+    .convo-item img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+
+    .convo-info { flex: 1; min-width: 0; }
+    .convo-info .name { font-size: 14px; font-weight: 700; color: #1a1a2e; }
+    .convo-info .preview {
+      font-size: 12px; color: #6b7280;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .convo-unread-preview { font-weight: 700; color: #1a1a2e; }
+
+    .convo-time { font-size: 11px; color: #9ca3af; flex-shrink: 0; }
+
+    .unread-badge {
+      min-width: 20px; height: 20px; border-radius: 10px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      font-size: 11px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 5px; flex-shrink: 0; margin-left: auto;
+      box-shadow: 0 2px 6px rgba(22,163,74,0.3);
+    }
+
+    /* ── Chat main panel ── */
+    .chat-main {
+      flex: 1; display: flex; flex-direction: column;
+      overflow: hidden;
+      background: rgba(255,255,255,0.6);
+    }
+
+    .chat-placeholder {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: #6b7280;
+    }
+    .chat-placeholder span { font-size: 56px; margin-bottom: 16px; }
+    .chat-placeholder p { text-align: center; line-height: 1.8; font-size: 15px; }
+    .chat-placeholder a { color: #16a34a; text-decoration: none; font-weight: 600; }
+    .chat-placeholder a:hover { text-decoration: underline; }
+
+    .chat-window { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .chat-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(229,231,235,0.4);
+    }
+    .chat-header img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    .chat-header h3 { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+
+    .convo-avatar-wrap { position: relative; flex-shrink: 0; }
+
+    .chat-partner-status { font-size: 12px; font-weight: 600; margin-top: 1px; }
+    .chat-partner-status.is-online  { color: #16a34a; }
+    .chat-partner-status.is-offline { color: #9ca3af; }
+
+    /* ── Messages area ── */
+    .messages-area {
+      flex: 1; overflow-y: auto; padding: 24px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      background: transparent;
+    }
+
+    @keyframes msgFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .message {
+      display: flex; flex-direction: row; max-width: 72%; align-items: flex-end; gap: 0;
+      animation: msgFadeIn 0.25s ease-out;
+    }
+    .message .bubble-wrap { display: flex; flex-direction: column; }
+    .message.mine  { align-self: flex-end;   flex-direction: row-reverse; }
+    .message.theirs { align-self: flex-start; flex-direction: row; }
+    .message.mine  .bubble-wrap { align-items: flex-end; }
+    .message.theirs .bubble-wrap { align-items: flex-start; }
+
+    .mine .bubble {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border-radius: 20px 20px 4px 20px;
+      padding: 12px 18px;
+      font-size: 14px; line-height: 1.5;
+      box-shadow: 0 2px 10px rgba(22,163,74,0.18);
+    }
+    .theirs .bubble {
+      background: white;
+      color: #1a1a2e;
+      border-radius: 20px 20px 20px 4px;
+      padding: 12px 18px;
+      font-size: 14px; line-height: 1.5;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    /* ── Message input area ── */
+    .input-wrapper {
+      display: flex; align-items: center; gap: 8px;
+      flex: 1; min-width: 0;
+    }
+    .input-wrapper input {
+      flex: 1; min-width: 0;
+      padding: 13px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 14px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      background: #f9fafb;
+      transition: all 0.2s ease;
+      height: 48px;
+    }
+    .input-wrapper input:focus {
+      border-color: #22c55e;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.1);
+    }
+
+    .message-input-area {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(229,231,235,0.4);
+    }
+
+    .btn-send {
+      min-width: 100px;
+      height: 52px;
+      padding: 0 28px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+    .btn-send:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 16px rgba(22,163,74,0.3);
+    }
+
+    .btn-emoji, .btn-attach {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-emoji:hover, .btn-emoji.open,
+    .btn-attach:hover {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+
+    /* ── File preview bar ── */
+    .file-preview-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 16px;
+      background: #f0fdf4;
+      border-top: 1px solid #86efac;
+    }
+    .file-preview-cancel:hover { background: #fef2f2; color: #ef4444; }
+
+    /* ── Emoji picker ── */
+    .emoji-picker {
+      display: none;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      padding: 8px;
+    }
+    .emoji-picker.open { display: block; }
+
+    .emoji-tabs { display: flex; gap: 4px; margin-bottom: 6px; }
+    .emoji-tab {
+      flex: 1; padding: 6px; border: none; background: transparent;
+      border-radius: 8px; cursor: pointer; font-size: 18px;
+      transition: background 0.2s;
+    }
+    .emoji-tab:hover { background: #f3f4f6; }
+    .emoji-tab.active { background: #f0fdf4; }
+
+    .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; max-height: 200px; overflow-y: auto; }
+    .emoji-grid button {
+      background: none; border: none; font-size: 24px; padding: 4px;
+      cursor: pointer; border-radius: 6px; transition: background 0.15s;
+    }
+    .emoji-grid button:hover { background: #f3f4f6; }
+
+    /* ── Message actions (edit/delete) ── */
+    .msg-actions { display: none; gap: 4px; align-items: center; }
+    .message.mine:hover  .msg-actions,
+    .message.theirs:hover .msg-actions { display: flex; }
+    .msg-actions button {
+      background: none; border: 1px solid #e5e7eb;
+      border-radius: 6px; padding: 4px 8px;
+      font-size: 11px; cursor: pointer; color: #6b7280;
+      transition: all 0.15s;
+    }
+    .msg-actions button:hover { background: #f0fdf4; border-color: #16a34a; color: #16a34a; }
+
+    .message-time {
+      font-size: 10px; color: #9ca3af;
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+    .mine .message-time  { text-align: right; padding-right: 4px; }
+    .theirs .message-time { text-align: left; padding-left: 4px; }
+
+    .edited-tag { font-size: 10px; color: rgba(255,255,255,0.6); margin-left: 4px; font-style: italic; }
+    .theirs .edited-tag { color: #9ca3af; }
+
+    .mine .chat-file { background: rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 12px; margin-top: 4px; }
+    .theirs .chat-file { background: #f3f4f6; border-radius: 10px; padding: 8px 12px; margin-top: 4px; }
+
+    .no-convos {
+      text-align: center; padding: 40px 20px;
+      color: #6b7280; font-size: 14px; line-height: 1.8;
+    }
+    .no-convos a { color: #16a34a; text-decoration: none; font-weight: 600; }
+
+    .no-msgs {
+      text-align: center; padding: 60px 20px;
+      color: #6b7280; font-size: 14px; line-height: 1.7;
+    }
+    .no-msgs .icon { font-size: 42px; display: block; margin-bottom: 10px; }
+    .no-msgs .title { font-size: 16px; font-weight: 700; color: #374151; margin-bottom: 4px; }
+    .no-msgs .desc { font-size: 13px; color: #9ca3af; }
+
+    .loading {
+      text-align: center; padding: 40px 20px;
+      color: #6b7280; font-size: 14px;
+    }
+
+    /* ── Status dot inside chat ── */
+    .convo-avatar-wrap .status-dot {
+      position: absolute; bottom: 0; right: 0;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .convo-avatar-wrap .status-dot.online {
+      box-shadow: 0 0 0 2px rgba(34,197,94,0.2);
+    }
+    @keyframes onlinePulse {
+      0%, 100% { box-shadow: 0 0 0 2px rgba(34,197,94,0.2); }
+      50%      { box-shadow: 0 0 0 4px rgba(34,197,94,0.1); }
+    }
+    .convo-avatar-wrap .status-dot.online {
+      animation: onlinePulse 2s ease-in-out infinite;
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+      background: rgba(255,255,255,0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 640px) {
+      .chat-sidebar { width: 80px; min-width: 80px; }
+      .sidebar-header h3, .convo-info { display: none; }
+      .convo-item { justify-content: center; padding: 12px 8px; }
+      .message { max-width: 85%; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="browse.html" class="logo-small">✦ Spark</a>
+    <div class="nav-links">
+      <a href="browse.html">Browse</a>
+      <a href="chat.html" class="active">Chat</a>
+      <a href="profile.html">Profile</a>
+      <div class="nav-user">
+        <div class="nav-user-avatar-placeholder" id="navInitial">?</div>
+        <span class="nav-user-name" id="navName">...</span>
+      </div>
+      <button onclick="logout()" class="btn-logout">Logout</button>
+    </div>
+  </nav>
+
+  <div class="chat-layout">
+    <!-- Sidebar -->
+    <div class="chat-sidebar">
+      <div class="sidebar-header">
+        <h3>Chat</h3>
+        <a href="browse.html" class="new-chat-btn" title="New chat">+</a>
+      </div>
+      <div id="conversationList" class="conversation-list">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+
+    <!-- Chat area -->
+    <div class="chat-main">
+      <div id="chatPlaceholder" class="chat-placeholder">
+        <span>💬</span>
+        <p>Select a conversation or<br><a href="browse.html">browse members</a> to start chatting</p>
+      </div>
+
+      <div id="chatWindow" class="chat-window hidden">
+        <div class="chat-header">
+          <div class="convo-avatar-wrap">
+            <img id="chatPartnerPhoto" src="" alt=""
+              onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect width=%2240%22 height=%2240%22 fill=%22%23dcfce7%22/><text y=%22.9em%22 font-size=%2224%22 x=%224%22>👤</text></svg>'">
+            <span class="status-dot offline" id="chatPartnerDot"></span>
+          </div>
+          <div>
+            <h3 id="chatPartnerName"></h3>
+            <p class="chat-partner-status is-offline" id="chatPartnerStatus">Offline</p>
+          </div>
+        </div>
+
+        <div id="messages" class="messages-area"></div>
+
+        <div class="emoji-picker" id="emojiPicker">
+          <div class="emoji-tabs">
+            <button class="emoji-tab active" onclick="showEmojiCat(event,'smileys')">😀</button>
+            <button class="emoji-tab" onclick="showEmojiCat(event,'hearts')">❤️</button>
+            <button class="emoji-tab" onclick="showEmojiCat(event,'hands')">👋</button>
+            <button class="emoji-tab" onclick="showEmojiCat(event,'nature')">🌸</button>
+            <button class="emoji-tab" onclick="showEmojiCat(event,'food')">🍕</button>
+            <button class="emoji-tab" onclick="showEmojiCat(event,'activity')">⚽</button>
+            <button class="emoji-tab" onclick="showEmojiCat(event,'symbols')">✨</button>
+          </div>
+          <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+
+        <div id="filePreviewBar" class="file-preview-bar hidden">
+          <div id="filePreviewContent"></div>
+          <button type="button" class="file-preview-cancel" onclick="cancelFile()" title="Cancel">✕</button>
+        </div>
+
+        <form class="message-input-area" onsubmit="sendMessage(event)">
+          <div class="input-wrapper">
+            <button type="button" class="btn-emoji" id="emojiToggle" onclick="toggleEmoji()" title="Emoji">😊</button>
+            <button type="button" class="btn-attach" id="attachBtn" onclick="document.getElementById('fileInput').click()" title="Attach file">📎</button>
+            <input type="file" id="fileInput" hidden onchange="handleFileSelect(event)">
+            <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" maxlength="500">
+          </div>
+          <button type="submit" class="btn-send">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="global.js"></script>
+  <script>
+    if (!localStorage.getItem('token')) window.location.href = 'index.html';
+
+    const token = localStorage.getItem('token');
+    const myId = parseInt(localStorage.getItem('userId'));
+    let currentPartnerId = null;
+    const unreadCounts = {}; // { senderId: count }
+
+    const socket = io({ auth: { token } });
+
+    socket.on('new_message', (msg) => {
+      const isActiveChat =
+        (msg.sender_id === currentPartnerId && msg.receiver_id === myId) ||
+        (msg.sender_id === myId && msg.receiver_id === currentPartnerId);
+
+      if (isActiveChat) {
+        appendMessage(msg);
+      } else if (msg.sender_id !== myId) {
+        // Incoming message from someone not currently open — count it
+        unreadCounts[msg.sender_id] = (unreadCounts[msg.sender_id] || 0) + 1;
+        updateNavBadge();
+        // Desktop notification + tab title flash
+        if (typeof window.showMessageNotification === 'function') {
+          window.showMessageNotification(msg);
+        }
+      }
+      loadConversations();
+    });
+
+    // Stop title flash when user focuses the chat window
+    window.addEventListener('focus', () => {
+      if (typeof window.stopTitleFlash === 'function') window.stopTitleFlash();
+    });
+
+    socket.on('connect_error', () => {
+      console.warn('Socket connection failed');
+    });
+
+    // Live online/offline updates
+    socket.on('user_status', ({ userId, online, lastSeen }) => {
+      // Update sidebar dot
+      const convoItem = document.querySelector(`.convo-item[onclick*="openChat(${userId},"]`);
+      if (convoItem) {
+        const dot = convoItem.querySelector('.status-dot');
+        if (dot) { dot.className = `status-dot ${online ? 'online' : 'offline'}`; }
+      }
+      // Update chat header if this is the active partner
+      if (userId === currentPartnerId) updateChatStatus(online, lastSeen);
+    });
+
+    function updateChatStatus(online, lastSeen) {
+      const dot = document.getElementById('chatPartnerDot');
+      const statusEl = document.getElementById('chatPartnerStatus');
+      if (!dot || !statusEl) return;
+      if (online) {
+        dot.className = 'status-dot online';
+        statusEl.textContent = 'Online';
+        statusEl.className = 'chat-partner-status is-online';
+      } else {
+        dot.className = 'status-dot offline';
+        statusEl.textContent = lastSeen ? 'Offline · ' + timeAgo(lastSeen) : 'Offline';
+        statusEl.className = 'chat-partner-status is-offline';
+      }
+    }
+
+    function updateNavBadge() {
+      const total = Object.values(unreadCounts).reduce((a, b) => a + b, 0);
+      let badge = document.getElementById('navMsgBadge');
+      const link = document.querySelector('.nav-links a[href="chat.html"]');
+      if (!link) return;
+      if (total > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.id = 'navMsgBadge';
+          badge.className = 'nav-msg-badge';
+          link.style.position = 'relative';
+          link.appendChild(badge);
+        }
+        badge.textContent = total > 99 ? '99+' : total;
+      } else if (badge) {
+        badge.remove();
+      }
+    }
+
+    function timeAgo(iso) {
+      if (!iso) return '';
+      const diff = Date.now() - new Date(iso).getTime();
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return `${mins}m ago`;
+      const hours = Math.floor(mins / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      if (days < 7) return `${days}d ago`;
+      return new Date(iso).toLocaleDateString();
+    }
+
+    // Open chat from URL params
+    const params = new URLSearchParams(window.location.search);
+    const withId = params.get('with');
+    const withName = params.get('name');
+    if (withId) {
+      // Fetch partner data to get their photo
+      (async () => {
+        try {
+          const res = await fetch('/api/members', { headers: { Authorization: `Bearer ${token}` } });
+          const members = await res.json();
+          const partner = members.find(m => m.id === parseInt(withId));
+          const photo = partner ? (partner.photo || '') : '';
+          openChat(parseInt(withId), withName || '', photo);
+        } catch {
+          openChat(parseInt(withId), withName || '', '');
+        }
+      })();
+    }
+
+    async function loadConversations() {
+      const res = await fetch('/api/conversations', { headers: { Authorization: `Bearer ${token}` } });
+      const convos = await res.json();
+      const list = document.getElementById('conversationList');
+
+      if (!convos.length) {
+        list.innerHTML = '<p class="no-convos">No messages yet.<br><a href="browse.html">Browse members</a></p>';
+        return;
+      }
+
+      list.innerHTML = convos.map(c => {
+        const count = unreadCounts[c.id] || 0;
+        const badge = count > 0 ? `<span class="unread-badge">${count > 99 ? '99+' : count}</span>` : '';
+        return `
+        <div class="convo-item ${c.id === currentPartnerId ? 'active' : ''}"
+             onclick="openChat(${c.id}, '${escapeHtml(c.name || c.username)}', '${escapeHtml(c.photo || '')}', ${c.online}, '${c.lastSeen || ''}')">
+          <div class="convo-avatar-wrap">
+            <img src="${c.photo || ''}" alt=""
+              onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect width=%2240%22 height=%2240%22 fill=%22%23dcfce7%22/><text y=%22.9em%22 font-size=%2224%22 x=%224%22>👤</text></svg>'">
+            <span class="status-dot ${c.online ? 'online' : 'offline'}"></span>
+          </div>
+          <div class="convo-info">
+            <strong>${escapeHtml(c.name || c.username)}</strong>
+            <span class="${count > 0 ? 'convo-unread-preview' : ''}">${escapeHtml(c.last_message || '')}</span>
+          </div>
+          ${badge}
+        </div>`;
+      }).join('');
+    }
+
+    async function openChat(partnerId, partnerName, partnerPhoto, online, lastSeen) {
+      currentPartnerId = partnerId;
+      // Clear unread count for this partner
+      if (unreadCounts[partnerId]) {
+        delete unreadCounts[partnerId];
+        updateNavBadge();
+      }
+      document.getElementById('chatPlaceholder').classList.add('hidden');
+      document.getElementById('chatWindow').classList.remove('hidden');
+      document.getElementById('chatPartnerName').textContent = partnerName;
+      document.getElementById('chatPartnerPhoto').src = partnerPhoto || '';
+      updateChatStatus(online, lastSeen);
+      document.getElementById('messages').innerHTML = '<div class="loading">Loading messages...</div>';
+
+      // Highlight active convo
+      document.querySelectorAll('.convo-item').forEach(el => el.classList.remove('active'));
+
+      const res = await fetch(`/api/messages/${partnerId}`, { headers: { Authorization: `Bearer ${token}` } });
+      const msgs = await res.json();
+      const area = document.getElementById('messages');
+      area.innerHTML = '';
+      if (!msgs.length) {
+        area.innerHTML = '<p class="no-msgs"><span class="icon">👋</span><span class="title">Start the conversation</span><span class="desc">Send a message, share a photo, or react with an emoji.</span></p>';
+      } else {
+        msgs.forEach(appendMessage);
+      }
+      area.scrollTop = area.scrollHeight;
+      document.getElementById('messageInput').focus();
+
+      // Update URL without reload
+      history.replaceState(null, '', `chat.html?with=${partnerId}&name=${encodeURIComponent(partnerName)}`);
+      loadConversations();
+    }
+
+    function buildBubbleContent(msg) {
+      if (msg.type === 'image') {
+        return `<img class="chat-image" src="${escapeHtml(msg.content)}" alt="image" onclick="window.open('${escapeHtml(msg.content)}','_blank')">`;
+      } else if (msg.type === 'file') {
+        const name = escapeHtml(msg.fileName || 'file');
+        return `<a class="chat-file" href="${escapeHtml(msg.content)}" download="${name}" target="_blank">
+          <span class="chat-file-icon">📄</span><span class="chat-file-name">${name}</span></a>`;
+      }
+      return escapeHtml(msg.content);
+    }
+
+    function appendMessage(msg) {
+      const area = document.getElementById('messages');
+      const noMsg = area.querySelector('.no-msgs');
+      if (noMsg) noMsg.remove();
+
+      const isMine = msg.sender_id === myId;
+      const div = document.createElement('div');
+      div.className = `message ${isMine ? 'mine' : 'theirs'}`;
+      div.dataset.msgId = msg.id;
+      div.dataset.msgType = msg.type || 'text';
+      div.dataset.msgContent = msg.content;
+
+      const editedTag = msg.edited ? `<span class="edited-tag">(edited)</span>` : '';
+      const canEdit = isMine && msg.type !== 'image' && msg.type !== 'file';
+      const actions = isMine ? `
+        <div class="msg-actions">
+          ${canEdit ? `<button title="Edit" onclick="startEdit(${msg.id})">✏️</button>` : ''}
+          <button title="Delete" onclick="confirmDelete(${msg.id})">🗑️</button>
+        </div>` : '';
+
+      div.innerHTML = `
+        ${actions}
+        <div class="bubble-wrap">
+          <div class="bubble">${buildBubbleContent(msg)}</div>
+          <span class="msg-time">${formatTime(msg.created_at)}${editedTag}</span>
+        </div>
+      `;
+      area.appendChild(div);
+      area.scrollTop = area.scrollHeight;
+    }
+
+    // ── Edit / Delete ─────────────────────────────────────────────
+    function startEdit(msgId) {
+      const div = document.querySelector(`.message[data-msg-id="${msgId}"]`);
+      if (!div) return;
+      const bubble = div.querySelector('.bubble');
+      const original = div.dataset.msgContent;
+      bubble.innerHTML = `
+        <div class="edit-box">
+          <input class="edit-input" value="${escapeHtml(original)}" maxlength="500">
+          <div class="edit-btns">
+            <button class="edit-confirm" onclick="confirmEdit(${msgId})">✓</button>
+            <button class="edit-cancel" onclick="cancelEdit(${msgId}, \`${original.replace(/`/g,'\\`')}\`)">✕</button>
+          </div>
+        </div>`;
+      const input = bubble.querySelector('.edit-input');
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') confirmEdit(msgId);
+        if (e.key === 'Escape') cancelEdit(msgId, original);
+      });
+    }
+
+    function confirmEdit(msgId) {
+      const div = document.querySelector(`.message[data-msg-id="${msgId}"]`);
+      if (!div) return;
+      const input = div.querySelector('.edit-input');
+      const newContent = input?.value.trim();
+      if (!newContent) return;
+      socket.emit('edit_message', { messageId: msgId, content: newContent });
+    }
+
+    function cancelEdit(msgId, original) {
+      const div = document.querySelector(`.message[data-msg-id="${msgId}"]`);
+      if (!div) return;
+      const bubble = div.querySelector('.bubble');
+      bubble.innerHTML = escapeHtml(original);
+    }
+
+    function confirmDelete(msgId) {
+      if (!confirm('Delete this message?')) return;
+      socket.emit('delete_message', { messageId: msgId });
+    }
+
+    // Real-time edit/delete from socket
+    socket.on('message_edited', ({ messageId, content }) => {
+      const div = document.querySelector(`.message[data-msg-id="${messageId}"]`);
+      if (!div) return;
+      div.dataset.msgContent = content;
+      div.querySelector('.bubble').innerHTML = escapeHtml(content);
+      const time = div.querySelector('.msg-time');
+      if (time && !time.querySelector('.edited-tag')) {
+        time.insertAdjacentHTML('beforeend', '<span class="edited-tag">(edited)</span>');
+      }
+    });
+
+    socket.on('message_deleted', ({ messageId }) => {
+      const div = document.querySelector(`.message[data-msg-id="${messageId}"]`);
+      if (div) div.remove();
+    });
+
+    // ── File attach ──────────────────────────────────────────────
+    let pendingFile = null; // { url, type, fileName }
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) { alert('File too large (max 10 MB)'); return; }
+
+      const bar = document.getElementById('filePreviewBar');
+      const content = document.getElementById('filePreviewContent');
+      bar.classList.remove('hidden');
+
+      if (file.type.startsWith('image/')) {
+        const url = URL.createObjectURL(file);
+        content.innerHTML = `<img src="${url}" class="file-preview-img" alt="preview"><span class="file-preview-label">${escapeHtml(file.name)}</span>`;
+      } else {
+        content.innerHTML = `<span class="file-preview-icon">📄</span><span class="file-preview-label">${escapeHtml(file.name)}</span>`;
+      }
+
+      // Upload immediately
+      uploadFile(file);
+    }
+
+    async function uploadFile(file) {
+      const btn = document.getElementById('attachBtn');
+      btn.textContent = '⏳';
+      btn.disabled = true;
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch('/api/chat/upload', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        pendingFile = data;
+        btn.textContent = '📎';
+        btn.disabled = false;
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+        cancelFile();
+        btn.textContent = '📎';
+        btn.disabled = false;
+      }
+    }
+
+    function cancelFile() {
+      pendingFile = null;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('filePreviewBar').classList.add('hidden');
+      document.getElementById('filePreviewContent').innerHTML = '';
+    }
+
+    function sendMessage(e) {
+      e.preventDefault();
+      if (!currentPartnerId) return;
+
+      if (pendingFile) {
+        socket.emit('send_message', {
+          receiverId: currentPartnerId,
+          content: pendingFile.url,
+          type: pendingFile.type,
+          fileName: pendingFile.fileName
+        });
+        cancelFile();
+        return;
+      }
+
+      const input = document.getElementById('messageInput');
+      const content = input.value.trim();
+      if (!content) return;
+      socket.emit('send_message', { receiverId: currentPartnerId, content, type: 'text' });
+      input.value = '';
+    }
+
+    function formatTime(iso) {
+      const d = new Date(iso);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+
+    // ── Emoji picker ─────────────────────────────────────────────
+    const EMOJIS = {
+      smileys: ['😀','😁','😂','🤣','😃','😄','😅','😆','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😗','😙','😚','😋','😛','😜','🤪','😝','🤑','🤗','🤭','🤫','🤔','😐','😑','😶','😏','😒','🙄','😬','🤥','😔','😪','🤤','😴','😷','🤒','🤕','🤧','🥵','🥶','😎','🤓','🧐','😕','😟','🙁','😮','😯','😲','😳','🥺','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','🥱','😤','😠','😡','🤬','😈','👿','💀','☠️','💩','🤡','👹','👺','👻','👾','🤖'],
+      hearts:  ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝','💟','☮️','✝️','🕉️','💯','🔥','💫','⭐','🌟','✨','💥','❄️','🌈','☀️','🌙','🌸','💐','🌺','🌻','🌹','🌷'],
+      hands:   ['👋','🤚','🖐️','✋','🖖','👌','🤌','🤏','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','✍️','💅','🤳','💪','🦵','🦶','👂','🦻','👃'],
+      nature:  ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🐛','🦋','🐌','🐞','🐜','🦟','🦗','🦂','🐢','🐍','🦎','🦖','🦕','🐙','🦑','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🐋','🦈','🌵','🎄','🌲','🌳','🌴','🌱','🌿','☘️','🍀','🎋','🍃','🍂','🍁','🍄','🌾','💐','🌷','🌹','🥀','🌺','🌸','🌼','🌻','🌞','🌝','🌛','🌜','🌚','🌕'],
+      food:    ['🍎','🍊','🍋','🍇','🍓','🫐','🍈','🍒','🍑','🥭','🍍','🥥','🥝','🍅','🍆','🥑','🥦','🥬','🥒','🌶️','🫑','🌽','🥕','🫛','🧄','🧅','🥔','🍠','🥐','🥯','🍞','🥖','🥨','🧀','🥚','🍳','🧈','🥞','🧇','🥓','🥩','🍗','🍖','🌭','🍔','🍟','🍕','🫓','🥪','🥙','🧆','🌮','🌯','🫔','🥗','🥘','🫕','🍝','🍜','🍲','🍛','🍣','🍱','🥟','🦪','🍤','🍙','🍚','🍘','🍥','🥮','🍢','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍿','🍩','🍪','🌰','🥜','🍯','🧃','🥤','🧋','☕','🍵','🧉','🍺','🍻','🥂','🍷','🥃','🍸','🍹','🍾'],
+      activity:['⚽','🏀','🏈','⚾','🥎','🎾','🏐','🏉','🥏','🎱','🏓','🏸','🏒','🥍','🏏','🪃','🥅','⛳','🪁','🎣','🤿','🎽','🎿','🛷','🥌','🎯','🪀','🪆','🎮','🎲','♟️','🎭','🎨','🎬','🎤','🎧','🎼','🎹','🥁','🪘','🎷','🎺','🎸','🪕','🎻','🎪','🤹','🎠','🎡','🎢','🎟️','🎪','🤸','🏋️','🤼','🤺','🤾','⛹️','🚴','🏊','🧘','🏄','🏇','🤽'],
+      symbols: ['✨','💫','⭐','🌟','🔥','💥','❄️','🌈','☀️','🌙','⚡','🌊','💨','🌪️','🎉','🎊','🎈','🎁','🎀','🏆','🥇','🎖️','🏅','💎','💰','💵','💳','🔑','🗝️','🔒','🔓','❤️','💯','✅','❌','⭕','🚫','💤','🔔','🔕','🔊','🔇','📢','📣','🔍','🔎','💡','🕯️','🔦','📱','💻','🖥️','⌨️','🖱️','📷','📸','📹','📺','📻','⏰','⌚','⏳','📅','📌','📍','✏️','✒️','🖊️','📝','📋','📁','📂','🗂️','📊','📈','📉','📧','📨','📩','📬','📭','📮','🗳️'],
+    };
+
+    let currentEmojiCat = 'smileys';
+
+    function renderEmojiGrid(cat) {
+      const grid = document.getElementById('emojiGrid');
+      grid.innerHTML = EMOJIS[cat].map(e =>
+        `<button type="button" onclick="insertEmoji('${e}')">${e}</button>`
+      ).join('');
+    }
+
+    function showEmojiCat(e, cat) {
+      currentEmojiCat = cat;
+      document.querySelectorAll('.emoji-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      renderEmojiGrid(cat);
+    }
+
+    function toggleEmoji() {
+      const picker = document.getElementById('emojiPicker');
+      const btn = document.getElementById('emojiToggle');
+      const isOpen = picker.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+      if (isOpen) renderEmojiGrid(currentEmojiCat);
+    }
+
+    function insertEmoji(emoji) {
+      const input = document.getElementById('messageInput');
+      const pos = input.selectionStart;
+      const val = input.value;
+      input.value = val.slice(0, pos) + emoji + val.slice(pos);
+      input.selectionStart = input.selectionEnd = pos + emoji.length;
+      input.focus();
+    }
+
+    // Close picker when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#emojiPicker') && !e.target.closest('#emojiToggle')) {
+        document.getElementById('emojiPicker').classList.remove('open');
+        document.getElementById('emojiToggle').classList.remove('open');
+      }
+    });
+
+    loadConversations();
+  </script>
+  <script src="nav.js"></script>
+  <div class="page-footer">
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <span style="color:var(--border);margin:0 8px;">|</span>
+    <a href="privacy.html">Privacy</a>
+    <span style="color:var(--border);margin:0 8px;">|</span>
+    <a href="faq.html">FAQ</a>
+  </div>
+</body>
+</html>

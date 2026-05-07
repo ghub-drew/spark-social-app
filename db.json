@@ -1,0 +1,248 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "testdrew",
+      "email": "drew@test.com",
+      "password": "$2a$10$YolYm.2oadVuA.P0WGTG7Og5HuD.LuZ3dgN58/kp4ciJMU3GUq9aO",
+      "name": null,
+      "age": null,
+      "gender": null,
+      "bio": null,
+      "photo": null,
+      "created_at": "2026-05-03T11:42:42.210Z"
+    },
+    {
+      "id": 2,
+      "username": "testcheck",
+      "email": "check@test.com",
+      "password": "$2a$10$ETmOt.tfVrhlZnK92WJUv.ixwt4ekq2ND/n9jwsb6iewxHI.G54XS",
+      "name": null,
+      "age": null,
+      "gender": null,
+      "bio": null,
+      "photo": null,
+      "created_at": "2026-05-03T12:23:03.286Z"
+    },
+    {
+      "id": 3,
+      "username": "Trey",
+      "email": "andrew@nai.edu.ph",
+      "password": "$2a$10$qi0EaGARTQXIqgxPexhZQ.SJYOB.zz/P73trshWV3eohwjS0ppYGi",
+      "name": "Trey",
+      "age": 18,
+      "gender": "Man",
+      "bio": "Passionate about growth, tech, and creativity. Always learning, always improving.",
+      "photo": "/uploads/1777811461052-avatar-3.png",
+      "created_at": "2026-05-03T12:24:27.419Z",
+      "lastSeen": "2026-05-07T01:54:14.720Z"
+    },
+    {
+      "id": 4,
+      "username": "John",
+      "email": "andrewsdlc@gmail.com",
+      "password": "$2a$10$Dzy/T9rmo3bChNduJbkAme.fkFTwIoUchwEpX2ccUUOk9u9KSVYnS",
+      "name": "John",
+      "age": 18,
+      "gender": "Man",
+      "bio": "Just vibing, learning, and trying to become better every day.",
+      "photo": "/uploads/1777811239883-avatar-1.png",
+      "created_at": "2026-05-03T12:26:48.496Z",
+      "lastSeen": "2026-05-07T09:40:57.862Z"
+    },
+    {
+      "id": 5,
+      "username": "Kirs",
+      "email": "nissi.andro@gmail.com",
+      "password": "$2a$10$4QdaOfnfEOijXv2CsMaKJuDQc6kQS7M4Pd9FRbnYW8upJ8V04irh6",
+      "name": "Kirs",
+      "age": 18,
+      "gender": "Woman",
+      "bio": "Just me",
+      "photo": "/uploads/1777812052611-avatar-4.png",
+      "created_at": "2026-05-03T12:40:32.470Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": 1,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "hi trey",
+      "created_at": "2026-05-03T12:31:27.332Z"
+    },
+    {
+      "id": 2,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "content": "hi john how are you?",
+      "created_at": "2026-05-03T12:31:37.680Z"
+    },
+    {
+      "id": 3,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "i am good what about you",
+      "created_at": "2026-05-03T12:31:49.696Z"
+    },
+    {
+      "id": 5,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "😐",
+      "created_at": "2026-05-03T12:34:36.577Z"
+    },
+    {
+      "id": 6,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "content": "😍",
+      "created_at": "2026-05-03T12:34:56.764Z"
+    },
+    {
+      "id": 7,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "content": "/uploads/chat-1777812717384-avatar-3.png",
+      "type": "image",
+      "fileName": "avatar-3.png",
+      "created_at": "2026-05-03T12:51:58.061Z"
+    },
+    {
+      "id": 8,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "/uploads/chat-1777812733315-avatar-2.png",
+      "type": "image",
+      "fileName": "avatar-2.png",
+      "created_at": "2026-05-03T12:52:13.901Z"
+    },
+    {
+      "id": 9,
+      "sender_id": 3,
+      "receiver_id": 3,
+      "content": "hi",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:28:15.799Z"
+    },
+    {
+      "id": 10,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "hi trey",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:28:25.359Z"
+    },
+    {
+      "id": 11,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "trey",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:32:03.941Z"
+    },
+    {
+      "id": 12,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "trey hi",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:38:08.699Z"
+    },
+    {
+      "id": 13,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "trey",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:38:23.474Z"
+    },
+    {
+      "id": 14,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "trey",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:38:49.466Z"
+    },
+    {
+      "id": 15,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "content": "trey",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:39:06.690Z"
+    },
+    {
+      "id": 16,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "content": "john",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:41:03.010Z"
+    },
+    {
+      "id": 17,
+      "sender_id": 4,
+      "receiver_id": 4,
+      "content": "test",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:41:20.266Z"
+    },
+    {
+      "id": 18,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "content": "john",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:41:25.401Z"
+    },
+    {
+      "id": 19,
+      "sender_id": 3,
+      "receiver_id": 3,
+      "content": "john",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:55:09.631Z"
+    },
+    {
+      "id": 20,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "content": "hey john",
+      "type": "text",
+      "fileName": null,
+      "created_at": "2026-05-03T23:55:42.109Z"
+    }
+  ],
+  "nextUserId": 6,
+  "nextMessageId": 21,
+  "contacts": [
+    {
+      "id": 1,
+      "name": "test",
+      "subject": "testes",
+      "message": "test",
+      "created_at": "2026-05-07T07:05:17.184Z"
+    },
+    {
+      "id": 2,
+      "name": "test",
+      "subject": "test",
+      "message": "test",
+      "created_at": "2026-05-07T07:06:39.037Z"
+    }
+  ],
+  "nextContactId": 3
+}

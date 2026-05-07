@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Social App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Noise texture overlay ── */
+    @keyframes noiseMove {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-5%, -10%); }
+      40% { transform: translate(10%, 5%); }
+      60% { transform: translate(-10%, 15%); }
+      80% { transform: translate(5%, -5%); }
+      100% { transform: translate(0, 0); }
+    }
+    body.auth-page::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(74,222,128,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(34,197,94,0.08) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 80%, rgba(134,239,172,0.06) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Grain texture layer */
+    body.auth-page::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+      pointer-events: none;
+      z-index: 0;
+      animation: noiseMove 30s linear infinite;
+      opacity: 0.5;
+    }
+
+    /* ── Override body for premium look ── */
+    body.auth-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a2f1a 0%, #14532d 35%, #166534 65%, #15803d 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Card glow behind login ── */
+    .card-glow {
+      position: fixed;
+      top: 50%; left: 50%;
+      width: 600px; height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(74,222,128,0.2) 0%, rgba(34,197,94,0.08) 30%, transparent 65%);
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+      animation: glowPulse 4s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.85; }
+    }
+
+    /* ── Ambient floating blobs ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatBlob 14s ease-in-out infinite;
+    }
+    .blob-1 {
+      width: 700px; height: 700px;
+      background: #4ade80;
+      top: -250px; right: -200px;
+      animation-delay: 0s;
+    }
+    .blob-2 {
+      width: 500px; height: 500px;
+      background: #22c55e;
+      bottom: -200px; left: -150px;
+      animation-delay: -5s;
+    }
+    .blob-3 {
+      width: 400px; height: 400px;
+      background: #86efac;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -10s;
+      opacity: 0.1;
+    }
+
+    @keyframes floatBlob {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(35px, -45px) scale(1.06); }
+      50% { transform: translate(-25px, 25px) scale(0.94); }
+      75% { transform: translate(45px, 35px) scale(1.03); }
+    }
+
+    /* ── Floating decorative UI elements ── */
+    .float-el {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.2;
+      transition: opacity 0.3s;
+    }
+    .float-el-1 {
+      top: 14%; left: 7%;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 12px 18px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: floatBlob 8s ease-in-out infinite;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    .float-el-2 {
+      top: 22%; right: 7%;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 2px solid rgba(255,255,255,0.12);
+      animation: floatBlob 10s ease-in-out infinite;
+      animation-delay: -3s;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.03);
+    }
+    .float-el-3 {
+      bottom: 26%; left: 5%;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(34,197,94,0.12);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 2px solid rgba(34,197,94,0.15);
+      animation: floatBlob 9s ease-in-out infinite;
+      animation-delay: -6s;
+      box-shadow: 0 0 20px rgba(34,197,94,0.08);
+    }
+    .float-el-4 {
+      bottom: 32%; right: 5%;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 8px 14px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      animation: floatBlob 11s ease-in-out infinite;
+      animation-delay: -2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+    .float-el-5 {
+      top: 52%; left: 2%;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(134,239,172,0.25);
+      animation: floatBlob 7s ease-in-out infinite;
+      animation-delay: -5s;
+      box-shadow: 0 0 12px rgba(134,239,172,0.1);
+    }
+    .float-el-6 {
+      top: 42%; right: 3%;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      animation: floatBlob 13s ease-in-out infinite;
+      animation-delay: -7s;
+      box-shadow: 0 0 8px rgba(255,255,255,0.05);
+    }
+
+    /* ── Sparkle dots ── */
+    .sparkle {
+      position: fixed;
+      width: 4px; height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    .sparkle:nth-child(15) { top: 15%; left: 10%; animation-delay: 0s; }
+    .sparkle:nth-child(16) { top: 25%; right: 15%; animation-delay: -1s; width: 6px; height: 6px; }
+    .sparkle:nth-child(17) { bottom: 30%; left: 20%; animation-delay: -2s; }
+    .sparkle:nth-child(18) { bottom: 20%; right: 10%; animation-delay: -0.5s; width: 3px; height: 3px; }
+    .sparkle:nth-child(19) { top: 60%; left: 8%; animation-delay: -1.5s; width: 5px; height: 5px; }
+    .sparkle:nth-child(20) { top: 10%; right: 30%; animation-delay: -2.5s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.08; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.6); }
+    }
+
+    /* ── Auth container with premium glassmorphism ── */
+    .auth-container {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border-radius: 32px;
+      padding: 48px 44px 44px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow:
+        0 50px 120px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+        0 0 80px rgba(74, 222, 128, 0.08);
+      position: relative;
+      z-index: 1;
+      animation: cardFadeIn 0.8s ease-out, cardFloat 5s ease-in-out 0.8s infinite;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+    }
+    .auth-container:hover {
+      transform: translateY(-6px) scale(1.005);
+      box-shadow:
+        0 60px 140px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+        0 0 100px rgba(74, 222, 128, 0.12);
+    }
+
+    /* ── Subtle card float animation ── */
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── Logo section ── */
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .logo-glow {
+      position: absolute;
+      top: -10px; left: 50%;
+      transform: translateX(-50%);
+      width: 80px; height: 80px;
+      background: radial-gradient(circle, rgba(74,222,128,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: logoGlowPulse 3s ease-in-out infinite;
+    }
+    @keyframes logoGlowPulse {
+      0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+      50% { transform: translateX(-50%) scale(1.3); opacity: 1; }
+    }
+    .logo-icon {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 2px;
+      position: relative;
+      z-index: 1;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(22, 163, 74, 0.3)); }
+      50% { filter: drop-shadow(0 0 30px rgba(22, 163, 74, 0.8)); }
+    }
+    .logo h1 {
+      font-size: 40px;
+      font-weight: 900;
+      color: #16a34a;
+      letter-spacing: -1.5px;
+      margin: 0 0 14px;
+      line-height: 1.05;
+      position: relative;
+      z-index: 1;
+    }
+    .logo .tagline {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 0 0 4px;
+      line-height: 1.35;
+      position: relative;
+      z-index: 1;
+    }
+    .logo .subtagline {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.45;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 4px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(229,231,235,0.2);
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      color: #9ca3af;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .tab.active {
+      background: white;
+      color: #16a34a;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.12);
+    }
+    .tab:hover:not(.active) {
+      color: #374151;
+      background: rgba(255,255,255,0.5);
+    }
+
+    /* ── Forms ── */
+    .auth-form { width: 100%; }
+    .hidden { display: none !important; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid rgba(229,231,235,0.7);
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      color: #1a1a2e;
+      transition: all 0.25s ease;
+      outline: none;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(4px);
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #22c55e;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12), 0 4px 12px rgba(34,197,94,0.06);
+    }
+    input::placeholder {
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    /* ── Button ── */
+    .btn-primary {
+      width: 100%;
+      padding: 15px 20px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-top: 12px;
+      letter-spacing: -0.01em;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(22, 163, 74, 0.35), 0 0 20px rgba(34,197,94,0.1);
+    }
+    .btn-primary:active {
+      transform: translateY(-1px) scale(1);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── Forgot password link ── */
+    .forgot-link {
+      text-align: right;
+      margin: -8px 0 4px;
+    }
+    .forgot-link a {
+      font-size: 13px;
+      color: #6b7280;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .forgot-link a:hover {
+      color: #16a34a;
+      text-decoration: underline;
+    }
+
+    /* ── Back button ── */
+    .btn-back {
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 16px;
+      transition: color 0.2s;
+    }
+    .btn-back:hover { color: #16a34a; }
+
+    /* ── Error / Success messages ── */
+    .error-msg {
+      color: #dc2626;
+      font-size: 13px;
+      padding: 10px 14px;
+      background: #fef2f2;
+      border-radius: 10px;
+      margin-top: 8px;
+      border: 1px solid #fecaca;
+    }
+    .success-msg {
+      color: #16a34a;
+      font-size: 13px;
+      padding: 10px 14px;
+      background: #f0fdf4;
+      border-radius: 10px;
+      margin-top: 8px;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* ── Forgot password title ── */
+    .forgot-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .forgot-desc {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 18px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      body.auth-page { padding: 12px; }
+      .auth-container { padding: 32px 26px 28px; border-radius: 24px; }
+      .logo { margin-bottom: 24px; }
+      .logo-icon { font-size: 36px; }
+      .logo h1 { font-size: 28px; margin-bottom: 10px; }
+      .logo .tagline { font-size: 15px; }
+      .logo .subtagline { font-size: 13px; }
+      .tabs { margin-bottom: 20px; border-radius: 14px; }
+      .tab { padding: 10px; font-size: 13px; border-radius: 10px; }
+      .form-group { margin-bottom: 14px; }
+      input, select, textarea { padding: 12px 14px; font-size: 14px; }
+      .btn-primary { padding: 13px 18px; font-size: 15px; border-radius: 14px; }
+      .blob-1 { width: 200px; height: 200px; }
+      .blob-2 { width: 160px; height: 160px; }
+      .card-glow { width: 300px; height: 300px; }
+      .float-el-1, .float-el-2, .float-el-3, .float-el-4,
+      .float-el-5, .float-el-6 { display: none; }
+      .sparkle { display: none; }
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <!-- Ambient background elements -->
+  <div class="card-glow"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+  <div class="sparkle"></div>
+
+  <!-- Floating decorative UI elements -->
+  <div class="float-el float-el-1">💬 Say hi!</div>
+  <div class="float-el float-el-2">👤</div>
+  <div class="float-el float-el-3"></div>
+  <div class="float-el float-el-4">🟢 Online</div>
+  <div class="float-el float-el-5"></div>
+  <div class="float-el float-el-6"></div>
+
+ 
+
+  <div class="auth-container">
+    <div class="logo">
+      <div class="logo-glow"></div>
+      <span class="logo-icon">✦</span>
+      <h1>Spark</h1>
+      <p class="tagline">Chat, connect, and build friendships instantly.</p>
+      <p class="subtagline">Meet people who match your energy and interests.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('login')">Login</button>
+      <button class="tab" onclick="showTab('register')">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="you@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" required>
+      </div>
+      <div class="forgot-link">
+        <a href="#" onclick="showForgot(event)">Forgot password?</a>
+      </div>
+      <div id="loginError" class="error-msg hidden"></div>
+      <button type="submit" class="btn-primary">Login</button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="registerForm" class="auth-form hidden" onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="regUsername" placeholder="coolname123" required>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="you@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="regPassword" placeholder="••••••••" required minlength="6">
+      </div>
+      <div id="registerError" class="error-msg hidden"></div>
+      <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+
+    <!-- Forgot Password -->
+    <div id="forgotForm" class="auth-form hidden">
+      <button type="button" class="btn-back" onclick="hideForgot()">← Back to login</button>
+      <h3 class="forgot-title">Reset Password</h3>
+      <p class="forgot-desc">Enter your email and choose a new password.</p>
+
+      <!-- Step 1: email -->
+      <div id="forgotStep1">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="forgotEmail" placeholder="you@email.com">
+        </div>
+        <div id="forgotError" class="error-msg hidden"></div>
+        <button type="button" class="btn-primary" onclick="verifyEmail()">Continue</button>
+      </div>
+
+      <!-- Step 2: new password -->
+      <div id="forgotStep2" class="hidden">
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" id="newPassword" placeholder="Min. 6 characters" minlength="6">
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <input type="password" id="confirmPassword" placeholder="Re-enter new password" minlength="6">
+        </div>
+        <button type="button" class="btn-primary" onclick="resetPassword()">Reset Password</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.add('hidden'));
+
+      if (tab === 'login') {
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        document.getElementById('loginForm').classList.remove('hidden');
+      } else {
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        document.getElementById('registerForm').classList.remove('hidden');
+      }
+    }
+
+    function showForgot(e) {
+      e.preventDefault();
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.add('hidden'));
+      document.getElementById('forgotForm').classList.remove('hidden');
+      document.getElementById('forgotStep1').classList.remove('hidden');
+      document.getElementById('forgotStep2').classList.add('hidden');
+      document.getElementById('forgotError').classList.add('hidden');
+    }
+
+    function hideForgot() {
+      document.getElementById('forgotForm').classList.add('hidden');
+      document.getElementById('loginForm').classList.remove('hidden');
+    }
+
+    async function verifyEmail() {
+      const email = document.getElementById('forgotEmail').value;
+      const errEl = document.getElementById('forgotError');
+      errEl.classList.add('hidden');
+      if (!email) { errEl.textContent = 'Please enter your email'; errEl.classList.remove('hidden'); return; }
+      try {
+        const res = await fetch('/api/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        document.getElementById('forgotStep1').classList.add('hidden');
+        document.getElementById('forgotStep2').classList.remove('hidden');
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    async function resetPassword() {
+      const newPw = document.getElementById('newPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+      const errEl = document.getElementById('forgotError');
+      errEl.classList.add('hidden');
+      if (newPw.length < 6) { errEl.textContent = 'Password must be at least 6 characters'; errEl.classList.remove('hidden'); return; }
+      if (newPw !== confirm) { errEl.textContent = 'Passwords do not match'; errEl.classList.remove('hidden'); return; }
+      try {
+        const email = document.getElementById('forgotEmail').value;
+        const res = await fetch('/api/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        const resetRes = await fetch('/api/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resetToken: data.resetToken, newPassword })
+        });
+        const resetData = await resetRes.json();
+        if (!resetRes.ok) throw new Error(resetData.error || 'Reset failed');
+        alert('Password reset successfully! Please login with your new password.');
+        hideForgot();
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Logging in...';
+      const errorEl = document.getElementById('loginError');
+      errorEl.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('loginEmail').value,
+            password: document.getElementById('loginPassword').value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.userId);
+        localStorage.setItem('username', data.username);
+        window.location.href = data.hasProfile ? 'browse.html' : 'profile.html';
+      } catch (err) {
+        errorEl.textContent = err.message === 'Failed to fetch' ? 'Cannot reach server. Open the app via http://localhost:3000' : err.message;
+        errorEl.classList.remove('hidden');
+        btn.disabled = false; btn.textContent = 'Login';
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Creating account...';
+      const errorEl = document.getElementById('registerError');
+      errorEl.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('regUsername').value,
+            email: document.getElementById('regEmail').value,
+            password: document.getElementById('regPassword').value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.userId);
+        localStorage.setItem('username', data.username);
+        window.location.href = 'profile.html';
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.classList.remove('hidden');
+        btn.disabled = false; btn.textContent = 'Create Account';
+      }
+    }
+  </script>
+</body>
+</html>

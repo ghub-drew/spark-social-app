@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark Admin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #16a34a;
+      --bg: #f4f6fb;
+      --card: #fff;
+      --border: #e5e7eb;
+      --text: #1a1a2e;
+      --muted: #6b7280;
+      --danger: #ef4444;
+      --green: #10b981;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Login ── */
+    #loginScreen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #22c55e, #15803d);
+    }
+    .login-box {
+      background: white; border-radius: 20px; padding: 40px 36px; width: 340px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2); text-align: center;
+    }
+    .login-box .icon { font-size: 36px; margin-bottom: 8px; }
+    .login-box h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .login-box p { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+    .login-box input {
+      width: 100%; padding: 11px 14px; border: 2px solid var(--border); border-radius: 10px;
+      font-size: 15px; margin-bottom: 12px; outline: none;
+    }
+    .login-box input:focus { border-color: var(--primary); }
+    .login-box button {
+      width: 100%; padding: 12px; background: var(--primary); color: white;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    .login-box button:hover { opacity: 0.9; }
+    .login-error { color: var(--danger); font-size: 13px; margin-top: 8px; }
+
+    /* ── App shell ── */
+    #appScreen { display: none; }
+    .topbar {
+      background: white; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; height: 58px; position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-left .logo { font-size: 18px; font-weight: 800; color: var(--primary); }
+    .topbar-left .badge { background: #f0fdf4; color: var(--primary); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; border: 1px solid #86efac; }
+    .topbar button { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; font-size: 13px; cursor: pointer; color: var(--muted); }
+    .topbar button:hover { border-color: var(--primary); color: var(--primary); }
+
+    .main { max-width: 1200px; margin: 0 auto; padding: 28px 24px; }
+
+    /* ── Stats ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: white; border-radius: 14px; padding: 20px 22px;
+      border: 1px solid var(--border); display: flex; align-items: center; gap: 14px;
+    }
+    .stat-icon { font-size: 28px; }
+    .stat-value { font-size: 26px; font-weight: 800; line-height: 1; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 4px; margin-bottom: 20px; }
+    .tab {
+      padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer;
+      font-size: 14px; font-weight: 600; background: white; color: var(--muted);
+      border: 1px solid var(--border); transition: all 0.15s;
+    }
+    .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* ── Table ── */
+    .table-card { background: white; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+    .table-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .table-header h3 { font-size: 15px; font-weight: 700; }
+    .table-header .count { font-size: 13px; color: var(--muted); }
+
+    .search-bar { padding: 8px 20px; border-bottom: 1px solid var(--border); }
+    .search-bar input {
+      width: 100%; max-width: 320px; padding: 7px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 13px; outline: none;
+    }
+    .search-bar input:focus { border-color: var(--primary); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead th { text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; background: #f9fafb; border-bottom: 1px solid var(--border); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f9fafb; }
+    td { padding: 11px 16px; vertical-align: middle; }
+
+    .avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: #dcfce7; }
+    .avatar-placeholder { width: 36px; height: 36px; border-radius: 50%; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .user-cell { display: flex; align-items: center; gap: 10px; }
+    .user-cell strong { display: block; font-weight: 600; }
+    .user-cell span { font-size: 12px; color: var(--muted); }
+
+    .badge-gender { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; background: #eff6ff; color: #3b82f6; }
+    .badge-woman { background: #fdf2f8; color: #db2777; }
+
+    .btn-del { background: none; border: none; cursor: pointer; color: #d1d5db; font-size: 16px; padding: 4px 6px; border-radius: 6px; transition: all 0.15s; }
+    .btn-del:hover { background: #f0fdf4; color: var(--danger); }
+
+    .msg-bubble { max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+    .time-cell { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+    .empty-row td { text-align: center; padding: 48px; color: var(--muted); }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="icon">🔐</div>
+    <h1>Admin Panel</h1>
+    <p>Spark Social App</p>
+    <input type="password" id="adminPass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter') doLogin()">
+    <button onclick="doLogin()">Login</button>
+    <div class="login-error hidden" id="loginError"></div>
+  </div>
+</div>
+
+<!-- App Screen -->
+<div id="appScreen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="logo">✦ Spark</span>
+      <span class="badge">Admin</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button onclick="loadAll()">↻ Refresh</button>
+      <button onclick="window.open('logs.html','_blank')">📋 Logs</button>
+      <button onclick="window.open('documentation.html','_blank')">📖 Docs</button>
+      <button onclick="window.open('changelog.html','_blank')">📋 Changelog</button>
+      <button onclick="adminLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div><div class="stat-value" id="statUsers">–</div><div class="stat-label">Total Users</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div><div class="stat-value" id="statProfiles">–</div><div class="stat-label">Complete Profiles</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📸</div>
+        <div><div class="stat-value" id="statPhotos">–</div><div class="stat-label">With Photos</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div><div class="stat-value" id="statMessages">–</div><div class="stat-label">Total Messages</div></div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" id="tabUsers" onclick="showTab('users')">👤 Users</button>
+      <button class="tab" id="tabMessages" onclick="showTab('messages')">💬 Messages</button>
+    </div>
+
+    <!-- Users Table -->
+    <div id="usersPanel" class="table-card">
+      <div class="table-header">
+        <h3>All Users</h3>
+        <span class="count" id="usersCount"></span>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search by name, username or email..." oninput="filterUsers(this.value)">
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Age / Gender</th>
+            <th>Bio</th>
+            <th>Photo</th>
+            <th>Joined</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="usersBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Messages Table -->
+    <div id="messagesPanel" class="table-card hidden">
+      <div class="table-header">
+        <h3>All Messages</h3>
+        <span class="count" id="messagesCount"></span>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search by user or content..." oninput="filterMessages(this.value)">
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Message</th>
+            <th>Time</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="messagesBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  let adminToken = sessionStorage.getItem('adminToken');
+  let allUsers = [], allMessages = [];
+
+  if (adminToken) showApp();
+
+  async function doLogin() {
+    const pass = document.getElementById('adminPass').value;
+    const err = document.getElementById('loginError');
+    err.classList.add('hidden');
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      adminToken = data.token;
+      sessionStorage.setItem('adminToken', adminToken);
+      localStorage.setItem('adminToken', adminToken);
+      showApp();
+    } catch (e) {
+      err.textContent = e.message;
+      err.classList.remove('hidden');
+    }
+  }
+
+  function showApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+    loadAll();
+  }
+
+  function adminLogout() {
+    sessionStorage.removeItem('adminToken');
+    localStorage.removeItem('adminToken');
+    adminToken = null;
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('adminPass').value = '';
+  }
+
+  function authHeaders() {
+    return { Authorization: `Bearer ${adminToken}` };
+  }
+
+  async function loadAll() {
+    await Promise.all([loadStats(), loadUsers(), loadMessages()]);
+  }
+
+  async function loadStats() {
+    const res = await fetch('/api/admin/stats', { headers: authHeaders() });
+    if (res.status === 401) return adminLogout();
+    const s = await res.json();
+    document.getElementById('statUsers').textContent = s.totalUsers;
+    document.getElementById('statProfiles').textContent = s.usersWithProfile;
+    document.getElementById('statPhotos').textContent = s.usersWithPhoto;
+    document.getElementById('statMessages').textContent = s.totalMessages;
+  }
+
+  async function loadUsers() {
+    const res = await fetch('/api/admin/users', { headers: authHeaders() });
+    allUsers = await res.json();
+    renderUsers(allUsers);
+  }
+
+  async function loadMessages() {
+    const res = await fetch('/api/admin/messages', { headers: authHeaders() });
+    allMessages = await res.json();
+    renderMessages(allMessages);
+  }
+
+  function renderUsers(users) {
+    document.getElementById('usersCount').textContent = `${users.length} user${users.length !== 1 ? 's' : ''}`;
+    const tbody = document.getElementById('usersBody');
+    if (!users.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No users yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = users.map(u => `
+      <tr>
+        <td style="color:var(--muted);font-size:12px">#${u.id}</td>
+        <td>
+          <div class="user-cell">
+            ${u.photo
+              ? `<img class="avatar" src="${u.photo}" onerror="this.style.display='none'">`
+              : `<div class="avatar-placeholder">👤</div>`}
+            <div>
+              <strong>${esc(u.name || u.username)}</strong>
+              <span>@${esc(u.username)} · ${esc(u.email)}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          ${u.age ? `<span style="font-weight:600">${u.age}</span>` : '<span style="color:var(--muted)">–</span>'}
+          ${u.gender ? `<span class="badge-gender ${u.gender === 'Woman' ? 'badge-woman' : ''}" style="margin-left:4px">${esc(u.gender)}</span>` : ''}
+        </td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:13px">
+          ${u.bio ? esc(u.bio) : '<em>No bio</em>'}
+        </td>
+        <td>${u.photo ? '✅' : '<span style="color:var(--muted)">–</span>'}</td>
+        <td class="time-cell">${fmtDate(u.created_at)}</td>
+        <td>
+          <button class="btn-del" title="Delete user" onclick="deleteUser(${u.id}, '${esc(u.username)}')">🗑</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function renderMessages(messages) {
+    document.getElementById('messagesCount').textContent = `${messages.length} message${messages.length !== 1 ? 's' : ''}`;
+    const tbody = document.getElementById('messagesBody');
+    if (!messages.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No messages yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = messages.map(m => `
+      <tr>
+        <td style="color:var(--muted);font-size:12px">#${m.id}</td>
+        <td><strong>${esc(m.sender_name)}</strong></td>
+        <td><strong>${esc(m.receiver_name)}</strong></td>
+        <td class="msg-bubble" title="${esc(m.content)}">${esc(m.content)}</td>
+        <td class="time-cell">${fmtDate(m.created_at)}</td>
+        <td>
+          <button class="btn-del" title="Delete message" onclick="deleteMessage(${m.id})">🗑</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function filterUsers(q) {
+    q = q.toLowerCase();
+    renderUsers(q ? allUsers.filter(u =>
+      (u.name || '').toLowerCase().includes(q) ||
+      u.username.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q)
+    ) : allUsers);
+  }
+
+  function filterMessages(q) {
+    q = q.toLowerCase();
+    renderMessages(q ? allMessages.filter(m =>
+      m.sender_name.toLowerCase().includes(q) ||
+      m.receiver_name.toLowerCase().includes(q) ||
+      m.content.toLowerCase().includes(q)
+    ) : allMessages);
+  }
+
+  async function deleteUser(id, username) {
+    if (!confirm(`Delete user "${username}" and all their messages?`)) return;
+    await fetch(`/api/admin/users/${id}`, { method: 'DELETE', headers: authHeaders() });
+    loadAll();
+  }
+
+  async function deleteMessage(id) {
+    if (!confirm('Delete this message?')) return;
+    await fetch(`/api/admin/messages/${id}`, { method: 'DELETE', headers: authHeaders() });
+    loadAll();
+  }
+
+  function showTab(tab) {
+    document.getElementById('usersPanel').classList.toggle('hidden', tab !== 'users');
+    document.getElementById('messagesPanel').classList.toggle('hidden', tab !== 'messages');
+    document.getElementById('tabUsers').classList.toggle('active', tab === 'users');
+    document.getElementById('tabMessages').classList.toggle('active', tab === 'messages');
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '–';
+    const d = new Date(iso);
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>

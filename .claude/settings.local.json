@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node server.js)",
+      "Bash(curl -s http://localhost:3000/api/members -H \"Authorization: Bearer test\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3000)",
+      "Bash(curl -s -X POST http://localhost:3000/api/register -H \"Content-Type: application/json\" -d \"{\\\\\"username\\\\\":\\\\\"testuser99\\\\\",\\\\\"email\\\\\":\\\\\"test99@test.com\\\\\",\\\\\"password\\\\\":\\\\\"password123\\\\\"}\")",
+      "PowerShell(Get-Process -Id 22512)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3000 | Select-Object LocalAddress, LocalPort, State, OwningProcess | ForEach-Object { $_ | Add-Member -MemberType NoteProperty -Name ProcessName -Value \\(Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue\\).Name -PassThru })",
+      "Bash(curl -s -X POST http://localhost:3000/api/register -H \"Content-Type: application/json\" -d \"{\\\\\"username\\\\\":\\\\\"testdrew\\\\\",\\\\\"email\\\\\":\\\\\"drew@test.com\\\\\",\\\\\"password\\\\\":\\\\\"pass123\\\\\"}\")",
+      "Bash(curl -s -X POST http://localhost:3000/api/admin/login -H \"Content-Type: application/json\" -d \"{\\\\\"password\\\\\":\\\\\"admin1234\\\\\"}\")",
+      "Bash(curl -s http://localhost:3000/browse.html)",
+      "Bash(curl -s -X POST http://localhost:3000/api/forgot-password -H \"Content-Type: application/json\" -d \"{\\\\\"email\\\\\":\\\\\"test@notfound.com\\\\\"}\")",
+      "Bash(pip show *)",
+      "Bash(py --version)",
+      "Bash(where py *)",
+      "Bash(npm list *)",
+      "Bash(node generate_docs.js)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const s=fs.statSync\\('C:/Users/andre/Documents/Claude Projects/Code App/Spark_Documentation.pdf'\\); console.log\\('Size:', s.size, 'bytes'\\);\")",
+      "Bash(node -e ' *)"
+    ]
+  }
+}
