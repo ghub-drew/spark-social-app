@@ -12,15 +12,16 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const JWT_SECRET = 'social-app-secret-key-change-in-prod';
+const JWT_SECRET = process.env.JWT_SECRET || 'social-app-secret-key-change-in-prod';
 const PORT = 3000;
 
 if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 
-const STORAGE_URL = 'https://hpezaqvtufrvvczyixwc.supabase.co/storage/v1/object/public/uploads';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE0OTkxOSwiZXhwIjoyMDkzNzI1OTE5fQ.MVu922CHYeNp0DWzZ73WfL_5lDMpd8xV4Qe-kuUaukA';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://hpezaqvtufrvvczyixwc.supabase.co';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE0OTkxOSwiZXhwIjoyMDkzNzI1OTE5fQ.MVu922CHYeNp0DWzZ73WfL_5lDMpd8xV4Qe-kuUaukA';
+const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/uploads`;
 const storageClient = require('@supabase/supabase-js').createClient(
-  'https://hpezaqvtufrvvczyixwc.supabase.co',
+  SUPABASE_URL,
   SERVICE_KEY
 );
 
