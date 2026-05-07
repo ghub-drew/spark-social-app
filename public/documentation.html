@@ -227,6 +227,7 @@
         <li><a href="#data-models">Data Models</a></li>
         <li><a href="#reasonix-setup">Reasonix Setup</a></li>
         <li><a href="#supabase">Supabase Local Setup</a></li>
+        <li><a href="#database-access">Database Access</a></li>
       </ol>
     </div>
 
@@ -653,6 +654,37 @@ npx supabase start</div>
         <li><strong>Phase 5</strong>  -  File uploads moved to Supabase Storage ✅</li>
         <li><strong>Phase 6</strong>  -  Deploy to Vercel ✅  -  live at <a href="https://cebuspark.com">cebuspark.com</a></li>
       </ol>
+    </div>
+
+    <!-- 11. DATABASE ACCESS -->
+    <div class="doc-section" id="database-access">
+      <h2>11. Database Access</h2>
+      <p>Access your Supabase PostgreSQL database two ways:</p>
+
+      <h3>Supabase Dashboard (Web UI)</h3>
+      <ul>
+        <li>Go to <a href="https://supabase.com/dashboard" target="_blank">supabase.com/dashboard</a></li>
+        <li>Sign in with GitHub, select the <strong>CWD</strong> project</li>
+        <li><strong>Table Editor</strong> - browse/edit users, messages, contacts</li>
+        <li><strong>SQL Editor</strong> - run custom queries</li>
+        <li><strong>Storage</strong> - manage uploaded files</li>
+      </ul>
+
+      <h3>Direct PostgreSQL Connection</h3>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr><th>Setting</th><th>Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Host</td><td class="route">aws-0-ap-southeast-1.pooler.supabase.com</td></tr>
+            <tr><td>Port</td><td class="route">6543</td></tr>
+            <tr><td>Database</td><td class="route">postgres</td></tr>
+            <tr><td>Username</td><td class="route">postgres.hpezaqvtufrvvczyixwc</td></tr>
+            <tr><td>Password</td><td>Database password set during project creation</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="doc-footer">
