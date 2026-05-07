@@ -30,21 +30,20 @@ if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://hpezaqvtufrvvczyixwc.supabase.co';
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE0OTkxOSwiZXhwIjoyMDkzNzI1OTE5fQ.MVu922CHYeNp0DWzZ73WfL_5lDMpd8xV4Qe-kuUaukA';
 const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/uploads`;
-const storageClient = require('@supabase/supabase-js').createClient(
-  SUPABASE_URL,
-  SERVICE_KEY
-);
 
 async function uploadToSupabase(file, prefix = '') {
-  const ext = file.originalname.split('.').pop();
-  // Sanitize filename
   const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
   const filename = prefix ? `${prefix}-${Date.now()}-${safeName}` : `${Date.now()}-${safeName}`;
-  const { data, error } = await storageClient
-    .storage
-    .from('uploads')
-    .upload(filename, file.buffer, { contentType: file.mimetype, upsert: true });
-  if (error) throw error;
+  const url = `${SUPABASE_URL}/storage/v1/object/uploads/${filename}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${SERVICE_KEY}`, 'Content-Type': file.mimetype },
+    body: file.buffer
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error('Storage upload failed: ' + err);
+  }
   return `${STORAGE_URL}/${filename}`;
 }
 
