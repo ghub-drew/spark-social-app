@@ -1,8 +1,34 @@
 const express = require('express');
+const multer = require('multer');
 const app = express();
 
 // Health check - no heavy deps needed
 app.get('/api/health', (req, res) => res.json({ ok: true, env: !!process.env.SUPABASE_URL }));
+
+
+
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://hpezaqvtufrvvczyixwc.supabase.co';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODE0OTkxOSwiZXhwIjoyMDkzNzI1OTE5fQ.MVu922CHYeNp0DWzZ73WfL_5lDMpd8xV4Qe-kuUaukA';
+const storageClient = require('@supabase/supabase-js').createClient(SUPABASE_URL, SERVICE_KEY);
+const STORAGE_URL = `${SUPABASE_URL}/storage/v1/object/public/uploads`;
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Only images allowed'));
+  }
+});
+
+async function uploadToSupabase(file, prefix = '') {
+  const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const filename = prefix ? `${prefix}-${Date.now()}-${safeName}` : `${Date.now()}-${safeName}`;
+  await storageClient.storage.from('uploads').upload(filename, file.buffer, {
+    contentType: file.mimetype, upsert: true
+  });
+  return `${STORAGE_URL}/${filename}`;
+}
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -116,15 +142,25 @@ app.get('/api/profile/me', authMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.put('/api/profile', authMiddleware, async (req, res) => {
-  // Note: file upload removed for Vercel - use Supabase Storage client-side
+app.put('/api/profile', authMiddleware, upload.single('photo'), async (req, res) => {
   try {
-    const { name, age, gender, bio, photo } = req.body;
-    const updates = { name, age: parseInt(age), gender, bio };
-    if (photo) updates.photo = photo;
+    const { name, age, gender, bio } = req.body;
+    let photo;
+
+    if (req.file) {
+      photo = await uploadToSupabase(req.file, 'avatar');
+    } else {
+      const { data: user } = await supabase.from('users').select('photo').eq('id', req.user.id).single();
+      photo = user.photo;
+    }
+
+    const updates = { name, age: parseInt(age), gender, bio, photo };
     await supabase.from('users').update(updates).eq('id', req.user.id);
-    res.json({ success: true, photo: updates.photo });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    res.json({ success: true, photo });
+  } catch (err) {
+    logger.error('Profile update error', err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/api/members', authMiddleware, async (req, res) => {
@@ -262,6 +298,23 @@ app.delete('/api/logs', adminAuth, (req, res) => {
     if (fs.existsSync(logger.LOG_FILE)) fs.unlinkSync(logger.LOG_FILE);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: 'Could not clear logs' }); }
+});
+
+// ── Chat file upload ────────────────────────────────────────────────────────────
+const uploadChat = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }
+});
+
+app.post('/api/chat/upload', authMiddleware, uploadChat.single('file'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    const url = await uploadToSupabase(req.file, 'chat');
+    const isImage = req.file.mimetype.startsWith('image/');
+    res.json({ url, type: isImage ? 'image' : 'file', fileName: req.file.originalname });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ── Error handler ───────────────────────────────────────────────────────────────
