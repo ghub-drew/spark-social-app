@@ -280,8 +280,8 @@
     .tab.active {
       background: white;
       color: #16a34a;
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.12);
+      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.15);
+      border: none;
     }
     .tab:hover:not(.active) {
       color: #374151;
@@ -300,6 +300,18 @@
       color: #374151;
       margin-bottom: 6px;
       letter-spacing: -0.01em;
+    }
+
+    .input-wrap {
+      position: relative; display: flex; align-items: center;
+    }
+    .input-icon {
+      position: absolute; left: 14px; z-index: 2;
+      font-size: 15px; opacity: 0.5; pointer-events: none;
+      line-height: 1;
+    }
+    .input-wrap input, .input-wrap select, .input-wrap textarea {
+      padding-left: 40px;
     }
 
     input, select, textarea {
@@ -391,16 +403,16 @@
 
     /* ── Social Login ── */
     .social-divider {
-      display: flex; align-items: center; gap: 14px;
-      margin: 20px 0 16px;
+      display: flex; align-items: center; gap: 16px;
+      margin: 18px 0 16px;
     }
     .social-divider-line {
       flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(229,231,235,0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(156,163,175,0.2), transparent);
     }
     .social-divider-text {
-      font-size: 12px; color: #9ca3af; font-weight: 500; white-space: nowrap;
-      letter-spacing: 0.02em;
+      font-size: 11px; color: rgba(156,163,175,0.6); white-space: nowrap;
+      letter-spacing: 0.03em; font-weight: 500;
     }
     .social-btns {
       display: flex; gap: 10px;
@@ -528,11 +540,17 @@
     <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
       <div class="form-group">
         <label>Email</label>
-        <input type="email" id="loginEmail" placeholder="you@email.com" required>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="loginEmail" placeholder="you@email.com" required>
+        </div>
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" required>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
       </div>
       <div class="forgot-link">
         <a href="#" onclick="showForgot(event)">Forgot password?</a>
@@ -564,15 +582,23 @@
     <form id="registerForm" class="auth-form hidden" onsubmit="handleRegister(event)">
       <div class="form-group">
         <label>Username</label>
-        <input type="text" id="regUsername" placeholder="coolname123" required>
+        <div class="input-wrap">
+          <span class="input-icon">👤</span>
+          <input type="text" id="regUsername" placeholder="coolname123" required>
+        </div>
       </div>
       <div class="form-group">
         <label>Email</label>
-        <input type="email" id="regEmail" placeholder="you@email.com" required>
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="regEmail" placeholder="you@email.com" required>
+        </div>
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input type="password" id="regPassword" placeholder="••••••••" required minlength="6">
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="regPassword" placeholder="••••••••" required minlength="6">
       </div>
       <div id="registerError" class="error-msg hidden"></div>
       <button type="submit" class="btn-primary">Create Account</button>
@@ -588,7 +614,10 @@
       <div id="forgotStep1">
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" id="forgotEmail" placeholder="you@email.com">
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="forgotEmail" placeholder="you@email.com">
+          </div>
         </div>
         <div id="forgotError" class="error-msg hidden"></div>
         <button type="button" class="btn-primary" onclick="verifyEmail()">Continue</button>
