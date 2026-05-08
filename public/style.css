@@ -562,7 +562,6 @@ textarea { resize: vertical; }
   .navbar { padding: 0 16px; height: 56px; }
   .logo-small { font-size: 17px; }
   .nav-links a { padding: 6px 10px; font-size: 12px; }
-  .nav-links a[href="browse.html"] { display: none; }
   .nav-user { padding: 3px 8px 3px 5px; gap: 4px; }
   .nav-user-name { font-size: 12px; }
   .btn-logout { padding: 5px 10px; font-size: 12px; }
