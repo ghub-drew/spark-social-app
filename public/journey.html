@@ -170,7 +170,7 @@
 
     <!-- ═══ VIBE NOTE ═══ -->
     <div class="jny-vibe">
-      <strong> What is Vibe Coding?</strong> A term for building software by describing what you want in plain English to an AI, letting it write the code, and iterating until it feels right. You don't need to know programming languages  -  just your ideas.
+      <strong> How I Built Spark</strong> I didn't use just one AI - I used <strong>three</strong>. <strong>Claude</strong> for architecting the foundation and planning the structure. <strong>DeepSeek</strong> for the heavy coding with its long context. <strong>ChatGPT</strong> for visuals, branding prompts, and UI inspiration. Each tool brought something different to the table, and Spark is better because of it.
     </div>
 
     <!-- ═══ TOC ═══ -->
@@ -187,32 +187,32 @@
     <!-- ═══ THE BEGINNING ═══ -->
     <div class="jny-section" id="beginning">
       <h2><span class="emoji"></span> The Beginning</h2>
-      <p>Spark started as an idea: a simple social app where people could connect, chat, and build friendships. The goal was to create something real  -  not just a concept  -  using AI as the developer.</p>
+      <p>Spark started as an idea: a simple social app where people could connect, chat, and build friendships. I didn't know how to code, but I knew AI could help me build it. So I jumped in.</p>
 
       <div class="jny-timeline">
         <div class="jny-tl-item">
           <div class="jny-tl-date">Step 1</div>
-          <div class="jny-tl-text"><strong>Get an AI Coding Assistant</strong>  -  DeepSeek API runs natively with Reasonix (no signup needed, just run <code>npx reasonix@latest code</code>).</div>
+          <div class="jny-tl-text"><strong>Claude - The Architect</strong> I started with Claude because it's great at planning. It helped me think through the app structure, the tech stack, and how everything would fit together before writing a single line of code.</div>
         </div>
         <div class="jny-tl-item">
           <div class="jny-tl-date">Step 2</div>
-          <div class="jny-tl-text"><strong>First Prompt</strong>  -  Told the AI to create a social app. It generated the entire project structure.</div>
+          <div class="jny-tl-text"><strong>DeepSeek - The Builder</strong> Once the plan was solid, I switched to DeepSeek through Reasonix. Its long context let me work on bigger pieces without losing track. The whole backend, database logic, and API routes were built here.</div>
         </div>
         <div class="jny-tl-item">
           <div class="jny-tl-date">Step 3</div>
-          <div class="jny-tl-text"><strong>Iterate & Refine</strong>  -  Dozens of changes: theme colors, UI improvements, features added through conversation.</div>
+          <div class="jny-tl-text"><strong>ChatGPT - The Creative</strong> For the look and feel, I turned to ChatGPT. It helped with color palettes, icon ideas, branding prompts, and the overall vibe you see on the site today.</div>
         </div>
         <div class="jny-tl-item">
           <div class="jny-tl-date">Step 4</div>
-          <div class="jny-tl-text"><strong>Add Features</strong>  -  Contact form, FAQ, Terms & Privacy, documentation, changelog, workflow guide.</div>
+          <div class="jny-tl-text"><strong>Iterate Across All Three</strong> I bounced between them - Claude for refactoring ideas, DeepSeek for the actual code changes, ChatGPT for quick design tweaks. Each had its strength.</div>
         </div>
         <div class="jny-tl-item">
           <div class="jny-tl-date">Step 5</div>
-          <div class="jny-tl-text"><strong>Database Upgrade</strong>  -  Migrated from local JSON to Supabase PostgreSQL for real scalability.</div>
+          <div class="jny-tl-text"><strong>Database & Infrastructure</strong> Supabase replaced the local JSON database. Vercel handled hosting. All configured through conversation with AI.</div>
         </div>
         <div class="jny-tl-item">
           <div class="jny-tl-date">Step 6</div>
-          <div class="jny-tl-text"><strong>Go Live</strong>  -  Deployed to Vercel, connected cebuspark.com, and the app went live to the world.</div>
+          <div class="jny-tl-text"><strong>Go Live</strong> Deployed to Vercel, connected cebuspark.com, and Spark was live to the world. Built without writing a single line of code myself.</div>
         </div>
       </div>
     </div>
@@ -226,9 +226,9 @@
         <div class="jny-step">
           <div class="jny-step-num">1</div>
           <div class="jny-step-content">
-            <h3>Get an AI Coding Tool</h3>
-            <p>DeepSeek API works natively with Reasonix as the coding interface. No additional setup needed.</p>
-            <div class="jny-code">npx reasonix@latest code</div>
+            <h3>Choose Your AI Toolkit</h3>
+            <p>I used Claude for planning, DeepSeek + Reasonix for coding, and ChatGPT for design. Pick what works for you - each has different strengths.</p>
+            <div class="jny-code">Claude - Planning & Architecture<br>DeepSeek + Reasonix - Long context coding<br>ChatGPT - Visuals & Branding</div>
           </div>
         </div>
 
@@ -309,7 +309,9 @@
           <tr><th>Component</th><th>What We Used</th></tr>
         </thead>
         <tbody>
-          <tr><td>AI Coding</td><td>DeepSeek API + Reasonix (native)</td></tr>
+          <tr><td>AI Architect</td><td>Claude (planning, structure, refactoring)</td></tr>
+          <tr><td>AI Developer</td><td>DeepSeek + Reasonix (long context coding)</td></tr>
+          <tr><td>AI Creative</td><td>ChatGPT (visuals, branding, prompts)</td></tr>
           <tr><td>Frontend</td><td>HTML + CSS + Vanilla JS</td></tr>
           <tr><td>Backend</td><td>Node.js + Express</td></tr>
           <tr><td>Database</td><td>Supabase (PostgreSQL)</td></tr>
@@ -332,7 +334,8 @@
         <li><strong>Use a real database early</strong>  -  JSON files don't scale (we learned this the hard way!).</li>
         <li><strong>Document as you go</strong>  -  Changelog, workflow guide, and docs saved us many times.</li>
         <li><strong>Git push = deploy</strong>  -  The workflow is just: edit, test, push, done.</li>
-        <li><strong>Vibe coding works</strong>  -  Describing what you want in plain English to AI is a real way to build software.</li>
+        <li><strong>Use different AIs for different jobs</strong>  -  Claude for architecture, DeepSeek for coding, ChatGPT for design. Each has strengths. Play to them.</li>
+        <li><strong>Vibe coding works</strong>  -  Describing what you want in plain English to AI is a real way to build software. You just need an idea and the patience to iterate.</li>
       </ul>
     </div>
 
