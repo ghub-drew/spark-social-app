@@ -1,5 +1,25 @@
 [
   {
+    "version": "v1.4",
+    "date": "May 8, 2026",
+    "items": [
+      "Refined Discover page with premium card design, avatars, vibe tags, active now section",
+      "Added search bar and filter pills (All, Active Now, Recently Joined) to Discover page",
+      "Human status labels instead of 'Offline - Xm ago' (Active now, Recently active, New here)",
+      "Added Google and Facebook OAuth login with Supabase",
+      "Created auth-callback.html page for OAuth redirect handling",
+      "Redesigned homepage auth card - wider (460px), premium glassmorphism, tighter spacing",
+      "Added social login buttons with Google and Facebook branding",
+      "Added input field icons (email, password, username) to login/register forms",
+      "Refined tab active state - softer green glow without border",
+      "Refined scrollbar, hover effects, and micro-interactions across all pages",
+      "Added floating social elements and ambient glow to homepage background",
+      "Polished Cebu brand identity - 'Meet real people around Cebu'",
+      "Terms and Privacy link added below social login section",
+      "Responsive design improvements for tablets and small screens"
+    ]
+  },
+  {
     "version": "v1.3",
     "date": "May 8, 2026",
     "items": [
