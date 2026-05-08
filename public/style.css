@@ -722,27 +722,24 @@ textarea { resize: vertical; }
 
   /* ── Chat page mobile ── */
   .chat-layout .page-footer { display: none; }
-  .chat-layout { height: calc(100vh - 60px); overflow: hidden; }
   .hamburger-nav { height: 50px; }
-  .chat-sidebar { width: 100%; min-width: 0; max-width: 100%; }
-  .chat-window.active ~ .chat-sidebar { display: none; }
-  .chat-window.active { display: flex; width: 100%; }
-  .chat-main { width: 100%; }
-  .sidebar-header h3 { display: none; }
-  .sidebar-header { padding: 12px 14px; }
+  .sidebar-header { padding: 10px 12px; }
+  .sidebar-header h3 { font-size: 15px; }
   .new-chat-btn { width: 28px; height: 28px; font-size: 14px; }
-  .convo-item { padding: 12px 14px; gap: 10px; }
-  .convo-item img { width: 40px; height: 40px; }
-  .messages-area { padding: 12px; flex: 1; }
+  .convo-item { padding: 10px 12px; gap: 8px; }
+  .convo-item img { width: 38px; height: 38px; }
+  .convo-info h4 { font-size: 13px; }
+  .convo-last { font-size: 11px; }
+  .messages-area { padding: 10px; }
   .message { max-width: 88%; }
-  .mine .bubble, .theirs .bubble { padding: 10px 14px; font-size: 14px; }
-  .message-input-area { padding: 8px 10px 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
-  .input-wrapper input { height: 40px; font-size: 14px; padding: 8px 12px; }
-  .btn-emoji, .btn-attach { width: 32px; height: 32px; }
+  .mine .bubble, .theirs .bubble { padding: 9px 13px; font-size: 14px; }
+  .message-input-area { padding: 8px 10px; padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+  .input-wrapper input { height: 38px; font-size: 14px; padding: 8px 12px; }
+  .btn-emoji, .btn-attach { width: 30px; height: 30px; }
   .chat-header { padding: 8px 12px; }
   .chat-header h3 { font-size: 15px; }
-  .chat-back-btn { display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; background: none; border: none; font-size: 20px; cursor: pointer; color: #374151; border-radius: 50%; flex-shrink: 0; }
-  .chat-back-btn:hover { background: #f3f4f6; }
+  .chat-back-btn { display: flex; width: 30px; height: 30px; align-items: center; justify-content: center; background: none; border: none; font-size: 20px; cursor: pointer; color: #374151; border-radius: 50%; flex-shrink: 0; }
+  .chat-back-btn:active { background: #f3f4f6; }
   .chat-placeholder { padding: 40px 20px; }
   .chat-placeholder span { font-size: 40px; }
   .chat-placeholder p { font-size: 13px; }
