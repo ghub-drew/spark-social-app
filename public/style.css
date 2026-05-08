@@ -563,10 +563,8 @@ textarea { resize: vertical; }
   .logo-small { font-size: 17px; }
   .nav-links a { padding: 6px 10px; font-size: 12px; }
   .nav-links a[href="browse.html"] { display: none; }
-  .nav-links a[href="profile.html"] { display: none; }
-  .nav-user { padding: 3px 8px 3px 5px; gap: 4px; cursor: pointer; }
-  .nav-user-name { font-size: 12px; cursor: pointer; }
-  .nav-user:hover { background: #f0fdf4; border-radius: 20px; }
+  .nav-user { padding: 3px 8px 3px 5px; gap: 4px; }
+  .nav-user-name { font-size: 12px; }
   .btn-logout { padding: 5px 10px; font-size: 12px; }
 
   .page-container { padding: 24px 16px 40px; }
