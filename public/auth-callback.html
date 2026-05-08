@@ -46,9 +46,9 @@
     <button class="btn-retry" id="retryBtn" onclick="location.reload()">Try Again</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" onload="handleCallback()"></script>
   <script>
-    (async function() {
+    async function handleCallback() {
       const statusEl = document.getElementById('statusText');
       const errorEl = document.getElementById('errorMsg');
       const retryBtn = document.getElementById('retryBtn');
@@ -103,7 +103,7 @@
         retryBtn.style.display = 'inline-block';
         statusEl.textContent = 'Something went wrong';
       }
-    })();
+    }
   </script>
 </body>
 </html>
