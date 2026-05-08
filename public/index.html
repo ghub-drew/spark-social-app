@@ -762,9 +762,10 @@
     async function signInWithGoogle() {
       const btn = document.getElementById('googleBtn');
       const errEl = document.getElementById('socialError');
+      const orig = btn.innerHTML;
       errEl.classList.add('hidden');
       btn.disabled = true;
-      btn.innerHTML = '<span style="font-size:14px;">Loading...</span>';
+      btn.innerHTML = '<span style="font-size:13px;">Loading...</span>';
       try {
         const sb = getSupabase();
         if (!sb) throw new Error('Supabase not loaded. Try again.');
@@ -777,16 +778,17 @@
         errEl.textContent = err.message;
         errEl.classList.remove('hidden');
         btn.disabled = false;
-        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 48 48">...</svg><span>Google</span>';
+        btn.innerHTML = orig;
       }
     }
 
     async function signInWithFacebook() {
       const btn = document.getElementById('facebookBtn');
       const errEl = document.getElementById('socialError');
+      const orig = btn.innerHTML;
       errEl.classList.add('hidden');
       btn.disabled = true;
-      btn.innerHTML = '<span style="font-size:14px;">Loading...</span>';
+      btn.innerHTML = '<span style="font-size:13px;">Loading...</span>';
       try {
         const sb = getSupabase();
         if (!sb) throw new Error('Supabase not loaded. Try again.');
@@ -799,7 +801,7 @@
         errEl.textContent = err.message;
         errEl.classList.remove('hidden');
         btn.disabled = false;
-        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 48 48">...</svg><span>Facebook</span>';
+        btn.innerHTML = orig;
       }
     }
 
