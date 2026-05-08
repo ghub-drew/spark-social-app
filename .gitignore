@@ -4,3 +4,5 @@ uploads/
 .env
 .env.local
 supabase/.temp
+
+.vercel

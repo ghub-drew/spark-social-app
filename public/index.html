@@ -389,6 +389,48 @@
     }
     .btn-back:hover { color: #16a34a; }
 
+    /* ── Social Login ── */
+    .social-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 20px 0 16px;
+    }
+    .social-divider-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(229,231,235,0.5), transparent);
+    }
+    .social-divider-text {
+      font-size: 12px; color: #9ca3af; font-weight: 500; white-space: nowrap;
+    }
+    .social-btns {
+      display: flex; gap: 10px;
+    }
+    .social-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 11px 12px;
+      border-radius: 14px; font-size: 14px; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: all 0.25s ease;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(4px);
+      border: 1.5px solid rgba(229,231,235,0.5);
+      color: #374151;
+    }
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      background: white;
+    }
+    .social-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .social-btn:disabled {
+      opacity: 0.5; cursor: not-allowed; transform: none;
+    }
+    .social-btn svg { flex-shrink: 0; }
+    .social-btn span { line-height: 1; }
+    .social-btn.social-google:hover { border-color: #ea4335; box-shadow: 0 6px 20px rgba(234,67,53,0.08); }
+    .social-btn.social-facebook:hover { border-color: #1877F2; box-shadow: 0 6px 20px rgba(24,119,242,0.08); }
+
     /* ── Error / Success messages ── */
     .error-msg {
       color: #dc2626;
@@ -494,15 +536,24 @@
       </div>
       <div id="loginError" class="error-msg hidden"></div>
       <button type="submit" class="btn-primary">Login</button>
-      <div style="display:flex;align-items:center;gap:10px;margin:18px 0 0;">
-        <span style="flex:1;height:1px;background:rgba(229,231,235,0.5);"></span>
-        <span style="font-size:12px;color:#9ca3af;font-weight:500;">or continue with</span>
-        <span style="flex:1;height:1px;background:rgba(229,231,235,0.5);"></span>
+
+      <!-- Social Login -->
+      <div class="social-divider">
+        <span class="social-divider-line"></span>
+        <span class="social-divider-text">or continue with</span>
+        <span class="social-divider-line"></span>
       </div>
-      <div style="display:flex;gap:8px;margin-top:14px;">
-        <button type="button" style="flex:1;padding:10px;border:1px solid rgba(229,231,235,0.5);border-radius:12px;background:rgba(255,255,255,0.6);cursor:pointer;font-size:18px;transition:all 0.2s;" onmouseover="this.style.background='white';this.style.borderColor='#e5e7eb'" onmouseout="this.style.background='rgba(255,255,255,0.6)';this.style.borderColor='rgba(229,231,235,0.5)'" title="Continue with Google">G</button>
-        <button type="button" style="flex:1;padding:10px;border:1px solid rgba(229,231,235,0.5);border-radius:12px;background:rgba(255,255,255,0.6);cursor:pointer;font-size:18px;transition:all 0.2s;" onmouseover="this.style.background='white';this.style.borderColor='#e5e7eb'" onmouseout="this.style.background='rgba(255,255,255,0.6)';this.style.borderColor='rgba(229,231,235,0.5)'" title="Continue with Apple">🍎</button>
+      <div class="social-btns">
+        <button type="button" class="social-btn social-google" onclick="signInWithGoogle()" id="googleBtn">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.54 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.35 2.56 10.56l7.98-5.97z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"/></svg>
+          <span>Google</span>
+        </button>
+        <button type="button" class="social-btn social-facebook" onclick="signInWithFacebook()" id="facebookBtn">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#1877F2" d="M24 0C10.74 0 0 10.74 0 24c0 13.26 10.74 24 24 24s24-10.74 24-24C48 10.74 37.26 0 24 0z"/><path fill="#fff" d="M26.2 36.8V24.9h4l.6-4.7h-4.6v-3c0-1.4.4-2.3 2.3-2.3h2.5V10.6c-.4-.1-2-.2-3.9-.2-3.8 0-6.5 2.3-6.5 6.6v3.7H17v4.7h4v11.9c.8.1 1.7.2 2.6.2.9 0 1.7-.1 2.6-.2z"/></svg>
+          <span>Facebook</span>
+        </button>
       </div>
+      <p id="socialError" class="error-msg hidden" style="margin-top:10px;"></p>
     </form>
 
     <!-- Register Form -->
@@ -692,6 +743,97 @@
         btn.disabled = false; btn.textContent = 'Create Account';
       }
     }
+
+    // ── OAuth Helpers ────────────────────────────────────────────
+    const SUPABASE_URL = 'https://hpezaqvtufrvvczyixwc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDk5MTksImV4cCI6MjA5MzcyNTkxOX0.WzUQH4ZGn33Omv02m0ZtQgdYCXihGnHsOuhJmwGPXXI';
+    let _supabase = null;
+
+    function getSupabase() {
+      if (!_supabase && typeof supabase !== 'undefined') {
+        _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+      return _supabase;
+    }
+
+    // Determine the current origin for OAuth redirect
+    function getRedirectUrl() {
+      return window.location.origin;
+    }
+
+    async function signInWithGoogle() {
+      const btn = document.getElementById('googleBtn');
+      const errEl = document.getElementById('socialError');
+      errEl.classList.add('hidden');
+      btn.disabled = true;
+      btn.innerHTML = '<span style="font-size:14px;">Loading...</span>';
+      try {
+        const sb = getSupabase();
+        if (!sb) throw new Error('Supabase not loaded. Try again.');
+        const { data, error } = await sb.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: getRedirectUrl() + '/auth-callback.html' }
+        });
+        if (error) throw error;
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 48 48">...</svg><span>Google</span>';
+      }
+    }
+
+    async function signInWithFacebook() {
+      const btn = document.getElementById('facebookBtn');
+      const errEl = document.getElementById('socialError');
+      errEl.classList.add('hidden');
+      btn.disabled = true;
+      btn.innerHTML = '<span style="font-size:14px;">Loading...</span>';
+      try {
+        const sb = getSupabase();
+        if (!sb) throw new Error('Supabase not loaded. Try again.');
+        const { data, error } = await sb.auth.signInWithOAuth({
+          provider: 'facebook',
+          options: { redirectTo: getRedirectUrl() + '/auth-callback.html' }
+        });
+        if (error) throw error;
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 48 48">...</svg><span>Facebook</span>';
+      }
+    }
+
+    // ── Check for OAuth session on page load ──
+    (async function checkSession() {
+      try {
+        const sb = getSupabase();
+        if (!sb) return;
+        const { data: { session } } = await sb.auth.getSession();
+        if (session) {
+          // Exchange Supabase session for our app token
+          const res = await fetch('/api/auth/supabase-callback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              access_token: session.access_token,
+              email: session.user.email,
+              name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+              avatar: session.user.user_metadata?.avatar_url || ''
+            })
+          });
+          const data = await res.json();
+          if (res.ok && data.token) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('username', data.username);
+            window.location.href = 'browse.html';
+          }
+        }
+      } catch (_) {}
+    })();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </body>
 </html>

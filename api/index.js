@@ -108,6 +108,40 @@ app.post('/api/login', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ── Supabase OAuth callback ──
+app.post('/api/auth/supabase-callback', async (req, res) => {
+  try {
+    const { access_token, email, name, avatar } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+
+    // Check if user exists
+    const { data: existing } = await supabase.from('users').select('id, username, name, photo').eq('email', email).maybeSingle();
+
+    if (existing) {
+      // Update profile info if needed
+      const updates = {};
+      if (name && !existing.name) updates.name = name;
+      if (avatar && !existing.photo) updates.photo = avatar;
+      if (Object.keys(updates).length) {
+        await supabase.from('users').update(updates).eq('id', existing.id);
+      }
+      const token = jwt.sign({ id: existing.id, username: existing.username }, JWT_SECRET, { expiresIn: '7d' });
+      return res.json({ token, userId: existing.id, username: existing.username, hasProfile: !!existing.name });
+    }
+
+    // Create new user
+    const username = email.split('@')[0] + Math.floor(Math.random() * 1000);
+    const { data: user, error } = await supabase.from('users').insert({
+      username, email, password: 'oauth_' + Date.now(),
+      name: name || null, photo: avatar || null
+    }).select('id, username').single();
+
+    if (error) throw error;
+    const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, userId: user.id, username: user.username, hasProfile: false });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 app.post('/api/forgot-password', async (req, res) => {
   const { email } = req.body;
   const { data: user } = await supabase.from('users').select('id').eq('email', email).maybeSingle();
