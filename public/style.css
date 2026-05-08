@@ -720,29 +720,16 @@ textarea { resize: vertical; }
 
   .page-container { padding: 24px 16px 40px; }
 
-  /* ── Chat page mobile ── */
-  .chat-layout .page-footer { display: none; }
-  .hamburger-nav { height: 50px; }
-  .sidebar-header { padding: 10px 12px; }
-  .sidebar-header h3 { font-size: 15px; }
+  .chat-sidebar { width: 70px; min-width: 70px; }
+  .sidebar-header h3, .convo-info { display: none; }
+  .sidebar-header { padding: 16px 10px; }
   .new-chat-btn { width: 28px; height: 28px; font-size: 14px; }
-  .convo-item { padding: 10px 12px; gap: 8px; }
-  .convo-item img { width: 38px; height: 38px; }
-  .convo-info h4 { font-size: 13px; }
-  .convo-last { font-size: 11px; }
-  .messages-area { padding: 10px; }
-  .message { max-width: 88%; }
-  .mine .bubble, .theirs .bubble { padding: 9px 13px; font-size: 14px; }
-  .message-input-area { padding: 8px 10px; padding-bottom: max(8px, env(safe-area-inset-bottom)); }
-  .input-wrapper input { height: 38px; font-size: 14px; padding: 8px 12px; }
-  .btn-emoji, .btn-attach { width: 30px; height: 30px; }
-  .chat-header { padding: 8px 12px; }
-  .chat-header h3 { font-size: 15px; }
-  .chat-back-btn { display: flex; width: 30px; height: 30px; align-items: center; justify-content: center; background: none; border: none; font-size: 20px; cursor: pointer; color: #374151; border-radius: 50%; flex-shrink: 0; }
-  .chat-back-btn:active { background: #f3f4f6; }
-  .chat-placeholder { padding: 40px 20px; }
-  .chat-placeholder span { font-size: 40px; }
-  .chat-placeholder p { font-size: 13px; }
+  .convo-item { justify-content: center; padding: 10px 6px; gap: 0; }
+  .convo-item img { width: 36px; height: 36px; }
+  .message-input-area { padding: 8px 10px; gap: 6px; }
+  .input-wrapper input { height: 42px; font-size: 13px; padding: 10px 12px; }
+  .btn-send { min-width: 70px; height: 42px; font-size: 13px; padding: 0 16px; }
+  .btn-emoji, .btn-attach { width: 34px; height: 34px; font-size: 15px; }
 
   .members-grid { grid-template-columns: 1fr; gap: 14px; }
   .browse-header h2 { font-size: 22px; }
