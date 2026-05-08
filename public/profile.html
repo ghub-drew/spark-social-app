@@ -7,6 +7,36 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Hamburger Navbar -->
+  <nav class="hamburger-nav">
+    <button class="hamburger-btn" id="menuToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="browse.html" class="hamburger-logo">✦ Spark</a>
+    <a href="profile.html" class="hamburger-avatar" id="hamburgerAvatar">?</a>
+  </nav>
+
+  <!-- Overlay + Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="drawer-avatar" id="drawerAvatar">?</div>
+      <div class="drawer-user-info">
+        <span class="drawer-name" id="drawerName">...</span>
+        <span class="drawer-status" id="drawerStatus">Offline</span>
+      </div>
+    </div>
+    <div class="drawer-links">
+      <a href="browse.html" class="drawer-link"><span class="drawer-icon">👥</span> Discover People</a>
+      <a href="profile.html" class="drawer-link active"><span class="drawer-icon">👤</span> My Profile</a>
+      <a href="chat.html" class="drawer-link"><span class="drawer-icon">💬</span> Messages</a>
+    </div>
+    <div class="drawer-footer">
+      <a href="#" class="drawer-link drawer-logout" onclick="logout()"><span class="drawer-icon">🚪</span> Logout</a>
+    </div>
+  </div>
+
+  <!-- Desktop navbar -->
   <nav class="navbar">
     <a href="browse.html" class="logo-small">✦ Spark</a>
     <div class="nav-links">
@@ -101,6 +131,31 @@
     </div>
   </div>
 
+  <script>
+    // ── Drawer menu ──────────────────────────────────────────────
+    const menuToggle = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('drawerOverlay');
+    if (menuToggle && drawer && overlay) {
+      function openDrawer() {
+        menuToggle.classList.add('open');
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        document.body.classList.add('drawer-open');
+      }
+      function closeDrawer() {
+        menuToggle.classList.remove('open');
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.classList.remove('drawer-open');
+      }
+      menuToggle.addEventListener('click', () => {
+        if (drawer.classList.contains('open')) closeDrawer();
+        else openDrawer();
+      });
+      overlay.addEventListener('click', closeDrawer);
+    }
+  </script>
   <script>
     if (!localStorage.getItem('token')) window.location.href = 'index.html';
 
