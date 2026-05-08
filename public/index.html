@@ -403,34 +403,21 @@
       letter-spacing: 0.02em;
     }
     .social-btns {
-      display: flex; gap: 12px;
+      display: flex; gap: 16px; justify-content: center;
     }
-    .social-btn {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      gap: 10px; padding: 14px;
-      border-radius: 14px; font-size: 14px; font-weight: 600;
-      font-family: 'Inter', sans-serif; cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      background: white;
-      border: 1px solid rgba(229,231,235,0.6);
-      color: #374151;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    .social-icon-btn {
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer;
+      padding: 6px; border-radius: 50%;
+      transition: all 0.2s ease;
     }
-    .social-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      border-color: #d1d5db;
+    .social-icon-btn:hover {
+      transform: scale(1.1);
     }
-    .social-btn:active {
-      transform: translateY(0) scale(0.97);
+    .social-icon-btn:active {
+      transform: scale(0.95);
     }
-    .social-btn:disabled {
-      opacity: 0.5; cursor: not-allowed; transform: none;
-    }
-    .social-btn svg { flex-shrink: 0; width: 20px; height: 20px; }
-    .social-btn span { line-height: 1; font-size: 14px; font-weight: 600; }
-    .social-btn.social-google:hover { border-color: #ea4335; }
-    .social-btn.social-facebook:hover { border-color: #1877F2; }
+    .social-icon-btn svg { display: block; }
 
     /* ── Error / Success messages ── */
     .error-msg {
@@ -480,9 +467,8 @@
       input, select, textarea { padding: 12px 14px; font-size: 14px; }
       .btn-primary { padding: 13px 18px; font-size: 15px; border-radius: 14px; }
       .social-divider { margin: 18px 0 14px; gap: 10px; }
-      .social-btns { gap: 8px; }
-      .social-btn { padding: 10px 12px; gap: 6px; font-size: 13px; }
-      .social-btn svg { width: 18px; height: 18px; }
+      .social-btns { gap: 12px; }
+      .social-icon-btn svg { width: 22px; height: 22px; }
       .blob-1 { width: 200px; height: 200px; }
       .blob-2 { width: 160px; height: 160px; }
       .card-glow { width: 300px; height: 300px; }
@@ -549,11 +535,11 @@
         <span class="social-divider-line"></span>
       </div>
       <div class="social-btns">
-        <button type="button" class="social-btn social-google" onclick="signInWithGoogle()" id="googleBtn" title="Sign in with Google">
-          <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.54 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.35 2.56 10.56l7.98-5.97z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"/></svg>
+        <button type="button" class="social-icon-btn" onclick="signInWithGoogle()" id="googleBtn" title="Sign in with Google">
+          <svg width="24" height="24" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.54 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.35 2.56 10.56l7.98-5.97z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"/></svg>
         </button>
-        <button type="button" class="social-btn social-facebook" onclick="signInWithFacebook()" id="facebookBtn" title="Sign in with Facebook">
-          <svg width="22" height="22" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#1877F2"/><path fill="#fff" d="M25 20.5h-3.5v12h-4.7v-12h-2.5v-4.1h2.5v-2.6c0-2.1 1-5.3 5.3-5.3h3.9v4.3h-2.8c-.5 0-1.1.2-1.1 1.2v2.4h4l-.5 4.1z"/></svg>
+        <button type="button" class="social-icon-btn" onclick="signInWithFacebook()" id="facebookBtn" title="Sign in with Facebook">
+          <svg width="24" height="24" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#1877F2"/><path fill="#fff" d="M25 20.5h-3.5v12h-4.7v-12h-2.5v-4.1h2.5v-2.6c0-2.1 1-5.3 5.3-5.3h3.9v4.3h-2.8c-.5 0-1.1.2-1.1 1.2v2.4h4l-.5 4.1z"/></svg>
         </button>
       </div>
       <p id="socialError" class="error-msg hidden" style="margin-top:10px;"></p>
