@@ -720,16 +720,32 @@ textarea { resize: vertical; }
 
   .page-container { padding: 24px 16px 40px; }
 
-  .chat-sidebar { width: 70px; min-width: 70px; }
-  .sidebar-header h3, .convo-info { display: none; }
-  .sidebar-header { padding: 16px 10px; }
+  /* ── Chat page mobile ── */
+  .chat-layout .page-footer { display: none; }
+  .chat-layout { height: calc(100vh - 60px); overflow: hidden; }
+  .hamburger-nav { height: 50px; }
+  .chat-sidebar { width: 100%; min-width: 0; max-width: 100%; }
+  .chat-window.active ~ .chat-sidebar { display: none; }
+  .chat-window.active { display: flex; width: 100%; }
+  .chat-main { width: 100%; }
+  .sidebar-header h3 { display: none; }
+  .sidebar-header { padding: 12px 14px; }
   .new-chat-btn { width: 28px; height: 28px; font-size: 14px; }
-  .convo-item { justify-content: center; padding: 10px 6px; gap: 0; }
-  .convo-item img { width: 36px; height: 36px; }
-  .message-input-area { padding: 8px 10px; gap: 6px; }
-  .input-wrapper input { height: 42px; font-size: 13px; padding: 10px 12px; }
-  .btn-send { min-width: 70px; height: 42px; font-size: 13px; padding: 0 16px; }
-  .btn-emoji, .btn-attach { width: 34px; height: 34px; font-size: 15px; }
+  .convo-item { padding: 12px 14px; gap: 10px; }
+  .convo-item img { width: 40px; height: 40px; }
+  .messages-area { padding: 12px; flex: 1; }
+  .message { max-width: 88%; }
+  .mine .bubble, .theirs .bubble { padding: 10px 14px; font-size: 14px; }
+  .message-input-area { padding: 8px 10px 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .input-wrapper input { height: 40px; font-size: 14px; padding: 8px 12px; }
+  .btn-emoji, .btn-attach { width: 32px; height: 32px; }
+  .chat-header { padding: 8px 12px; }
+  .chat-header h3 { font-size: 15px; }
+  .chat-back-btn { display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; background: none; border: none; font-size: 20px; cursor: pointer; color: #374151; border-radius: 50%; flex-shrink: 0; }
+  .chat-back-btn:hover { background: #f3f4f6; }
+  .chat-placeholder { padding: 40px 20px; }
+  .chat-placeholder span { font-size: 40px; }
+  .chat-placeholder p { font-size: 13px; }
 
   .members-grid { grid-template-columns: 1fr; gap: 14px; }
   .browse-header h2 { font-size: 22px; }

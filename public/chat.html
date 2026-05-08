@@ -464,6 +464,7 @@
 
       <div id="chatWindow" class="chat-window hidden">
         <div class="chat-header">
+          <button type="button" class="chat-back-btn" id="chatBackBtn" onclick="closeChat()" aria-label="Back">←</button>
           <div class="convo-avatar-wrap">
             <img id="chatPartnerPhoto" src="" alt=""
               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect width=%2240%22 height=%2240%22 fill=%22%23dcfce7%22/><text y=%22.9em%22 font-size=%2224%22 x=%224%22>👤</text></svg>'">
@@ -726,6 +727,7 @@
       }
       document.getElementById('chatPlaceholder').classList.add('hidden');
       document.getElementById('chatWindow').classList.remove('hidden');
+      document.getElementById('chatWindow').classList.add('active');
       document.getElementById('chatPartnerName').textContent = partnerName;
       document.getElementById('chatPartnerPhoto').src = partnerPhoto || '';
       updateChatStatus(online, lastSeen);
@@ -939,6 +941,12 @@
       } catch (err) {
         console.error('Send failed:', err);
       }
+    }
+
+    function closeChat() {
+      document.getElementById('chatWindow').classList.add('hidden');
+      document.getElementById('chatPlaceholder').classList.remove('hidden');
+      document.getElementById('chatWindow').classList.remove('active');
     }
 
     function formatTime(iso) {
