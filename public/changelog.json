@@ -6,7 +6,8 @@
       "Refined Discover page with premium card design, avatars, vibe tags, active now section",
       "Added search bar and filter pills (All, Active Now, Recently Joined) to Discover page",
       "Human status labels instead of 'Offline - Xm ago' (Active now, Recently active, New here)",
-      "Added Google and Facebook OAuth login with Supabase",
+      "Added Google OAuth login with Supabase (working - live)",
+      "Added Facebook OAuth login with Supabase (pending Facebook App setup in Supabase dashboard)",
       "Created auth-callback.html page for OAuth redirect handling",
       "Redesigned homepage auth card - wider (460px), premium glassmorphism, tighter spacing",
       "Added social login buttons with Google and Facebook branding",
@@ -17,7 +18,17 @@
       "Polished Cebu brand identity - 'Meet real people around Cebu'",
       "Terms and Privacy link added below social login section",
       "Responsive design improvements for tablets and small screens"
+    ,
+  {
+    "note": "Deploy Tip",
+    "date": "May 8, 2026",
+    "items": [
+      "Batch multiple git commits before deploying to save Vercel free tier slots. Instead of pushing each change separately, accumulate changes locally and push them together with one deploy.",
+      "Workflow: make changes → test on localhost → commit → repeat → when ready, push all commits at once → deploy once",
+      "This way 1 deployment = 1 Vercel slot instead of 5+ for the same set of changes"
     ]
+  }
+]
   },
   {
     "version": "v1.3",
