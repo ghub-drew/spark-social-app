@@ -1,5 +1,26 @@
 [
   {
+    "version": "v1.3",
+    "date": "May 8, 2026",
+    "items": [
+      "Added mobile hamburger slide-out drawer menu with user profile and nav links",
+      "Changed nav labels: Browse to Discover, Chat to Messages",
+      "Redesigned chat input with Messenger-style pill, SVG icons (emoji, photo, send)",
+      "Fixed profile photo upload on Vercel (direct REST API to Supabase Storage)",
+      "Rewrote FAQ page for end-users (removed backend/admin content)",
+      "Created journey.html - full vibe coding story page with modern layout",
+      "Integrated multi-AI workflow: Claude (architecture), DeepSeek (coding), ChatGPT (design)",
+      "Cleaned up Vercel projects - deleted 3 duplicate projects",
+      "Added Database Access section to documentation",
+      "Updated workspace guide with localhost-first review workflow",
+      "Removed contact modal from profile page, added email link in footer",
+      "Removed em dashes from all public pages",
+      "Removed Socket.io references from docs (replaced with Supabase Realtime)",
+      "Mobile responsive styles added for all pages via style.css",
+      "Fixed footer spacing and hidden footer on chat page for immersive mobile view"
+    ]
+  },
+  {
     "version": "v1.2",
     "date": "May 7, 2026",
     "items": [
