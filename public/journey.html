@@ -6,62 +6,143 @@
   <title>My Journey - Building Spark with Vibe Coding</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .journey-page {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
+    /* ── Reset & Base ── */
+    .jny { max-width: 820px; margin: 0 auto; padding: 0 24px 80px; position: relative; z-index: 1; }
+
+    /* ── Hero ── */
+    .jny-hero {
+      text-align: center; padding: 60px 20px 40px;
       position: relative;
-      z-index: 1;
     }
-    .journey-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
-    .journey-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
-    .journey-page h2 {
-      font-size: 18px; font-weight: 800; color: var(--primary);
-      margin: 36px 0 12px; display: flex; align-items: center; gap: 10px;
+    .jny-hero::after {
+      content: ''; position: absolute; bottom: 0; left: 10%; right: 10%;
+      height: 1px; background: linear-gradient(90deg, transparent, #86efac, transparent);
     }
-    .journey-page h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 6px; }
-    .journey-page p { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 10px; }
-    .journey-page ul { margin: 6px 0 12px 20px; }
-    .journey-page li { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 4px; }
-    .journey-code {
-      background: #f1f5f9; border-left: 3px solid var(--primary);
-      padding: 12px 16px; border-radius: 0 8px 8px 0;
-      font-family: monospace; font-size: 13px; line-height: 1.6;
-      margin: 8px 0 12px; white-space: pre; overflow-x: auto;
+    .jny-hero h1 {
+      font-size: 32px; font-weight: 900; color: #16a34a; margin: 0 0 6px;
+      letter-spacing: -0.5px; line-height: 1.2;
     }
-    .journey-note {
-      background: #f0fdf4; border-left: 3px solid var(--primary);
-      padding: 12px 16px; border-radius: 0 8px 8px 0;
-      font-size: 13px; line-height: 1.5; margin: 12px 0; color: #166534;
+    .jny-hero .byline { font-size: 14px; color: #6b7280; margin: 0 0 4px; }
+    .jny-hero .byline strong { color: #374151; }
+    .jny-hero .links { font-size: 13px; margin-top: 8px; }
+    .jny-hero .links a { color: #16a34a; text-decoration: none; font-weight: 600; transition: color 0.2s; }
+    .jny-hero .links a:hover { color: #15803d; text-decoration: underline; }
+    .jny-hero .links span { color: #d1d5db; margin: 0 8px; }
+
+    /* ── Vibe Note ── */
+    .jny-vibe {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border-radius: 16px; padding: 20px 24px; margin: 0 0 36px;
+      border: 1px solid #bbf7d0; font-size: 14px; line-height: 1.6; color: #166534;
     }
-    .journey-step {
-      display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start;
+    .jny-vibe strong { color: #15803d; }
+
+    /* ── TOC ── */
+    .jny-toc {
+      background: white; border-radius: 16px; padding: 20px 24px; margin: 0 0 40px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06); border: 1px solid #f3f4f6;
     }
-    .journey-step-num {
-      background: var(--primary); color: white; width: 28px; height: 28px;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+    .jny-toc-label { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .jny-toc-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+    .jny-toc-links a {
+      font-size: 14px; color: #374151; text-decoration: none; font-weight: 500;
+      padding: 4px 0; transition: color 0.2s; position: relative;
     }
-    .journey-step-content { flex: 1; }
-    .journey-step-content h3 { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
-    .journey-step-content p { margin: 0 0 6px; font-size: 14px; line-height: 1.6; }
-    .journey-step-content .journey-code { margin: 6px 0; }
-    .journey-footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 40px; }
-    .timeline {
-      position: relative; padding-left: 24px; margin: 16px 0;
+    .jny-toc-links a:hover { color: #16a34a; }
+    .jny-toc-links a::before { content: '▸ '; color: #86efac; font-weight: 700; }
+
+    /* ── Section ── */
+    .jny-section { margin-bottom: 44px; }
+    .jny-section h2 {
+      font-size: 20px; font-weight: 800; color: #1a1a2e; margin: 0 0 16px;
+      display: flex; align-items: center; gap: 10px;
     }
-    .timeline::before {
-      content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px;
-      width: 2px; background: #dce7e0; border-radius: 2px;
+    .jny-section h2 .emoji { font-size: 24px; }
+    .jny-section p { font-size: 14px; line-height: 1.7; color: #374151; margin: 0 0 10px; }
+
+    /* ── Timeline ── */
+    .jny-timeline { position: relative; padding-left: 28px; }
+    .jny-timeline::before {
+      content: ''; position: absolute; left: 9px; top: 6px; bottom: 6px;
+      width: 2px; background: linear-gradient(180deg, #22c55e, #86efac, #22c55e);
+      border-radius: 2px;
     }
-    .timeline-item { position: relative; margin-bottom: 16px; }
-    .timeline-item::before {
-      content: ''; position: absolute; left: -20px; top: 6px;
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--primary); border: 2px solid #dce7e0;
+    .jny-tl-item { position: relative; margin-bottom: 20px; }
+    .jny-tl-item::before {
+      content: ''; position: absolute; left: -22px; top: 5px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: white; border: 2.5px solid #16a34a;
+      box-shadow: 0 0 0 3px #f0fdf4;
     }
-    .timeline-date { font-size: 11px; color: #9ca3af; margin-bottom: 2px; }
-    .timeline-text { font-size: 14px; line-height: 1.5; color: var(--text); }
+    .jny-tl-date { font-size: 11px; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
+    .jny-tl-text { font-size: 14px; line-height: 1.6; color: #374151; }
+    .jny-tl-text strong { color: #1a1a2e; }
+
+    /* ── Steps (Clean Card Style) ── */
+    .jny-steps { display: flex; flex-direction: column; gap: 16px; }
+    .jny-step {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: white; border-radius: 14px; padding: 18px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04); border: 1px solid #f3f4f6;
+      transition: all 0.2s ease;
+    }
+    .jny-step:hover { box-shadow: 0 4px 16px rgba(22,163,74,0.08); border-color: #bbf7d0; transform: translateY(-1px); }
+    .jny-step-num {
+      background: linear-gradient(135deg, #22c55e, #16a34a); color: white;
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; flex-shrink: 0; margin-top: 1px;
+    }
+    .jny-step-content { flex: 1; min-width: 0; }
+    .jny-step-content h3 { font-size: 15px; font-weight: 700; color: #1a1a2e; margin: 0 0 4px; }
+    .jny-step-content p { font-size: 14px; line-height: 1.6; color: #374151; margin: 0 0 6px; }
+    .jny-step-content .jny-code { margin: 6px 0; }
+
+    /* ── Code Block ── */
+    .jny-code {
+      background: #1e293b; color: #e2e8f0; border-radius: 10px;
+      padding: 12px 16px; font-family: 'Courier New', monospace;
+      font-size: 12.5px; line-height: 1.6; margin: 6px 0 0;
+      white-space: pre; overflow-x: auto; border: none;
+    }
+
+    /* ── Table ── */
+    .jny-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; margin: 12px 0 16px; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border: 1px solid #f3f4f6; }
+    .jny-table thead th { background: #f8fafc; padding: 12px 14px; text-align: left; font-weight: 700; color: #374151; border-bottom: 1px solid #e5e7eb; font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .jny-table tbody td { padding: 11px 14px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+    .jny-table tbody tr:last-child td { border-bottom: none; }
+    .jny-table tbody tr:hover { background: #fafdfb; }
+    .jny-table td:first-child { font-weight: 600; color: #1a1a2e; }
+
+    /* ── Lessons ── */
+    .jny-lessons { list-style: none; padding: 0; margin: 0; }
+    .jny-lessons li {
+      padding: 14px 18px; margin-bottom: 8px;
+      background: white; border-radius: 12px; border: 1px solid #f3f4f6;
+      font-size: 14px; line-height: 1.6; color: #374151;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .jny-lessons li strong { color: #16a34a; }
+
+    /* ── Final Note ── */
+    .jny-final {
+      background: linear-gradient(135deg, #f0fdf4, #f8fafc);
+      border-radius: 16px; padding: 24px 28px; margin: 32px 0 0;
+      border: 1px solid #bbf7d0; font-size: 14px; line-height: 1.7; color: #166534;
+      text-align: center;
+    }
+    .jny-final strong { color: #15803d; font-size: 15px; }
+
+    /* ── Footer ── */
+    .jny-footer { text-align: center; padding: 28px 0 0; border-top: 1px solid #f3f4f6; color: #9ca3af; font-size: 12px; margin-top: 48px; }
+
+    /* ── Mobile ── */
+    @media (max-width: 640px) {
+      .jny-hero h1 { font-size: 24px; }
+      .jny-hero { padding: 40px 16px 28px; }
+      .jny-step { padding: 14px 16px; flex-direction: column; gap: 10px; }
+      .jny-step-num { width: 26px; height: 26px; font-size: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -74,203 +155,196 @@
     </div>
   </nav>
 
-  <div class="journey-page">
-    <h1> My Journey: Building Spark with Vibe Coding</h1>
-    <p class="subtitle">by <strong>Andrew D</strong> - a web enthusiast</p>
-    <p style="font-size:13px;color:var(--muted);margin-top:-28px;margin-bottom:36px;">
-      <a href="https://www.cebuspark.com" style="color:var(--primary);">www.cebuspark.com</a>
-      <span style="color:var(--border);margin:0 6px;">|</span>
-      <a href="https://www.andrewdaugdaug.com" style="color:var(--primary);">www.andrewdaugdaug.com</a>
-    </p>
+  <div class="jny">
 
-    <div class="journey-note">
-      <strong>What is Vibe Coding?</strong> A term for building software by describing what you want in plain English to an AI, letting it write the code, and iterating until it feels right. You don't need to know programming languages - just your ideas.
+    <!-- ═══ HERO ═══ -->
+    <div class="jny-hero">
+      <h1> My Journey<br>Building Spark with Vibe Coding</h1>
+      <p class="byline">by <strong>Andrew D</strong> — a web enthusiast</p>
+      <p class="links">
+        <a href="https://www.cebuspark.com" target="_blank">cebuspark.com</a>
+        <span>|</span>
+        <a href="https://www.andrewdaugdaug.com" target="_blank">andrewdaugdaug.com</a>
+      </p>
     </div>
 
-    <div style="background:#f8fafc;border-radius:12px;padding:16px 20px;margin:16px 0;border:1px solid #e5e7eb;">
-      <strong style="font-size:13px;color:#6b7280;">On this page:</strong>
-      <div style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:13px;">
-        <a href="#beginning" style="color:var(--primary);text-decoration:none;"> The Beginning</a>
-        <a href="#workflow" style="color:var(--primary);text-decoration:none;"> The Complete Workflow</a>
-        <a href="#tech-stack" style="color:var(--primary);text-decoration:none;"> Tech Stack Used</a>
-        <a href="#lessons" style="color:var(--primary);text-decoration:none;"> Key Lessons Learned</a>
-        <a href="#final-thought" style="color:var(--primary);text-decoration:none;"> Final Thought</a>
-      </div>
+    <!-- ═══ VIBE NOTE ═══ -->
+    <div class="jny-vibe">
+      <strong> What is Vibe Coding?</strong> A term for building software by describing what you want in plain English to an AI, letting it write the code, and iterating until it feels right. You don't need to know programming languages — just your ideas.
     </div>
 
-    <h2 id="beginning"> The Beginning</h2>
-    <p>Spark started as an idea: a simple social app where people could connect, chat, and build friendships. The goal was to create something real - not just a concept - using AI as the developer.</p>
-
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-date">Step 1</div>
-        <div class="timeline-text"><strong>Get an AI Coding Assistant</strong> - Signed up for Reasonix (a vibe coding platform) and got an API key from DeepSeek.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">Step 2</div>
-        <div class="timeline-text"><strong>First Prompt</strong> - Told the AI: "Create a social app with user registration, profiles, chat, and admin panel." The AI generated the entire project structure.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">Step 3</div>
-        <div class="timeline-text"><strong>Iterate & Refine</strong> - Made dozens of small changes: changed the theme from pink to green, renamed "Messages" to "Chat", added error logging, improved the UI.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">Step 4</div>
-        <div class="timeline-text"><strong>Add Features</strong> - Contact form, FAQ page, Terms & Privacy, documentation, changelog, workflow guide.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">Step 5</div>
-        <div class="timeline-text"><strong>Database Upgrade</strong> - Migrated from local JSON file (lowdb) to Supabase PostgreSQL for real scalability.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">Step 6</div>
-        <div class="timeline-text"><strong>Go Live</strong> - Deployed to Vercel, connected a custom domain (cebuspark.com), and the app was live to the world.</div>
+    <!-- ═══ TOC ═══ -->
+    <div class="jny-toc">
+      <div class="jny-toc-label">On this page</div>
+      <div class="jny-toc-links">
+        <a href="#beginning">The Beginning</a>
+        <a href="#workflow">The Complete Workflow</a>
+        <a href="#tech-stack">Tech Stack Used</a>
+        <a href="#lessons">Key Lessons Learned</a>
+        <a href="#final-thought">Final Thought</a>
       </div>
     </div>
 
-    <h2 id="workflow"> The Complete Workflow</h2>
-    <p>Here's how every change goes from idea to live website:</p>
+    <!-- ═══ THE BEGINNING ═══ -->
+    <div class="jny-section" id="beginning">
+      <h2><span class="emoji"></span> The Beginning</h2>
+      <p>Spark started as an idea: a simple social app where people could connect, chat, and build friendships. The goal was to create something real — not just a concept — using AI as the developer.</p>
 
-    <div class="journey-step">
-      <div class="journey-step-num">1</div>
-      <div class="journey-step-content">
-        <h3>Get an AI Coding Tool</h3>
-        <p>Sign up for a vibe coding platform. I used <strong>Reasonix</strong> which runs on top of <strong>DeepSeek AI</strong>. You can also use Cursor, Claude, or similar tools.</p>
-        <div class="journey-code">Go to platform.deepseek.com -> Sign up -> Get API key
-Install: npx reasonix@latest code</div>
+      <div class="jny-timeline">
+        <div class="jny-tl-item">
+          <div class="jny-tl-date">Step 1</div>
+          <div class="jny-tl-text"><strong>Get an AI Coding Assistant</strong> — Signed up for Reasonix and got an API key from DeepSeek.</div>
+        </div>
+        <div class="jny-tl-item">
+          <div class="jny-tl-date">Step 2</div>
+          <div class="jny-tl-text"><strong>First Prompt</strong> — Told the AI to create a social app. It generated the entire project structure.</div>
+        </div>
+        <div class="jny-tl-item">
+          <div class="jny-tl-date">Step 3</div>
+          <div class="jny-tl-text"><strong>Iterate & Refine</strong> — Dozens of changes: theme colors, UI improvements, features added through conversation.</div>
+        </div>
+        <div class="jny-tl-item">
+          <div class="jny-tl-date">Step 4</div>
+          <div class="jny-tl-text"><strong>Add Features</strong> — Contact form, FAQ, Terms & Privacy, documentation, changelog, workflow guide.</div>
+        </div>
+        <div class="jny-tl-item">
+          <div class="jny-tl-date">Step 5</div>
+          <div class="jny-tl-text"><strong>Database Upgrade</strong> — Migrated from local JSON to Supabase PostgreSQL for real scalability.</div>
+        </div>
+        <div class="jny-tl-item">
+          <div class="jny-tl-date">Step 6</div>
+          <div class="jny-tl-text"><strong>Go Live</strong> — Deployed to Vercel, connected cebuspark.com, and the app went live to the world.</div>
+        </div>
       </div>
     </div>
 
-    <div class="journey-step">
-      <div class="journey-step-num">2</div>
-      <div class="journey-step-content">
-        <h3>Start Your Project</h3>
-        <p>Describe your app in plain English. Tell the AI what you want to build. It will create the files and structure for you.</p>
-        <div class="journey-code">"Create a social app with login, profile pages,
-real-time chat, member browsing, and an admin panel."</div>
+    <!-- ═══ WORKFLOW ═══ -->
+    <div class="jny-section" id="workflow">
+      <h2><span class="emoji"></span> The Complete Workflow</h2>
+      <p>Here's how every change goes from idea to live website:</p>
+
+      <div class="jny-steps">
+        <div class="jny-step">
+          <div class="jny-step-num">1</div>
+          <div class="jny-step-content">
+            <h3>Get an AI Coding Tool</h3>
+            <p>Sign up for Reasonix (or Cursor, Claude) and get an API key.</p>
+            <div class="jny-code">npx reasonix@latest code</div>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">2</div>
+          <div class="jny-step-content">
+            <h3>Start Your Project</h3>
+            <p>Describe your app in plain English. The AI creates all the files.</p>
+            <div class="jny-code">"Create a social app with login, profiles, chat, and admin panel."</div>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">3</div>
+          <div class="jny-step-content">
+            <h3>Test Locally</h3>
+            <p>See your app at <strong>http://localhost:3000</strong>. Changes appear instantly. Nothing goes live until you say so.</p>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">4</div>
+          <div class="jny-step-content">
+            <h3>Iterate & Improve</h3>
+            <p>Keep telling the AI what to change — colors, features, fixes — all through conversation.</p>
+            <div class="jny-code">"Change the theme to green"<br>"Add a contact form"<br>"Improve mobile layout"</div>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">5</div>
+          <div class="jny-step-content">
+            <h3>Set Up Database</h3>
+            <p>Supabase offers a generous free tier with PostgreSQL. Let the AI connect it to your app.</p>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">6</div>
+          <div class="jny-step-content">
+            <h3>Push to GitHub</h3>
+            <div class="jny-code">git init && git add -A && git commit -m "Initial commit"<br>git push -u origin main</div>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">7</div>
+          <div class="jny-step-content">
+            <h3>Deploy to Vercel</h3>
+            <p>Connect your GitHub repo to Vercel. Every push auto-deploys.</p>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">8</div>
+          <div class="jny-step-content">
+            <h3>Custom Domain</h3>
+            <p>Connect your own domain. Spark lives at <strong>cebuspark.com</strong>.</p>
+          </div>
+        </div>
+
+        <div class="jny-step">
+          <div class="jny-step-num">9</div>
+          <div class="jny-step-content">
+            <h3>Keep Improving</h3>
+            <p>Pull latest code, start Reasonix, describe changes, test, push — repeat.</p>
+            <div class="jny-code">git pull origin main<br>npx reasonix@latest code</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="journey-step">
-      <div class="journey-step-num">3</div>
-      <div class="journey-step-content">
-        <h3>Test Locally</h3>
-        <p>The AI starts a local server so you can see your app in the browser immediately.</p>
-        <div class="journey-code">Open http://localhost:3000 -> See your app running</div>
-        <div class="journey-note">Changes appear instantly on localhost. Nothing goes live until you say so.</div>
-      </div>
+    <!-- ═══ TECH STACK ═══ -->
+    <div class="jny-section" id="tech-stack">
+      <h2><span class="emoji"></span> Tech Stack Used</h2>
+      <table class="jny-table">
+        <thead>
+          <tr><th>Component</th><th>What We Used</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AI Coding</td><td>Reasonix + DeepSeek AI</td></tr>
+          <tr><td>Frontend</td><td>HTML + CSS + Vanilla JS</td></tr>
+          <tr><td>Backend</td><td>Node.js + Express</td></tr>
+          <tr><td>Database</td><td>Supabase (PostgreSQL)</td></tr>
+          <tr><td>Real-time Chat</td><td>Supabase Realtime</td></tr>
+          <tr><td>File Storage</td><td>Supabase Storage</td></tr>
+          <tr><td>Auth</td><td>JWT + bcrypt</td></tr>
+          <tr><td>Hosting</td><td>Vercel</td></tr>
+          <tr><td>Version Control</td><td>Git + GitHub</td></tr>
+          <tr><td>Domain</td><td>cebuspark.com</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="journey-step">
-      <div class="journey-step-num">4</div>
-      <div class="journey-step-content">
-        <h3>Iterate & Improve</h3>
-        <p>Keep telling the AI what to change. Change colors, add features, fix issues - all through conversation.</p>
-        <div class="journey-code">"Change the theme to green"
-"Add a contact form"
-"Improve the mobile layout"
-"Fix the profile photo upload"</div>
-      </div>
+    <!-- ═══ LESSONS ═══ -->
+    <div class="jny-section" id="lessons">
+      <h2><span class="emoji"></span> Key Lessons Learned</h2>
+      <ul class="jny-lessons">
+        <li><strong>Start simple</strong> — Get the core working first, then add features.</li>
+        <li><strong>Test locally</strong> — Preview everything on localhost before pushing live.</li>
+        <li><strong>Use a real database early</strong> — JSON files don't scale (we learned this the hard way!).</li>
+        <li><strong>Document as you go</strong> — Changelog, workflow guide, and docs saved us many times.</li>
+        <li><strong>Git push = deploy</strong> — The workflow is just: edit, test, push, done.</li>
+        <li><strong>Vibe coding works</strong> — Describing what you want in plain English to AI is a real way to build software.</li>
+      </ul>
     </div>
 
-    <div class="journey-step">
-      <div class="journey-step-num">5</div>
-      <div class="journey-step-content">
-        <h3>Set Up Database (Optional but Recommended)</h3>
-        <p>For a production app, use a real database. Supabase offers a generous free tier with PostgreSQL.</p>
-        <div class="journey-code">1. Create account at supabase.com
-2. Create a new project (free)
-3. Let the AI connect it to your app
-4. Migrate your data</div>
-      </div>
+    <!-- ═══ FINAL ═══ -->
+    <div class="jny-final" id="final-thought">
+      <strong> Final Thought</strong><br>
+      You don't need to be a programmer to build a web app anymore. With AI, you just need a clear idea and the willingness to iterate. Spark went from a concept to a live app at <strong>cebuspark.com</strong> in just a few days of conversation.
     </div>
 
-    <div class="journey-step">
-      <div class="journey-step-num">6</div>
-      <div class="journey-step-content">
-        <h3>Push to GitHub</h3>
-        <p>Initialize git and push your code to GitHub. This is your source of truth and backup.</p>
-        <div class="journey-code">git init
-git add -A
-git commit -m "Initial commit"
-git remote add origin https://github.com/your-username/your-repo.git
-git push -u origin main</div>
-      </div>
-    </div>
-
-    <div class="journey-step">
-      <div class="journey-step-num">7</div>
-      <div class="journey-step-content">
-        <h3>Deploy to Vercel</h3>
-        <p>Connect your GitHub repo to Vercel for automatic deployments on every push.</p>
-        <div class="journey-code">1. Go to vercel.com
-2. Import your GitHub repo
-3. Add environment variables
-4. Click Deploy -> Live!</div>
-      </div>
-    </div>
-
-    <div class="journey-step">
-      <div class="journey-step-num">8</div>
-      <div class="journey-step-content">
-        <h3>Custom Domain (Optional)</h3>
-        <p>Connect your own domain name for a professional touch.</p>
-        <div class="journey-code">1. Buy a domain (e.g., from Namecheap, GoDaddy)
-2. Add it in Vercel Dashboard -> Domains
-3. Update DNS settings
-4. Your app is live at your custom domain!</div>
-      </div>
-    </div>
-
-    <div class="journey-step">
-      <div class="journey-step-num">9</div>
-      <div class="journey-step-content">
-        <h3>Keep Improving</h3>
-        <p>Every time you want to make changes:</p>
-        <div class="journey-code">1. git pull origin main (get latest code)
-2. npx reasonix@latest code (start AI)
-3. Describe your changes
-4. Test on localhost
-5. Say "push it" -> Vercel auto-deploys</div>
-      </div>
-    </div>
-
-    <h2 id="tech-stack"> Tech Stack Used</h2>
-    <table style="width:100%;border-collapse:collapse;font-size:13px;margin:12px 0 16px;">
-      <thead>
-        <tr><th style="background:#f8fafc;padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e5e7eb;">Component</th>
-        <th style="background:#f8fafc;padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e5e7eb;">What We Used</th></tr>
-      </thead>
-      <tbody>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">AI Coding</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Reasonix + DeepSeek AI</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Frontend</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">HTML + CSS + Vanilla JS</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Backend</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Node.js + Express</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Database</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Supabase (PostgreSQL)</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Real-time Chat</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Supabase Realtime</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">File Storage</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Supabase Storage</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Auth</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">JWT + bcrypt</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Hosting</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Vercel</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Version Control</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Git + GitHub</td></tr>
-        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Domain</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">cebuspark.com</td></tr>
-      </tbody>
-    </table>
-
-    <h2 id="lessons"> Key Lessons Learned</h2>
-    <ul>
-      <li><strong>Start simple</strong> - Get the core working first, then add features</li>
-      <li><strong>Test locally</strong> - Preview everything on localhost before pushing live</li>
-      <li><strong>Use a real database early</strong> - JSON files don't scale (we learned this the hard way!)</li>
-      <li><strong>Document as you go</strong> - Changelog, workflow guide, and docs saved us many times</li>
-      <li><strong>Git push = deploy</strong> - The workflow is just: edit, test, push, done</li>
-      <li><strong>Vibe coding works</strong> - Describing what you want in plain English to AI is a real way to build software</li>
-    </ul>
-
-    <div class="journey-note">
-      <strong id="final-thought">Final thought:</strong> You don't need to be a programmer to build a web app anymore. With AI, you just need a clear idea and the willingness to iterate. Spark went from a concept to a live app at cebuspark.com in just a few days of conversation.
-    </div>
-
-    <div class="journey-footer">
-      Spark - Social App | My Journey v1.0
+    <div class="jny-footer">
+      Spark - Social App | Built with Vibe Coding by Andrew D
     </div>
   </div>
 
