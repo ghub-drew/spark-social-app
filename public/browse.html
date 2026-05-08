@@ -36,49 +36,63 @@
     .page-container {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 32px 24px 60px;
+      padding: 28px 24px 60px;
       position: relative;
       z-index: 1;
     }
 
-    /* ── Header ── */
-    .discover-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 28px; flex-wrap: wrap; gap: 8px;
+    /* ── Hero ── */
+    .discover-hero {
+      margin-bottom: 28px;
     }
-    .discover-header h2 {
-      font-size: 26px; font-weight: 800; color: #1a1a2e;
-      margin: 0; letter-spacing: -0.5px;
+    .discover-hero h1 {
+      font-size: 28px; font-weight: 800; color: #1a1a2e;
+      margin: 0 0 4px; letter-spacing: -0.5px;
     }
-    .discover-header .subtitle {
-      font-size: 14px; color: #6b7280; margin: 4px 0 0; font-weight: 400;
+    .discover-hero h1 span { color: #16a34a; }
+    .discover-hero p {
+      font-size: 15px; color: #6b7280; margin: 0; font-weight: 400;
     }
+
+    /* ── Filter Tabs ── */
+    .filter-tabs {
+      display: flex; gap: 6px; margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 8px 18px; border-radius: 24px;
+      border: 1px solid #e5e7eb; background: white;
+      font-size: 13px; font-weight: 600; color: #6b7280;
+      cursor: pointer; transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .filter-tab:hover { border-color: #bbf7d0; color: #16a34a; background: #f0fdf4; }
+    .filter-tab.active { background: #16a34a; color: white; border-color: #16a34a; box-shadow: 0 2px 8px rgba(22,163,74,0.2); }
 
     /* ── Section ── */
     .section-head {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .section-head h3 {
       font-size: 16px; font-weight: 700; color: #1a1a2e; margin: 0;
       display: flex; align-items: center; gap: 8px;
     }
-    .section-head h3 .badge {
-      font-size: 11px; background: #22c55e; color: white;
-      padding: 2px 8px; border-radius: 20px; font-weight: 600;
+    .section-head .sub-label {
+      font-size: 12px; color: #9ca3af; font-weight: 400; margin-left: 4px;
     }
     .section-head .view-all {
       font-size: 13px; color: #16a34a; text-decoration: none;
       font-weight: 600; transition: color 0.2s;
     }
-    .section-head .view-all:hover { color: #15803d; text-decoration: underline; }
-    .discover-section { margin-bottom: 36px; }
+    .section-head .view-all:hover { color: #15803d; }
+    .discover-section { margin-bottom: 32px; }
 
     /* ── Member Grid ── */
     .members-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 16px;
     }
     @media (min-width: 900px) {
       .members-grid { grid-template-columns: repeat(3, 1fr); }
@@ -92,15 +106,15 @@
       border-radius: 20px;
       border: 1px solid rgba(229,231,235,0.5);
       box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      padding: 24px 20px 18px;
-      transition: all 0.3s ease;
+      padding: 22px 18px 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
       display: flex; flex-direction: column; align-items: center;
       text-align: center;
     }
     .member-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(22,163,74,0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(22,163,74,0.1);
       border-color: rgba(34,197,94,0.2);
       background: rgba(255,255,255,0.96);
     }
@@ -108,20 +122,20 @@
     /* ── Avatar ── */
     .member-avatar-wrap {
       position: relative;
-      width: 88px; height: 88px;
+      width: 84px; height: 84px;
       flex-shrink: 0;
       margin-bottom: 12px;
     }
     .member-avatar {
-      width: 88px; height: 88px;
+      width: 84px; height: 84px;
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid white;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 0 0 1px rgba(34,197,94,0.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 0 0 2px rgba(34,197,94,0.12);
       transition: transform 0.3s ease;
     }
     .member-card:hover .member-avatar {
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
     .member-avatar img {
       width: 100%; height: 100%;
@@ -130,13 +144,13 @@
     .member-status-dot {
       position: absolute;
       bottom: 2px; right: 2px;
-      width: 14px; height: 14px;
+      width: 13px; height: 13px;
       border-radius: 50%;
-      border: 3px solid white;
+      border: 2.5px solid white;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       z-index: 2;
     }
-    .member-status-dot.online { background: #22c55e; }
+    .member-status-dot.online { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.15), 0 2px 6px rgba(0,0,0,0.1); }
     .member-status-dot.offline { background: #9ca3af; }
 
     /* ── Info ── */
@@ -145,7 +159,7 @@
       margin: 0 0 2px; letter-spacing: -0.2px;
     }
     .member-meta {
-      font-size: 13px; color: #6b7280; margin: 0 0 4px; font-weight: 500;
+      font-size: 13px; color: #6b7280; margin: 0 0 3px; font-weight: 500;
     }
     .member-status-text {
       font-size: 12px; font-weight: 600; margin: 0 0 10px;
@@ -153,7 +167,7 @@
     .member-status-text.online { color: #16a34a; }
     .member-status-text.offline { color: #9ca3af; }
     .member-bio {
-      font-size: 13px; color: #6b7280; margin: 0 0 12px;
+      font-size: 13px; color: #6b7280; margin: 0 0 10px;
       line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -163,15 +177,17 @@
 
     /* ── Tags ── */
     .member-tags {
-      display: flex; flex-wrap: wrap; gap: 6px;
+      display: flex; flex-wrap: wrap; gap: 5px;
       justify-content: center; margin-bottom: 14px;
     }
     .member-tag {
       font-size: 11px; font-weight: 600;
-      padding: 4px 10px; border-radius: 20px;
+      padding: 3px 10px; border-radius: 20px;
       background: #f0fdf4; color: #16a34a;
       border: 1px solid #bbf7d0;
+      transition: all 0.2s;
     }
+    .member-tag:hover { background: #dcfce7; }
 
     /* ── Button ── */
     .btn-message {
@@ -180,14 +196,14 @@
       color: white; border: none; border-radius: 12px;
       font-size: 14px; font-weight: 700;
       font-family: 'Inter', sans-serif; cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       letter-spacing: -0.01em;
     }
     .btn-message:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(22,163,74,0.25);
+      box-shadow: 0 8px 24px rgba(22,163,74,0.25);
     }
-    .btn-message:active { transform: translateY(0); }
+    .btn-message:active { transform: translateY(0) scale(0.98); }
 
     /* ── States ── */
     .loading {
@@ -208,10 +224,14 @@
 
     /* ── Mobile ── */
     @media (max-width: 640px) {
-      .page-container { padding: 24px 16px 40px; }
-      .discover-header h2 { font-size: 22px; }
-      .discover-header { margin-bottom: 20px; }
+      .page-container { padding: 20px 16px 40px; }
+      .discover-hero h1 { font-size: 24px; }
+      .discover-hero p { font-size: 14px; }
+      .discover-hero { margin-bottom: 20px; }
+      .filter-tabs { margin-bottom: 20px; gap: 4px; }
+      .filter-tab { padding: 6px 14px; font-size: 12px; }
       .discover-section { margin-bottom: 28px; }
+      .section-head h3 { font-size: 15px; }
       .members-grid { gap: 14px; grid-template-columns: 1fr; }
       .member-card { padding: 20px 16px 14px; }
       .member-avatar-wrap { width: 76px; height: 76px; }
@@ -267,26 +287,32 @@
 
   <div class="page-container">
 
-    <div class="discover-header">
-      <div>
-        <h2>Discover</h2>
-        <p class="subtitle">Find someone you'd like to connect with</p>
-      </div>
+    <!-- ═══ Hero ═══ -->
+    <div class="discover-hero">
+      <h1>Discover people <span>✨</span></h1>
+      <p>Find someone you'd like to connect with in Cebu.</p>
     </div>
 
-    <!-- Active Now Section -->
+    <!-- ═══ Filter Tabs ═══ -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all" onclick="filterMembers('all', this)">All</button>
+      <button class="filter-tab" data-filter="active" onclick="filterMembers('active', this)">🟢 Active Now</button>
+      <button class="filter-tab" data-filter="recent" onclick="filterMembers('recent', this)">⭐ Recently Joined</button>
+    </div>
+
+    <!-- ═══ Active Now ═══ -->
     <div class="discover-section" id="activeNowSection" style="display:none;">
       <div class="section-head">
-        <h3>🟢 Active Now</h3>
-        <a href="#" class="view-all" onclick="document.getElementById('membersGrid').scrollIntoView({behavior:'smooth'});return false;">View all →</a>
+        <h3>🟢 Active Now <span class="sub-label">Online now</span></h3>
+        <a href="#" class="view-all" onclick="filterMembers('all', document.querySelector('[data-filter=all]'));return false;">View all →</a>
       </div>
       <div id="activeNowGrid" class="members-grid"></div>
     </div>
 
-    <!-- All Members -->
+    <!-- ═══ All Members ═══ -->
     <div class="discover-section">
       <div class="section-head">
-        <h3>👥 Everyone</h3>
+        <h3>👥 Everyone <span class="sub-label">All members</span></h3>
       </div>
       <div id="membersGrid" class="members-grid">
         <div class="loading">Loading members...</div>
@@ -320,6 +346,8 @@
         overlay.addEventListener('click', closeDrawer);
       }
     })();
+
+    let allMembers = [];
   </script>
   <script>
     if (!localStorage.getItem('token')) window.location.href = 'index.html';
@@ -331,23 +359,23 @@
     window.loadMembers = async function loadMembers() {
       try {
         const res = await fetch('/api/members', { headers: { Authorization: `Bearer ${token}` } });
-        const members = await res.json();
+        allMembers = await res.json();
         const grid = document.getElementById('membersGrid');
         const activeGrid = document.getElementById('activeNowGrid');
         const activeSection = document.getElementById('activeNowSection');
 
-        if (!members.length) {
+        if (!allMembers.length) {
           grid.innerHTML = '<div class="empty-state"><span>👥</span><p>No other members yet.<br>Invite friends to join!</p></div>';
           return;
         }
 
-        const activeMembers = members.filter(m => m.online);
+        const activeMembers = allMembers.filter(m => m.online);
         if (activeMembers.length > 0) {
           activeSection.style.display = 'block';
           activeGrid.innerHTML = activeMembers.map(m => buildCard(m)).join('');
         }
 
-        grid.innerHTML = members.map(m => buildCard(m)).join('');
+        grid.innerHTML = allMembers.map(m => buildCard(m)).join('');
       } catch (e) {
         document.getElementById('membersGrid').innerHTML = '<div class="error-msg">Failed to load members.</div>';
       }
@@ -377,6 +405,26 @@
           <button class="btn-message">Message</button>
         </div>
       `;
+    }
+
+    function filterMembers(filter, btn) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const grid = document.getElementById('membersGrid');
+      let filtered = allMembers;
+
+      if (filter === 'active') {
+        filtered = allMembers.filter(m => m.online);
+      } else if (filter === 'recent') {
+        filtered = [...allMembers].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 10);
+      }
+
+      if (!filtered.length) {
+        grid.innerHTML = '<div class="empty-state"><span>🔍</span><p>No members found.</p></div>';
+        return;
+      }
+      grid.innerHTML = filtered.map(m => buildCard(m)).join('');
     }
 
     function startChat(userId, name) {
