@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <style>
     /* ── Noise texture overlay ── */
     @keyframes noiseMove {
@@ -807,7 +808,7 @@
         if (!sb) throw new Error('Supabase not loaded. Try again.');
         const { data, error } = await sb.auth.signInWithOAuth({
           provider: 'google',
-          options: { redirectTo: getRedirectUrl() + '/auth-callback.html' }
+          options: { redirectTo: getRedirectUrl() }
         });
         if (error) throw error;
       } catch (err) {
@@ -843,6 +844,36 @@
 
     // ── Check for OAuth session on page load ──
     (async function checkSession() {
+      // Handle hash token from OAuth redirect (backup for auth-callback.html)
+      if (window.location.hash && window.location.hash.includes('access_token')) {
+        try {
+          const params = new URLSearchParams(window.location.hash.substring(1));
+          const accessToken = params.get('access_token');
+          if (accessToken) {
+            const sb = getSupabase();
+            if (sb) {
+              const { data: { user } } = await sb.auth.getUser(accessToken);
+              if (user) {
+                const email = user.email || '';
+                const name = user.user_metadata?.full_name || user.user_metadata?.name || email.split('@')[0] || 'User';
+                const avatar = user.user_metadata?.avatar_url || user.user_metadata?.picture || '';
+                const res = await fetch('/api/auth/supabase-callback', {
+                  method: 'POST', headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ access_token: accessToken, email, name, avatar })
+                });
+                const data = await res.json();
+                if (res.ok && data.token) {
+                  localStorage.setItem('token', data.token);
+                  localStorage.setItem('userId', data.userId);
+                  localStorage.setItem('username', data.username);
+                  window.location.href = data.hasProfile ? 'browse.html' : 'profile.html';
+                  return;
+                }
+              }
+            }
+          }
+        } catch(_) {}
+      }
       try {
         const sb = getSupabase();
         if (!sb) return;
@@ -870,6 +901,5 @@
       } catch (_) {}
     })();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </body>
 </html>
