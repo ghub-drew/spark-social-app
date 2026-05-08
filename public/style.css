@@ -731,6 +731,9 @@ textarea { resize: vertical; }
   .btn-send { min-width: 70px; height: 42px; font-size: 13px; padding: 0 16px; }
   .btn-emoji, .btn-attach { width: 34px; height: 34px; font-size: 15px; }
 
+  .chat-layout .page-footer { display: none; }
+  body { overflow-x: hidden; }
+
   .members-grid { grid-template-columns: 1fr; gap: 14px; }
   .browse-header h2 { font-size: 22px; }
   .member-card { border-radius: 16px; }
