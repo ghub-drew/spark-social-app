@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Journey - Building Spark with Vibe Coding</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .journey-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .journey-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .journey-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
+    .journey-page h2 {
+      font-size: 18px; font-weight: 800; color: var(--primary);
+      margin: 36px 0 12px; display: flex; align-items: center; gap: 10px;
+    }
+    .journey-page h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 6px; }
+    .journey-page p { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 10px; }
+    .journey-page ul { margin: 6px 0 12px 20px; }
+    .journey-page li { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 4px; }
+    .journey-code {
+      background: #f1f5f9; border-left: 3px solid var(--primary);
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-family: monospace; font-size: 13px; line-height: 1.6;
+      margin: 8px 0 12px; white-space: pre; overflow-x: auto;
+    }
+    .journey-note {
+      background: #f0fdf4; border-left: 3px solid var(--primary);
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-size: 13px; line-height: 1.5; margin: 12px 0; color: #166534;
+    }
+    .journey-step {
+      display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start;
+    }
+    .journey-step-num {
+      background: var(--primary); color: white; width: 28px; height: 28px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+    }
+    .journey-step-content { flex: 1; }
+    .journey-step-content h3 { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
+    .journey-step-content p { margin: 0 0 6px; font-size: 14px; line-height: 1.6; }
+    .journey-step-content .journey-code { margin: 6px 0; }
+    .journey-footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 40px; }
+    .timeline {
+      position: relative; padding-left: 24px; margin: 16px 0;
+    }
+    .timeline::before {
+      content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px;
+      width: 2px; background: #dce7e0; border-radius: 2px;
+    }
+    .timeline-item { position: relative; margin-bottom: 16px; }
+    .timeline-item::before {
+      content: ''; position: absolute; left: -20px; top: 6px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--primary); border: 2px solid #dce7e0;
+    }
+    .timeline-date { font-size: 11px; color: #9ca3af; margin-bottom: 2px; }
+    .timeline-text { font-size: 14px; line-height: 1.5; color: var(--text); }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="browse.html" class="logo-small">✦ Spark</a>
+    <div class="nav-links">
+      <a href="browse.html">Discover</a>
+      <a href="chat.html">Messages</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <div class="journey-page">
+    <h1> My Journey: Building Spark with Vibe Coding</h1>
+    <p class="subtitle">How a social app was built from scratch using AI - no prior coding experience needed</p>
+
+    <div class="journey-note">
+      <strong>What is Vibe Coding?</strong> A term for building software by describing what you want in plain English to an AI, letting it write the code, and iterating until it feels right. You don't need to know programming languages - just your ideas.
+    </div>
+
+    <h2> The Beginning</h2>
+    <p>Spark started as an idea: a simple social app where people could connect, chat, and build friendships. The goal was to create something real - not just a concept - using AI as the developer.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">Step 1</div>
+        <div class="timeline-text"><strong>Get an AI Coding Assistant</strong> - Signed up for Reasonix (a vibe coding platform) and got an API key from DeepSeek.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Step 2</div>
+        <div class="timeline-text"><strong>First Prompt</strong> - Told the AI: "Create a social app with user registration, profiles, chat, and admin panel." The AI generated the entire project structure.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Step 3</div>
+        <div class="timeline-text"><strong>Iterate & Refine</strong> - Made dozens of small changes: changed the theme from pink to green, renamed "Messages" to "Chat", added error logging, improved the UI.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Step 4</div>
+        <div class="timeline-text"><strong>Add Features</strong> - Contact form, FAQ page, Terms & Privacy, documentation, changelog, workflow guide.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Step 5</div>
+        <div class="timeline-text"><strong>Database Upgrade</strong> - Migrated from local JSON file (lowdb) to Supabase PostgreSQL for real scalability.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Step 6</div>
+        <div class="timeline-text"><strong>Go Live</strong> - Deployed to Vercel, connected a custom domain (cebuspark.com), and the app was live to the world.</div>
+      </div>
+    </div>
+
+    <h2> The Complete Workflow</h2>
+    <p>Here's how every change goes from idea to live website:</p>
+
+    <div class="journey-step">
+      <div class="journey-step-num">1</div>
+      <div class="journey-step-content">
+        <h3>Get an AI Coding Tool</h3>
+        <p>Sign up for a vibe coding platform. I used <strong>Reasonix</strong> which runs on top of <strong>DeepSeek AI</strong>. You can also use Cursor, Claude, or similar tools.</p>
+        <div class="journey-code">Go to platform.deepseek.com -> Sign up -> Get API key
+Install: npx reasonix@latest code</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">2</div>
+      <div class="journey-step-content">
+        <h3>Start Your Project</h3>
+        <p>Describe your app in plain English. Tell the AI what you want to build. It will create the files and structure for you.</p>
+        <div class="journey-code">"Create a social app with login, profile pages,
+real-time chat, member browsing, and an admin panel."</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">3</div>
+      <div class="journey-step-content">
+        <h3>Test Locally</h3>
+        <p>The AI starts a local server so you can see your app in the browser immediately.</p>
+        <div class="journey-code">Open http://localhost:3000 -> See your app running</div>
+        <div class="journey-note">Changes appear instantly on localhost. Nothing goes live until you say so.</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">4</div>
+      <div class="journey-step-content">
+        <h3>Iterate & Improve</h3>
+        <p>Keep telling the AI what to change. Change colors, add features, fix issues - all through conversation.</p>
+        <div class="journey-code">"Change the theme to green"
+"Add a contact form"
+"Improve the mobile layout"
+"Fix the profile photo upload"</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">5</div>
+      <div class="journey-step-content">
+        <h3>Set Up Database (Optional but Recommended)</h3>
+        <p>For a production app, use a real database. Supabase offers a generous free tier with PostgreSQL.</p>
+        <div class="journey-code">1. Create account at supabase.com
+2. Create a new project (free)
+3. Let the AI connect it to your app
+4. Migrate your data</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">6</div>
+      <div class="journey-step-content">
+        <h3>Push to GitHub</h3>
+        <p>Initialize git and push your code to GitHub. This is your source of truth and backup.</p>
+        <div class="journey-code">git init
+git add -A
+git commit -m "Initial commit"
+git remote add origin https://github.com/your-username/your-repo.git
+git push -u origin main</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">7</div>
+      <div class="journey-step-content">
+        <h3>Deploy to Vercel</h3>
+        <p>Connect your GitHub repo to Vercel for automatic deployments on every push.</p>
+        <div class="journey-code">1. Go to vercel.com
+2. Import your GitHub repo
+3. Add environment variables
+4. Click Deploy -> Live!</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">8</div>
+      <div class="journey-step-content">
+        <h3>Custom Domain (Optional)</h3>
+        <p>Connect your own domain name for a professional touch.</p>
+        <div class="journey-code">1. Buy a domain (e.g., from Namecheap, GoDaddy)
+2. Add it in Vercel Dashboard -> Domains
+3. Update DNS settings
+4. Your app is live at your custom domain!</div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="journey-step-num">9</div>
+      <div class="journey-step-content">
+        <h3>Keep Improving</h3>
+        <p>Every time you want to make changes:</p>
+        <div class="journey-code">1. git pull origin main (get latest code)
+2. npx reasonix@latest code (start AI)
+3. Describe your changes
+4. Test on localhost
+5. Say "push it" -> Vercel auto-deploys</div>
+      </div>
+    </div>
+
+    <h2> Tech Stack Used</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;margin:12px 0 16px;">
+      <thead>
+        <tr><th style="background:#f8fafc;padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e5e7eb;">Component</th>
+        <th style="background:#f8fafc;padding:10px 12px;text-align:left;font-weight:700;border-bottom:2px solid #e5e7eb;">What We Used</th></tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">AI Coding</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Reasonix + DeepSeek AI</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Frontend</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">HTML + CSS + Vanilla JS</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Backend</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Node.js + Express</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Database</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Supabase (PostgreSQL)</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Real-time Chat</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Supabase Realtime</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">File Storage</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Supabase Storage</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Auth</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">JWT + bcrypt</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Hosting</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Vercel</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Version Control</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">Git + GitHub</td></tr>
+        <tr><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;font-weight:600;">Domain</td><td style="padding:9px 12px;border-bottom:1px solid #e5e7eb;">cebuspark.com</td></tr>
+      </tbody>
+    </table>
+
+    <h2> Key Lessons Learned</h2>
+    <ul>
+      <li><strong>Start simple</strong> - Get the core working first, then add features</li>
+      <li><strong>Test locally</strong> - Preview everything on localhost before pushing live</li>
+      <li><strong>Use a real database early</strong> - JSON files don't scale (we learned this the hard way!)</li>
+      <li><strong>Document as you go</strong> - Changelog, workflow guide, and docs saved us many times</li>
+      <li><strong>Git push = deploy</strong> - The workflow is just: edit, test, push, done</li>
+      <li><strong>Vibe coding works</strong> - Describing what you want in plain English to AI is a real way to build software</li>
+    </ul>
+
+    <div class="journey-note">
+      <strong>Final thought:</strong> You don't need to be a programmer to build a web app anymore. With AI, you just need a clear idea and the willingness to iterate. Spark went from a concept to a live app at cebuspark.com in just a few days of conversation.
+    </div>
+
+    <div class="journey-footer">
+      Spark - Social App | My Journey v1.0
+    </div>
+  </div>
+
+  <script src="nav.js"></script>
+</body>
+</html>
