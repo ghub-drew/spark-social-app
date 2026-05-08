@@ -52,16 +52,14 @@
         <tr><th style="width:35%">Problem</th><th>Fix</th></tr>
       </thead>
       <tbody>
-        <tr><td>App shows blank page or "Cannot reach server"</td><td>Make sure you open <strong>http://localhost:3000</strong> in the browser, not the file directly via <code>file://</code></td></tr>
-        <tr><td>"Invalid token" error</td><td>Your session expired. Log out and log in again. Tokens last 7 days.</td></tr>
-        <tr><td>Profile photo not uploading</td><td>Check that the file is JPEG or PNG and under 5 MB in size.</td></tr>
-        <tr><td>Chat messages not sending</td><td>Check your internet connection. The server must be running (<code>node server.js</code>).</td></tr>
-        <tr><td>Cannot log in / forgot password</td><td>Use the "Forgot password?" link on the login page to reset via email verification.</td></tr>
-        <tr><td>Admin login not working</td><td>Default password is <code>admin1234</code>. Check that caps lock is off.</td></tr>
+        <tr><td>"Invalid token" or "Session expired"</td><td>Your session expired. Log out and log in again. Tokens last 7 days.</td></tr>
+        <tr><td>Profile photo not uploading</td><td>Make sure the file is JPEG or PNG and under 5 MB in size.</td></tr>
+        <tr><td>Chat messages not sending</td><td>Check your internet connection and try refreshing the page.</td></tr>
+        <tr><td>Cannot log in / forgot password</td><td>Use the "Forgot password?" link on the login page to reset your password.</td></tr>
         <tr><td>File upload keeps failing</td><td>Profile photos max 5 MB, chat files max 10 MB. Only images are allowed for profile photos.</td></tr>
-        <tr><td>'npx' not recognised when starting Reasonix</td><td>Node.js is not installed or not on your PATH. Download from <a href="https://nodejs.org" target="_blank">nodejs.org</a>.</td></tr>
-        <tr><td>Still using Flash model after config change</td><td>v0.28.0 ignores config model/preset. Run <code>/preset max</code> manually every session.</td></tr>
-        <tr><td>Server crashed or hung</td><td>Check the terminal running the server. Press <code>Ctrl + C</code> and run <code>node server.js</code> again. Check <code>error.log</code> for details.</td></tr>
+        <tr><td>Can't find other users</td><td>Make sure other users have completed their profiles (added a name). Members with no name won't appear in Browse.</td></tr>
+        <tr><td>Notifications not working</td><td>Allow browser notifications when prompted. You can also check your browser's notification settings.</td></tr>
+        <tr><td>App not loading on mobile</td><td>Make sure you have a stable internet connection. Try refreshing the page or clearing your browser cache.</td></tr>
       </tbody>
     </table>
 
@@ -69,8 +67,13 @@
     <h2>❓ Frequently Asked Questions</h2>
 
     <div class="qa-item">
-      <div class="qa-q">How do I delete my account?</div>
-      <div class="qa-a">Contact the administrator through the Admin panel or use the Contact form on your Profile page. Provide your username and the admin will delete your account and all associated data.</div>
+      <div class="qa-q">How do I create an account?</div>
+      <div class="qa-a">Go to the login page and click "Register." Enter a username, email, and password (minimum 6 characters). You'll be logged in automatically after registration.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">How do I set up my profile?</div>
+      <div class="qa-a">After logging in, go to your Profile page. You can add your name, age, gender, bio, and a profile photo. A complete profile helps others get to know you.</div>
     </div>
 
     <div class="qa-item">
@@ -80,42 +83,47 @@
 
     <div class="qa-item">
       <div class="qa-q">Can I change my username?</div>
-      <div class="qa-a">Usernames are set at registration and cannot be changed. You can update your display name on the Profile page.</div>
+      <div class="qa-a">Usernames are set at registration and cannot be changed. You can update your display name on the Profile page anytime.</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-q">How do I start a conversation?</div>
+      <div class="qa-a">Go to the Browse page and click "Message" on any member's card. This opens a chat where you can send messages, emojis, photos, and files.</div>
     </div>
 
     <div class="qa-item">
       <div class="qa-q">Can I delete a message I sent?</div>
-      <div class="qa-a">Yes. Hover over your message in the chat and click the delete button. The message is removed instantly for both you and the recipient.</div>
+      <div class="qa-a">Yes. Hover or tap your message in the chat and click the delete button. The message is removed for both you and the recipient.</div>
     </div>
 
     <div class="qa-item">
       <div class="qa-q">Can I edit a message?</div>
-      <div class="qa-a">Yes. Hover over your message and click the edit button. Press Enter to confirm. A "(edited)" label will appear on the message.</div>
+      <div class="qa-a">Yes. Hover or tap your message and click the edit button. Press Enter to confirm. An "(edited)" label will appear on the message.</div>
     </div>
 
     <div class="qa-item">
       <div class="qa-q">Who can see my profile?</div>
-      <div class="qa-a">All registered users can see your profile (name, age, gender, bio, photo). Messages are private between you and the recipient.</div>
+      <div class="qa-a">All registered users can see your profile (name, age, gender, bio, photo). Chat messages are private between you and the person you're talking to.</div>
     </div>
 
     <div class="qa-item">
       <div class="qa-q">Is my password safe?</div>
-      <div class="qa-a">Yes. Passwords are hashed using bcrypt (a strong, one-way hash) and are never stored in plain text. They are never returned by any API route.</div>
+      <div class="qa-a">Yes. Passwords are encrypted using bcrypt and are never stored or shared in plain text.</div>
     </div>
 
     <div class="qa-item">
       <div class="qa-q">Can I use the app on my phone?</div>
-      <div class="qa-a">The app is built with responsive CSS and works in mobile browsers, but there is no native mobile app. Open http://localhost:3000 in your phone browser on the same network.</div>
+      <div class="qa-a">Yes! The app is mobile-friendly and works in any browser. Just visit <strong>https://cebuspark.com</strong> on your phone.</div>
     </div>
 
     <div class="qa-item">
       <div class="qa-q">How do I report a problem?</div>
-      <div class="qa-a">Use the Contact form on your Profile page, or check the error logs in the Admin panel for technical issues.</div>
+      <div class="qa-a">Send an email to <a href="mailto:siomai2025@gmail.com">siomai2025@gmail.com</a> with details about the issue you're experiencing.</div>
     </div>
 
     <div class="qa-item">
-      <div class="qa-q">What happens if the server goes down?</div>
-      <div class="qa-a">All data is persisted in <code>db.json</code>. When you restart the server with <code>node server.js</code>, everything is restored.</div>
+      <div class="qa-q">How do I delete my account?</div>
+      <div class="qa-a">Send an email to <a href="mailto:siomai2025@gmail.com">siomai2025@gmail.com</a> with your username and a request to delete your account. All associated data will be removed.</div>
     </div>
 
     <div class="faq-footer">
