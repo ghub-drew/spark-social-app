@@ -112,102 +112,41 @@
       75% { transform: translate(45px, 35px) scale(1.03); }
     }
 
-    /* ── Floating decorative UI elements ── */
+    /* ── Floating social elements ── */
     .float-el {
-      position: fixed;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.2;
+      position: fixed; pointer-events: none; z-index: 0;
       transition: opacity 0.3s;
     }
-    .float-el-1 {
-      top: 14%; left: 7%;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+    .float-bubble {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 16px;
-      padding: 12px 18px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.7);
-      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
       animation: floatBlob 8s ease-in-out infinite;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
-    .float-el-2 {
-      top: 22%; right: 7%;
-      width: 52px; height: 52px;
+    .float-avatar {
       border-radius: 50%;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.07);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 2px solid rgba(255,255,255,0.12);
-      animation: floatBlob 10s ease-in-out infinite;
-      animation-delay: -3s;
+      border: 2px solid rgba(255,255,255,0.1);
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.03);
-    }
-    .float-el-3 {
-      bottom: 26%; left: 5%;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: rgba(34,197,94,0.12);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      border: 2px solid rgba(34,197,94,0.15);
-      animation: floatBlob 9s ease-in-out infinite;
-      animation-delay: -6s;
-      box-shadow: 0 0 20px rgba(34,197,94,0.08);
-    }
-    .float-el-4 {
-      bottom: 32%; right: 5%;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 8px 14px;
-      font-size: 11px;
-      color: rgba(255,255,255,0.6);
-      border: 1px solid rgba(255,255,255,0.08);
-      animation: floatBlob 11s ease-in-out infinite;
-      animation-delay: -2s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
-    }
-    .float-el-5 {
-      top: 52%; left: 2%;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: rgba(134,239,172,0.25);
-      animation: floatBlob 7s ease-in-out infinite;
-      animation-delay: -5s;
-      box-shadow: 0 0 12px rgba(134,239,172,0.1);
-    }
-    .float-el-6 {
-      top: 42%; right: 3%;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      animation: floatBlob 13s ease-in-out infinite;
-      animation-delay: -7s;
-      box-shadow: 0 0 8px rgba(255,255,255,0.05);
+      box-shadow: 0 0 24px rgba(255,255,255,0.03);
     }
 
-    /* ── Sparkle dots ── */
-    .sparkle {
-      position: fixed;
-      width: 4px; height: 4px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-      animation: twinkle 3s ease-in-out infinite;
-    }
-    .sparkle:nth-child(15) { top: 15%; left: 10%; animation-delay: 0s; }
-    .sparkle:nth-child(16) { top: 25%; right: 15%; animation-delay: -1s; width: 6px; height: 6px; }
-    .sparkle:nth-child(17) { bottom: 30%; left: 20%; animation-delay: -2s; }
-    .sparkle:nth-child(18) { bottom: 20%; right: 10%; animation-delay: -0.5s; width: 3px; height: 3px; }
-    .sparkle:nth-child(19) { top: 60%; left: 8%; animation-delay: -1.5s; width: 5px; height: 5px; }
-    .sparkle:nth-child(20) { top: 10%; right: 30%; animation-delay: -2.5s; }
+    .float-el-1 { top: 12%; left: 6%; background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 16px; padding: 10px 16px; font-size: 12px; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.04); animation: floatBlob 8s ease-in-out infinite; }
+    .float-el-2 { top: 20%; right: 6%; width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.07); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 2px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 24px rgba(255,255,255,0.03); animation: floatBlob 10s ease-in-out infinite; animation-delay: -3s; }
+    .float-el-3 { bottom: 28%; left: 4%; width: 40px; height: 40px; border-radius: 50%; background: rgba(34,197,94,0.12); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 2px solid rgba(34,197,94,0.15); animation: floatBlob 9s ease-in-out infinite; animation-delay: -6s; box-shadow: 0 0 20px rgba(34,197,94,0.08); }
+    .float-el-4 { bottom: 35%; right: 5%; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 12px; padding: 8px 14px; font-size: 11px; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.08); animation: floatBlob 11s ease-in-out infinite; animation-delay: -2s; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
+    .float-el-5 { top: 50%; left: 2%; width: 9px; height: 9px; border-radius: 50%; background: rgba(134,239,172,0.25); animation: floatBlob 7s ease-in-out infinite; animation-delay: -5s; box-shadow: 0 0 12px rgba(134,239,172,0.08); }
+    .float-el-6 { top: 45%; right: 3%; width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.15); animation: floatBlob 13s ease-in-out infinite; animation-delay: -7s; box-shadow: 0 0 8px rgba(255,255,255,0.05); }
+    .float-el-7 { top: 60%; left: 10%; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.06); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 2px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 16px; animation: floatBlob 12s ease-in-out infinite; animation-delay: -1s; }
+    .float-el-8 { bottom: 15%; right: 10%; background: rgba(255,255,255,0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 12px; padding: 6px 12px; font-size: 10px; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.06); animation: floatBlob 8s ease-in-out infinite; animation-delay: -4s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
 
     @keyframes twinkle {
       0%, 100% { opacity: 0.08; transform: scale(1); }
@@ -512,20 +451,16 @@
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
-  <div class="sparkle"></div>
 
-  <!-- Floating decorative UI elements -->
+  <!-- Floating social elements -->
   <div class="float-el float-el-1">💬 Say hi!</div>
   <div class="float-el float-el-2">👤</div>
   <div class="float-el float-el-3"></div>
-  <div class="float-el float-el-4">🟢 Online</div>
+  <div class="float-el float-el-4">🟢 Online now</div>
   <div class="float-el float-el-5"></div>
   <div class="float-el float-el-6"></div>
+  <div class="float-el float-el-7">💚</div>
+  <div class="float-el float-el-8">Good vibes ✨</div>
 
  
 
@@ -558,6 +493,15 @@
       </div>
       <div id="loginError" class="error-msg hidden"></div>
       <button type="submit" class="btn-primary">Login</button>
+      <div style="display:flex;align-items:center;gap:10px;margin:18px 0 0;">
+        <span style="flex:1;height:1px;background:rgba(229,231,235,0.5);"></span>
+        <span style="font-size:12px;color:#9ca3af;font-weight:500;">or continue with</span>
+        <span style="flex:1;height:1px;background:rgba(229,231,235,0.5);"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button type="button" style="flex:1;padding:10px;border:1px solid rgba(229,231,235,0.5);border-radius:12px;background:rgba(255,255,255,0.6);cursor:pointer;font-size:18px;transition:all 0.2s;" onmouseover="this.style.background='white';this.style.borderColor='#e5e7eb'" onmouseout="this.style.background='rgba(255,255,255,0.6)';this.style.borderColor='rgba(229,231,235,0.5)'" title="Continue with Google">G</button>
+        <button type="button" style="flex:1;padding:10px;border:1px solid rgba(229,231,235,0.5);border-radius:12px;background:rgba(255,255,255,0.6);cursor:pointer;font-size:18px;transition:all 0.2s;" onmouseover="this.style.background='white';this.style.borderColor='#e5e7eb'" onmouseout="this.style.background='rgba(255,255,255,0.6)';this.style.borderColor='rgba(229,231,235,0.5)'" title="Continue with Apple">🍎</button>
+      </div>
     </form>
 
     <!-- Register Form -->
