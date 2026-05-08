@@ -392,7 +392,7 @@
     /* ── Social Login ── */
     .social-divider {
       display: flex; align-items: center; gap: 14px;
-      margin: 22px 0 18px;
+      margin: 20px 0 16px;
     }
     .social-divider-line {
       flex: 1; height: 1px;
@@ -403,21 +403,27 @@
       letter-spacing: 0.02em;
     }
     .social-btns {
-      display: flex; gap: 16px; justify-content: center;
+      display: flex; gap: 10px;
     }
-    .social-icon-btn {
-      display: flex; align-items: center; justify-content: center;
-      background: none; border: none; cursor: pointer;
-      padding: 6px; border-radius: 50%;
-      transition: all 0.2s ease;
+    .social-auth-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 11px 14px;
+      border-radius: 12px; font-size: 14px; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: white; border: 1px solid rgba(229,231,235,0.5);
+      color: #374151; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
-    .social-icon-btn:hover {
-      transform: scale(1.1);
+    .social-auth-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      border-color: #d1d5db;
     }
-    .social-icon-btn:active {
-      transform: scale(0.95);
+    .social-auth-btn:active {
+      transform: translateY(0) scale(0.98);
     }
-    .social-icon-btn svg { display: block; }
+    .social-auth-btn svg { flex-shrink: 0; display: block; }
+    .social-auth-btn span { line-height: 1; }
 
     /* ── Error / Success messages ── */
     .error-msg {
@@ -466,9 +472,10 @@
       .form-group { margin-bottom: 14px; }
       input, select, textarea { padding: 12px 14px; font-size: 14px; }
       .btn-primary { padding: 13px 18px; font-size: 15px; border-radius: 14px; }
-      .social-divider { margin: 18px 0 14px; gap: 10px; }
-      .social-btns { gap: 12px; }
-      .social-icon-btn svg { width: 22px; height: 22px; }
+      .social-divider { margin: 16px 0 12px; gap: 10px; }
+      .social-btns { gap: 8px; }
+      .social-auth-btn { padding: 9px 10px; font-size: 13px; gap: 6px; }
+      .social-auth-btn svg { width: 18px; height: 18px; }
       .blob-1 { width: 200px; height: 200px; }
       .blob-2 { width: 160px; height: 160px; }
       .card-glow { width: 300px; height: 300px; }
@@ -535,11 +542,13 @@
         <span class="social-divider-line"></span>
       </div>
       <div class="social-btns">
-        <button type="button" class="social-icon-btn" onclick="signInWithGoogle()" id="googleBtn" title="Sign in with Google">
-          <svg width="24" height="24" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.54 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.35 2.56 10.56l7.98-5.97z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"/></svg>
+        <button type="button" class="social-auth-btn" onclick="signInWithGoogle()" id="googleBtn" title="Sign in with Google">
+          <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.54 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.35 2.56 10.56l7.98-5.97z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"/></svg>
+          <span>Google</span>
         </button>
-        <button type="button" class="social-icon-btn" onclick="signInWithFacebook()" id="facebookBtn" title="Sign in with Facebook">
-          <span style="color:#1877F2;font-size:24px;font-weight:800;font-family:'Helvetica',sans-serif;line-height:1;display:block;">f</span>
+        <button type="button" class="social-auth-btn" onclick="signInWithFacebook()" id="facebookBtn" title="Sign in with Facebook">
+          <span class="fb-icon">f</span>
+          <span>Facebook</span>
         </button>
       </div>
       <p id="socialError" class="error-msg hidden" style="margin-top:10px;"></p>
