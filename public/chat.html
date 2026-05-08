@@ -262,6 +262,11 @@
       flex-shrink: 0;
       opacity: 0.5;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+    .btn-send:focus {
+      outline: none;
     }
     .btn-send svg {
       display: block;
@@ -273,11 +278,13 @@
       opacity: 1;
       transform: scale(1.1);
     }
+    .btn-send:active {
+      transform: scale(0.9);
+      opacity: 0.8;
+    }
     .input-wrapper:focus-within .btn-send {
       opacity: 1;
     }
-    .btn-send:hover {
-      transform: scale(1.03);
       box-shadow: 0 4px 16px rgba(22,163,74,0.3);
     }
 
