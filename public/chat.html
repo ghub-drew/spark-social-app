@@ -200,10 +200,10 @@
     }
     .input-wrapper input {
       flex: 1; min-width: 0;
-      padding: 14px 18px;
+      padding: 13px 16px;
       border: 2px solid #e5e7eb;
-      border-radius: 20px;
-      font-size: 15px;
+      border-radius: 14px;
+      font-size: 14px;
       font-family: 'Inter', sans-serif;
       outline: none;
       background: #f9fafb;
@@ -215,12 +215,9 @@
       background: white;
       box-shadow: 0 0 0 4px rgba(34,197,94,0.1);
     }
-    .input-wrapper input::placeholder {
-      color: #9ca3af;
-    }
 
     .message-input-area {
-      display: flex; align-items: center; gap: 8px;
+      display: flex; align-items: center; gap: 10px;
       padding: 12px 16px;
       background: rgba(255,255,255,0.9);
       backdrop-filter: blur(8px);
@@ -229,25 +226,25 @@
     }
 
     .btn-send {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
+      min-width: 100px;
+      height: 52px;
+      padding: 0 28px;
+      border-radius: 16px;
       background: linear-gradient(135deg, #22c55e, #16a34a);
       color: white;
       border: none;
-      font-size: 20px;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(22,163,74,0.2);
+      white-space: nowrap;
+      letter-spacing: -0.01em;
     }
     .btn-send:hover {
-      transform: scale(1.08);
-      box-shadow: 0 4px 16px rgba(22,163,74,0.35);
-    }
-    .btn-send:active {
-      transform: scale(0.95);
+      transform: scale(1.03);
+      box-shadow: 0 4px 16px rgba(22,163,74,0.3);
     }
 
     .btn-emoji, .btn-attach {
@@ -449,7 +446,7 @@
             <input type="file" id="fileInput" hidden onchange="handleFileSelect(event)">
             <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" maxlength="500">
           </div>
-          <button type="submit" class="btn-send">➤</button>
+          <button type="submit" class="btn-send">Send</button>
         </form>
       </div>
     </div>
