@@ -334,7 +334,7 @@
     <div class="filter-pills">
       <button class="filter-pill active" data-filter="all" onclick="filterMembers('all', this)">All</button>
       <button class="filter-pill" data-filter="active" onclick="filterMembers('active', this)">🟢 Active Now</button>
-      <button class="filter-pill" data-filter="nearby" onclick="filterMembers('nearby', this)">📍 Nearby</button>
+
       <button class="filter-pill" data-filter="recent" onclick="filterMembers('recent', this)">⭐ Recently Joined</button>
     </div>
 
@@ -350,7 +350,7 @@
     <!-- ═══ Everyone ═══ -->
     <div class="section-block">
       <div class="section-head">
-        <h3>👥 Everyone <span class="sub">All members</span></h3>
+        <h3>👥 People in Cebu <span class="sub">All members</span></h3>
       </div>
       <div id="membersGrid" class="members-grid">
         <div class="loading">Loading members...</div>
@@ -455,7 +455,7 @@
 
       if (filter === 'active') filtered = allMembers.filter(m => m.online);
       else if (filter === 'recent') filtered = [...allMembers].sort((a,b) => new Date(b.created_at)-new Date(a.created_at)).slice(0,10);
-      else if (filter === 'nearby') filtered = allMembers;
+
 
       if (q) filtered = filtered.filter(m => (m.name||'').toLowerCase().includes(q) || (m.bio||'').toLowerCase().includes(q) || (m.username||'').toLowerCase().includes(q) || (m.gender||'').toLowerCase().includes(q));
 
