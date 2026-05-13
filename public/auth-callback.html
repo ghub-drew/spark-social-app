@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Signing in - Spark</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
   <link rel="stylesheet" href="style.css">
   <style>
     body {
@@ -41,13 +42,13 @@
   <div class="card">
     <div class="spinner" id="spinner"></div>
     <h2>Signing you in...</h2>
-    <p id="statusText">Completing authentication with Supabase</p>
+    <p id="statusText">Verifying your account...</p>
     <div id="errorMsg" class="error-msg"></div>
     <button class="btn-retry" id="retryBtn" onclick="location.reload()">Try Again</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" onload="handleCallback()"></script>
   <script>
+    // Define handler FIRST, then CDN onload will find it
     async function handleCallback() {
       const statusEl = document.getElementById('statusText');
       const errorEl = document.getElementById('errorMsg');
@@ -57,45 +58,65 @@
       try {
         const hash = window.location.hash;
         if (!hash || !hash.includes('access_token')) {
+          // Still on auth-callback but no hash = user landed here directly
+          // Maybe Supabase already stored session in storage — try that
+          const sb = window.supabase?.createClient(
+            'https://hpezaqvtufrvvczyixwc.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDk5MTksImV4cCI6MjA5MzcyNTkxOX0.WzUQH4ZGn33Omv02m0ZtQgdYCXihGnHsOuhJmwGPXXI'
+          );
+          if (sb) {
+            const { data: { session } } = await sb.auth.getSession();
+            if (session?.access_token) {
+              const token = session.access_token;
+              const email = session.user.email || '';
+              const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User';
+              const avatar = session.user.user_metadata?.avatar_url || '';
+              const res = await fetch('/api/auth/supabase-callback', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ access_token: token, email, name, avatar })
+              });
+              const data = await res.json();
+              if (res.ok && data.token) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userId', data.userId);
+                localStorage.setItem('username', data.username);
+                window.location.href = data.hasProfile ? '/discover' : 'profile.html';
+                return;
+              }
+            }
+          }
           throw new Error('No authentication data found. Please try logging in again.');
         }
 
-        statusEl.textContent = 'Exchanging credentials...';
+        statusEl.textContent = 'Verifying your account...';
         const params = new URLSearchParams(hash.substring(1));
         const accessToken = params.get('access_token');
-        const refreshToken = params.get('refresh_token');
 
         if (!accessToken) throw new Error('Invalid authentication response.');
 
-        // Get user info from Supabase
-        const supabase = supabase.createClient(
+        const sb = window.supabase.createClient(
           'https://hpezaqvtufrvvczyixwc.supabase.co',
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDk5MTksImV4cCI6MjA5MzcyNTkxOX0.WzUQH4ZGn33Omv02m0ZtQgdYCXihGnHsOuhJmwGPXXI'
         );
-
-        const { data: { user }, error: userError } = await supabase.auth.getUser(accessToken);
+        const { data: { user }, error: userError } = await sb.auth.getUser(accessToken);
         if (userError || !user) throw new Error('Could not verify your identity.');
 
         const email = user.email || '';
         const name = user.user_metadata?.full_name || user.user_metadata?.name || email.split('@')[0] || 'User';
         const avatar = user.user_metadata?.avatar_url || user.user_metadata?.picture || '';
 
-        statusEl.textContent = 'Creating your account...';
         const res = await fetch('/api/auth/supabase-callback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ access_token: accessToken, email, name, avatar })
         });
-
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Failed to create session.');
 
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userId);
         localStorage.setItem('username', data.username);
-
-        statusEl.textContent = 'Redirecting...';
-        setTimeout(() => { window.location.href = data.hasProfile ? 'browse.html' : 'profile.html'; }, 300);
+        window.location.href = data.hasProfile ? '/discover' : 'profile.html';
       } catch (err) {
         spinner.style.display = 'none';
         errorEl.textContent = err.message;
@@ -105,5 +126,6 @@
       }
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" onload="handleCallback()"></script>
 </body>
 </html>

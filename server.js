@@ -103,6 +103,35 @@ app.post('/api/register', async (req, res) => {
 
     if (error) throw error;
 
+    // ── Send welcome message from Spark system user ──
+    try {
+      const SPARK_EMAIL = 'hello@spark.community';
+      let { data: sparkUser } = await supabase.from('users').select('id').eq('email', SPARK_EMAIL).maybeSingle();
+      if (!sparkUser) {
+        const sparkPw = bcrypt.hashSync('spark_' + Date.now(), 10);
+        const { data: newSpark } = await supabase.from('users').insert({
+          username: 'Spark',
+          email: SPARK_EMAIL,
+          password: sparkPw,
+          photo: '/spark-icon.svg'
+        }).select('id').single();
+        if (newSpark) sparkUser = newSpark;
+      } else {
+        await supabase.from('users').update({ name: null, photo: '/spark-icon.svg' }).eq('id', sparkUser.id);
+      }
+      if (sparkUser) {
+        const welcomeMsg = `Hey 👋 welcome to Spark!\n\nYou're now part of Cebu's local social community ✨\n\nComplete your profile to meet people nearby, or browse members to start connecting.`;
+        await supabase.from('messages').insert({
+          sender_id: sparkUser.id,
+          receiver_id: user.id,
+          content: welcomeMsg,
+          type: 'text'
+        });
+      }
+    } catch (_) {
+      logger.warn('Welcome message skipped', _.message);
+    }
+
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, userId: user.id, username: user.username });
   } catch (err) {
@@ -199,7 +228,24 @@ app.put('/api/profile', authMiddleware, upload.single('photo'), async (req, res)
     }
 
     const updates = { name, age: parseInt(age), gender, bio, photo };
-    await supabase.from('users').update(updates).eq('id', req.user.id);
+
+    // Add interests if provided
+    if (req.body.interests) {
+      try {
+        updates.interests = JSON.parse(req.body.interests);
+      } catch (_) {
+        updates.interests = req.body.interests;
+      }
+    }
+
+    try {
+      await supabase.from('users').update(updates).eq('id', req.user.id);
+    } catch (err) {
+      if (err.message?.includes('interests') || err.code === 'PGRST204') {
+        return res.status(400).json({ error: 'Please run: ALTER TABLE users ADD COLUMN interests JSONB DEFAULT \'[]\'::jsonb;' });
+      }
+      throw err;
+    }
 
     res.json({ success: true, photo });
   } catch (err) {
@@ -226,13 +272,13 @@ app.get('/api/members', authMiddleware, async (req, res) => {
     const { data: users, error } = await supabase
       .from('users')
       .select('*')
-      .not('name', 'is', null)
       .order('id');
 
     if (error) throw error;
+    const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
     const members = users.map(({ password, email, ...safe }) => ({
       ...safe,
-      online: onlineUsers.has(safe.id) || safe.id === req.user.id
+      online: onlineUsers.has(safe.id) || safe.id === req.user.id || (safe.lastSeen && safe.lastSeen >= fiveMinAgo)
     }));
     res.json(members);
   } catch (err) {
@@ -291,19 +337,22 @@ app.get('/api/conversations', authMiddleware, async (req, res) => {
     for (const partner of partners || []) {
       const { data: lastMsg } = await supabase
         .from('messages')
-        .select('content')
+        .select('content, created_at')
         .or(`and(sender_id.eq.${myId},receiver_id.eq.${partner.id}),and(sender_id.eq.${partner.id},receiver_id.eq.${myId})`)
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
 
+      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+      const isOnline = onlineUsers.has(partner.id) || (partner.lastSeen && partner.lastSeen >= fiveMinAgo);
       conversations.push({
         id: partner.id,
         username: partner.username,
         name: partner.name,
         photo: partner.photo,
         last_message: lastMsg?.content,
-        online: onlineUsers.has(partner.id),
+        last_message_time: lastMsg?.created_at || partner.lastSeen,
+        online: isOnline,
         lastSeen: partner.lastSeen
       });
     }
@@ -314,9 +363,25 @@ app.get('/api/conversations', authMiddleware, async (req, res) => {
 });
 
 // Chat file upload
+const DAILY_UPLOAD_LIMIT = 20;
+
 app.post('/api/chat/upload', authMiddleware, uploadChat.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+    // Check daily upload limit per user
+    const today = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count } = await supabase
+      .from('messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('sender_id', req.user.id)
+      .in('type', ['image', 'file'])
+      .gte('created_at', today);
+
+    if (count >= DAILY_UPLOAD_LIMIT) {
+      return res.status(429).json({ error: `Daily upload limit reached (${DAILY_UPLOAD_LIMIT} per day).` });
+    }
+
     const url = await uploadToSupabase(req.file, 'chat');
     const isImage = req.file.mimetype.startsWith('image/');
     res.json({
@@ -470,6 +535,12 @@ app.post('/api/messages/send', authMiddleware, async (req, res) => {
     }).select('*').single();
     if (error) throw error;
     const { data: user } = await supabase.from('users').select('username').eq('id', req.user.id).single();
+    // Notify receiver via Socket.io if available
+    if (io) {
+      const fullMsg = { ...message, sender_name: user?.username };
+      const receiverSocket = onlineUsers.get(parseInt(receiverId));
+      if (receiverSocket) io.to(receiverSocket).emit('new_message', fullMsg);
+    }
     res.json({ ...message, sender_name: user?.username });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -481,6 +552,12 @@ app.put('/api/messages/:id', authMiddleware, async (req, res) => {
     const { data: msg } = await supabase.from('messages').select('receiver_id').eq('id', req.params.id).eq('sender_id', req.user.id).single();
     if (!msg) return res.status(404).json({ error: 'Message not found' });
     await supabase.from('messages').update({ content: content.trim(), edited: true }).eq('id', req.params.id);
+    // Notify receiver via Socket.io if available
+    if (io) {
+      const payload = { messageId: parseInt(req.params.id), content: content.trim() };
+      const receiverSocket = onlineUsers.get(msg.receiver_id);
+      if (receiverSocket) io.to(receiverSocket).emit('message_edited', payload);
+    }
     res.json({ success: true, messageId: parseInt(req.params.id), content: content.trim() });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -490,8 +567,36 @@ app.delete('/api/messages/:id', authMiddleware, async (req, res) => {
     const { data: msg } = await supabase.from('messages').select('receiver_id').eq('id', req.params.id).eq('sender_id', req.user.id).single();
     if (!msg) return res.status(404).json({ error: 'Message not found' });
     await supabase.from('messages').delete().eq('id', req.params.id);
+    // Notify receiver via Socket.io if available
+    if (io) {
+      const payload = { messageId: parseInt(req.params.id) };
+      const receiverSocket = onlineUsers.get(msg.receiver_id);
+      if (receiverSocket) io.to(receiverSocket).emit('message_deleted', payload);
+    }
     res.json({ success: true, messageId: parseInt(req.params.id) });
   } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ── Heartbeat (keeps lastSeen fresh for online presence) ─────────────────────
+app.post('/api/heartbeat', authMiddleware, async (req, res) => {
+  try {
+    const now = new Date().toISOString();
+    await supabase.from('users').update({ lastSeen: now }).eq('id', req.user.id);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Logout (set lastSeen to 6min ago so 5min online window doesn't catch it) ──
+app.post('/api/logout', authMiddleware, async (req, res) => {
+  try {
+    const sixMinAgo = new Date(Date.now() - 6 * 60 * 1000).toISOString();
+    await supabase.from('users').update({ lastSeen: sixMinAgo }).eq('id', req.user.id);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ── Error handling middleware ─────────────────────────────────────────────────

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spark - Discover</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -106,6 +107,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
       gap: 16px;
+      transition: opacity 0.2s ease;
     }
     @media (min-width: 900px) {
       .members-grid { grid-template-columns: repeat(3, 1fr); }
@@ -123,6 +125,7 @@
       cursor: pointer;
       display: flex; flex-direction: column; align-items: center;
       text-align: center;
+      height: 100%;
     }
     .member-card:hover {
       transform: translateY(-6px);
@@ -172,12 +175,16 @@
       line-height: 1.5;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       overflow: hidden;
+      flex: 1;
+      width: 100%;
     }
 
     /* ── Tags ── */
     .member-tags {
       display: flex; flex-wrap: wrap; gap: 5px;
       justify-content: center; margin-bottom: 14px;
+      margin-top: auto;
+      width: 100%;
     }
     .member-tag {
       font-size: 11px; font-weight: 600; padding: 3px 10px;
@@ -185,6 +192,12 @@
       border: 1px solid #bbf7d0; transition: all 0.2s;
     }
     .member-tag:hover { background: #dcfce7; }
+    .member-tag-more {
+      background: #f3f4f6 !important;
+      color: #6b7280 !important;
+      border-color: #e5e7eb !important;
+      font-size: 10px;
+    }
 
     /* ── Button ── */
     .btn-message {
@@ -280,8 +293,8 @@
 <body>
   <nav class="hamburger-nav">
     <button class="hamburger-btn" id="menuToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-    <a href="browse.html" class="hamburger-logo">✦ Spark</a>
-    <a href="profile.html" class="hamburger-avatar" id="hamburgerAvatar">?</a>
+    <a href="/discover" class="hamburger-logo">✦ Spark</a>
+    <a href="/profile" class="hamburger-avatar" id="hamburgerAvatar">?</a>
   </nav>
 
   <div class="drawer-overlay" id="drawerOverlay"></div>
@@ -294,9 +307,9 @@
       </div>
     </div>
     <div class="drawer-links">
-      <a href="browse.html" class="drawer-link active"><span class="drawer-icon">👥</span> Discover</a>
-      <a href="profile.html" class="drawer-link"><span class="drawer-icon">👤</span> Profile</a>
-      <a href="chat.html" class="drawer-link"><span class="drawer-icon">💬</span> Messages</a>
+      <a href="/discover" class="drawer-link active"><span class="drawer-icon">👥</span> Discover</a>
+      <a href="/profile" class="drawer-link"><span class="drawer-icon">👤</span> Profile</a>
+      <a href="/messages" class="drawer-link"><span class="drawer-icon">💬</span> Messages</a>
     </div>
     <div class="drawer-footer">
       <a href="#" class="drawer-link drawer-logout" onclick="logout()"><span class="drawer-icon">🚪</span> Logout</a>
@@ -304,11 +317,11 @@
   </div>
 
   <nav class="navbar">
-    <a href="browse.html" class="logo-small">✦ Spark</a>
+    <a href="/discover" class="logo-small">✦ Spark</a>
     <div class="nav-links">
-      <a href="browse.html" class="active">Discover</a>
-      <a href="chat.html">Messages</a>
-      <a href="profile.html">Profile</a>
+      <a href="/discover" class="active">Discover</a>
+      <a href="/messages">Messages</a>
+      <a href="/profile">Profile</a>
       <div class="nav-user">
         <div class="nav-user-avatar-placeholder" id="navInitial">?</div>
         <span class="nav-user-name" id="navName">...</span>
@@ -321,13 +334,13 @@
 
     <div class="hero">
       <h1>Discover people <span>✨</span></h1>
-      <p>Find someone you'd like to connect with in Cebu.</p>
+      <p>Find someone you'd like to connect within Cebu.</p>
     </div>
 
     <!-- ═══ Search ═══ -->
     <div class="search-bar">
       <span>🔍</span>
-      <input type="text" id="searchInput" placeholder="Search people, vibes, or interests..." oninput="filterMembers(currentFilter, document.querySelector('.filter-pill.active'))">
+      <input type="text" id="searchInput" placeholder="Search people, vibes, or interests...">
     </div>
 
     <!-- ═══ Filter Pills ═══ -->
@@ -366,11 +379,11 @@
       t.addEventListener('click',()=>{d.classList.contains('open')?b():a();});o.addEventListener('click',b);}
     })();
 
-    let allMembers = [];
-    let currentFilter = 'all';
+    var allMembers = [];
+    var currentFilter = 'all';
   </script>
   <script>
-    if (!localStorage.getItem('token')) window.location.href = 'index.html';
+    if (!localStorage.getItem('token')) window.location.href = '/';
     const token = localStorage.getItem('token');
 
     const TAGS = ['Tech', 'Coffee', 'Music', 'Travel', 'Anime', 'Fitness', 'Photography', 'Gaming', 'Books'];
@@ -380,7 +393,7 @@
       if (!m.lastSeen) return 'New here';
       const diff = Date.now() - new Date(m.lastSeen).getTime();
       const mins = Math.floor(diff / 60000);
-      if (mins < 5) return 'Active now';
+      if (mins <= 15) return 'Active now';
       if (mins < 60) return 'Recently active';
       if (mins < 1440) return 'Active today';
       const days = Math.floor(mins / 1440);
@@ -391,6 +404,8 @@
     function statusClass(m) {
       if (m.online) return 'online';
       if (!m.lastSeen) return 'new';
+      const minsAgo = (Date.now() - new Date(m.lastSeen).getTime()) / 60000;
+      if (minsAgo <= 15) return 'online';
       return 'offline';
     }
 
@@ -413,7 +428,12 @@
           activeGrid.innerHTML = active.map(m => card(m)).join('');
         }
 
-        grid.innerHTML = allMembers.map(m => card(m)).join('');
+        grid.style.opacity = '0';
+        grid.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+          grid.innerHTML = allMembers.map(m => card(m)).join('');
+          grid.style.opacity = '1';
+        }, 100);
       } catch (e) {
         document.getElementById('membersGrid').innerHTML = '<div class="error-msg">Failed to load members.</div>';
       }
@@ -421,7 +441,16 @@
 
     function card(m) {
       const name = esc(m.name || m.username);
-      const tags = [...TAGS].sort(() => Math.random() - 0.5).slice(0, 3).map(t => `<span class="member-tag">${t}</span>`).join('');
+      let tags = '';
+      if (m.interests && Array.isArray(m.interests) && m.interests.length > 0) {
+        const shown = m.interests.slice(0, 4);
+        const remainder = m.interests.length - 4;
+        tags = shown.map(t => `<span class="member-tag">${esc(t)}</span>`).join('');
+        if (remainder > 0) tags += `<span class="member-tag member-tag-more">+${remainder}</span>`;
+      } else {
+        // Fallback: deterministic tags based on user ID (so search finds them too)
+        tags = getFallbackTags(m.id).map(t => `<span class="member-tag">${t}</span>`).join('');
+      }
       const status = humanStatus(m);
       const sClass = statusClass(m);
 
@@ -432,7 +461,7 @@
               <img src="${m.photo || ''}" alt="${name}"
                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23dcfce7%22/><text y=%22.9em%22 font-size=%2260%22 x=%2210%22>👤</text></svg>'">
             </div>
-            <span class="status-dot ${m.online ? 'online' : 'offline'}"></span>
+            <span class="status-dot ${statusClass(m) === 'online' ? 'online' : 'offline'}" data-uid="${m.id}"></span>
           </div>
           <h3 class="member-name">${name}</h3>
           <p class="member-meta">${m.age ? m.age + ' · ' : ''}${esc(m.gender || '')}</p>
@@ -444,32 +473,165 @@
       `;
     }
 
+    function isActive(m) {
+      if (m.online) return true;
+      if (m.lastSeen) {
+        const minsAgo = (Date.now() - new Date(m.lastSeen).getTime()) / 60000;
+        if (minsAgo <= 15) return true;
+      }
+      return false;
+    }
+
+    // Deterministic fallback tags based on user ID (matches card() display)
+    function getFallbackTags(userId) {
+      var len = TAGS.length;
+      return [TAGS[userId % len], TAGS[(userId + 3) % len], TAGS[(userId + 7) % len]];
+    }
+
     function filterMembers(filter, btn) {
       currentFilter = filter;
       document.querySelectorAll('.filter-pill').forEach(t => t.classList.remove('active'));
       if (btn) btn.classList.add('active');
 
       const grid = document.getElementById('membersGrid');
+      if (!grid) return;
+      const activeSection = document.getElementById('activeNowSection');
       const q = (document.getElementById('searchInput').value || '').toLowerCase();
-      let filtered = allMembers;
+      let filtered = allMembers || [];
 
-      if (filter === 'active') filtered = allMembers.filter(m => m.online);
-      else if (filter === 'recent') filtered = [...allMembers].sort((a,b) => new Date(b.created_at)-new Date(a.created_at)).slice(0,10);
-
-
-      if (q) filtered = filtered.filter(m => (m.name||'').toLowerCase().includes(q) || (m.bio||'').toLowerCase().includes(q) || (m.username||'').toLowerCase().includes(q) || (m.gender||'').toLowerCase().includes(q));
-
-      if (!filtered.length) {
-        grid.innerHTML = '<div class="empty-state"><span>🔍</span><p>No members found.</p></div>';
-        return;
+      if (filter === 'active') {
+        filtered = filtered.filter(m => isActive(m));
+      } else if (filter === 'recent') {
+        filtered = [...filtered].sort((a,b) => new Date(b.created_at)-new Date(a.created_at)).slice(0,10);
       }
-      grid.innerHTML = filtered.map(m => card(m)).join('');
+
+      if (q) {
+        filtered = filtered.filter(function(m) {
+          // Build a single lowercase string from all member fields
+          var haystack = '';
+          if (m.name) haystack += m.name.toLowerCase() + ' ';
+          if (m.username) haystack += m.username.toLowerCase() + ' ';
+          if (m.bio) haystack += m.bio.toLowerCase() + ' ';
+          if (m.gender) haystack += m.gender.toLowerCase() + ' ';
+          var interests = m.interests;
+          if (interests) {
+            if (!Array.isArray(interests)) {
+              try { interests = JSON.parse(interests); } catch (_) { interests = []; }
+            }
+            if (Array.isArray(interests)) {
+              for (var j = 0; j < interests.length; j++) {
+                haystack += String(interests[j]).toLowerCase() + ' ';
+              }
+            }
+          }
+          // Also include deterministic fallback tags (matches card display)
+          var fb = getFallbackTags(m.id);
+          for (var k = 0; k < fb.length; k++) {
+            haystack += fb[k].toLowerCase() + ' ';
+          }
+          return haystack.indexOf(q) !== -1;
+        });
+      }
+
+      // Show/hide the Active Now section based on filter
+      if (activeSection) {
+        activeSection.style.display = (filter === 'all') ? 'block' : 'none';
+      }
+
+      // Fade out, swap, fade in
+      grid.style.opacity = '0';
+      grid.style.transition = 'opacity 0.2s ease';
+
+      setTimeout(function() {
+        if (!filtered.length) {
+          var msg = filter === 'active'
+            ? '<div class="empty-state"><span>💤</span><p>No active users right now.<br>Check back later or try another filter.</p></div>'
+            : '<div class="empty-state"><span>🔍</span><p>No members found.</p></div>';
+          grid.innerHTML = msg;
+        } else {
+          grid.innerHTML = filtered.map(function(m) { return card(m); }).join('');
+        }
+        grid.style.opacity = '1';
+      }, 150);
     }
 
-    function startChat(id, name) { window.location.href = `chat.html?with=${id}&name=${encodeURIComponent(name)}`; }
+    function startChat(id, name) { window.location.href = `/chat?with=${id}&name=${encodeURIComponent(name)}`; }
     function esc(s) { if(!s)return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function timeAgo(iso) { if(!iso)return ''; const d=Date.now()-new Date(iso).getTime(); const m=Math.floor(d/60000); if(m<1)return 'just now'; if(m<60)return m+'m ago'; const h=Math.floor(m/60); if(h<24)return h+'h ago'; const days=Math.floor(h/24); if(days<7)return days+'d ago'; return new Date(iso).toLocaleDateString(); }
-    function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+    function logout() {
+      fetch('/api/logout', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      }).catch(() => {}).finally(() => {
+        localStorage.clear();
+        window.location.href = '/';
+      });
+    }
+
+    // ── Periodic presence polling: refresh online/offline dots ──
+    let pollTimer = null;
+    let pollEnabled = true;
+
+    async function pollPresence() {
+      if (!pollEnabled) return;
+      try {
+        const res = await fetch('/api/members', { headers: { Authorization: `Bearer ${token}` } });
+        const fresh = await res.json();
+        // Update allMembers array in place
+        allMembers = fresh;
+
+        // Update status dots + text on existing cards without full re-render
+        fresh.forEach(m => {
+          const dot = document.querySelector(`.status-dot[data-uid="${m.id}"]`);
+          const statusEl = document.querySelector(`.member-status[data-uid="${m.id}"]`);
+          const sClass = statusClass(m);
+          if (dot) {
+            dot.className = 'status-dot ' + (sClass === 'online' ? 'online' : 'offline');
+          }
+          if (statusEl) {
+            statusEl.textContent = humanStatus(m);
+            statusEl.className = 'member-status ' + (sClass === 'online' ? 'is-online' : 'is-offline');
+          }
+        });
+
+        // Update Active Now section
+        const activeSection = document.getElementById('activeNowSection');
+        const activeGrid = document.getElementById('activeNowGrid');
+        if (activeSection && activeGrid) {
+          const active = fresh.filter(m => m.online);
+          if (active.length > 0) {
+            activeSection.style.display = 'block';
+            activeGrid.innerHTML = active.map(m => card(m)).join('');
+          } else {
+            activeSection.style.display = 'none';
+          }
+        }
+      } catch (_) { /* silent */ }
+    }
+
+    function schedulePoll() {
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(pollPresence, 30_000); // every 30s
+    }
+
+    schedulePoll();
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        pollEnabled = false;
+      } else {
+        pollEnabled = true;
+        pollPresence(); // immediate refresh on return
+      }
+    });
+
+    // ── Search input: bind via JS instead of inline oninput ──
+    var searchInputEl = document.getElementById('searchInput');
+    if (searchInputEl) {
+      searchInputEl.addEventListener('input', function () {
+        filterMembers(window.currentFilter, document.querySelector('.filter-pill.active'));
+      });
+    }
 
     loadMembers();
   </script>
@@ -477,9 +639,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="global.js"></script>
   <div class="page-footer">
-    <a href="terms.html">Terms</a> <span style="color:var(--border);margin:0 8px;">|</span>
-    <a href="privacy.html">Privacy</a> <span style="color:var(--border);margin:0 8px;">|</span>
-    <a href="faq.html">FAQ</a>
+    <a href="/terms">Terms</a> <span style="color:var(--border);margin:0 8px;">|</span>
+    <a href="/privacy">Privacy</a> <span style="color:var(--border);margin:0 8px;">|</span>
+    <a href="/faq">FAQ</a>
   </div>
 </body>
 </html>

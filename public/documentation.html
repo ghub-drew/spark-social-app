@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spark - Technical Documentation</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
   <link rel="stylesheet" href="style.css">
   <style>
     .doc-page {
@@ -200,12 +201,12 @@
       <div class="logo-icon">✦</div>
       <h1>Spark</h1>
       <p>Social App  -  Technical Documentation</p>
-      <div class="meta">Generated: May 5, 2026</div>
+      <div class="meta">Generated: May 10, 2026</div>
       <div class="badge-row">
-        <span>9 Features</span>
-        <span>17 API Routes</span>
+        <span>11 Features</span>
+        <span>19 API Routes</span>
         <span>6 Socket Events</span>
-        <span>5 Pages</span>
+        <span>6 Pages</span>
       </div>
       <p style="margin-top:20px;color:var(--muted);font-size:13px;">
         This document covers the complete Spark social app  -  built with Node.js,<br>
@@ -307,12 +308,16 @@ npm install</div>
       </ul>
 
       <h3>3.3 Discover / Browse</h3>
-      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/browse.html &middot; server.js</p>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/browse.html &middot; server.js &middot; public/nav.js &middot; public/style.css</p>
       <ul>
         <li>Responsive card grid of all members who completed their profile</li>
-        <li>88 px circular photo with a live green/grey online status dot</li>
-        <li>Shows name, age, gender, bio, and last-seen time</li>
-        <li>Click any card or the Message button to open a chat with that person</li>
+        <li>88 px circular photo with a green/grey online status dot — updates every 30s without page reload</li>
+        <li>Shows name, age, gender, bio, and human-readable status (Active now, Recently active, etc.)</li>
+        <li><strong>Search bar:</strong> Searches name, username, bio, gender, and interests as you type</li>
+        <li><strong>Filter pills:</strong> All, 🟢 Active Now (online + recently active), ⭐ Recently Joined</li>
+        <li>Active Now section at top shows currently online members, with "View all" shortcut</li>
+        <li>Deterministic vibe tags based on user ID — same user always shows same tags; search matches them</li>
+        <li>Click any card or Message button to open a chat with that person</li>
         <li>Your own card is included and always shows Online while you are logged in</li>
       </ul>
 
@@ -329,13 +334,18 @@ npm install</div>
       </ul>
 
       <h3>3.5 Online / Offline Presence</h3>
-      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/global.js &middot; server.js &middot; browse.html &middot; chat.html</p>
+      <p class="doc-meta" style="font-size:12px;color:var(--muted);margin:-4px 0 8px;">public/global.js &middot; public/nav.js &middot; server.js &middot; browse.html &middot; chat.html</p>
       <ul>
-        <li>Green = online, grey = offline on every member card and in the chat header</li>
-        <li>Updates in real time via <code>user_status</code> socket event  -  no page reload needed</li>
-        <li>Shows "Online" when connected, "Offline &middot; Xm ago" after disconnect</li>
-        <li>Global: user stays online while on Browse, Profile, or any other authenticated page</li>
-        <li>Last-seen timestamp saved to db.json on socket disconnect</li>
+        <li>🟢 Green = online / recently active, ⚫ Grey = offline on every member card, drawer, and chat header</li>
+        <li>Sidebar drawer shows "Online now" with green dot when user is active — no more "Offline · just now"</li>
+        <li>Heartbeat system: <code>nav.js</code> ping every 30s (3min when tab hidden), <code>global.js</code> ping every 45s + activity-triggered</li>
+        <li>Activity detection: scrolling, clicking, typing, or touching triggers immediate heartbeat</li>
+        <li>Visibility API: fast heartbeat when tab visible, slow when backgrounded</li>
+        <li>Browse & chat pages poll member status every 30s — dots update without page refresh</li>
+        <li>Tab close / logout: <code>beforeunload</code> sends offline signal via fetch+keepalive (not broken sendBeacon)</li>
+        <li><code>/api/logout</code> sets <code>lastSeen</code> to 6 min ago so the 5-min online window correctly marks offline</li>
+        <li>Online window: API marks user as online if <code>lastSeen</code> is within last 5 minutes or socket-connected</li>
+        <li>Status labels: "Online now", "Active Xm ago", "Offline" — human-readable, no awkward combinations</li>
       </ul>
 
       <h3>3.6 Unread Badges &amp; Browser Notifications</h3>
@@ -357,6 +367,7 @@ npm install</div>
         <li>Messages tab: full log with sender, receiver, content, timestamp; delete per row</li>
         <li>Refresh button reloads live data without a page reload</li>
         <li>One-click link to Error Logs page</li>
+        <li>Syncs directly with the live Supabase database — manage users and messages without ever opening the Supabase dashboard</li>
       </ul>
 
       <h3>3.8 Error Logging</h3>

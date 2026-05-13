@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spark - Developer Workflow Guide</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
   <link rel="stylesheet" href="style.css">
   <style>
     .wf-page {
@@ -69,6 +70,7 @@
   <div class="wf-page">
     <h1>🚀 Developer Workflow Guide</h1>
     <p class="subtitle">How to develop, test, and deploy Spark from start to finish.</p>
+    <p style="font-size:13px;color:var(--muted);margin-top:-28px;margin-bottom:36px;">by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a></p>
 
     <h2>📋 Overview</h2>
     <p>Spark is deployed on <strong>Vercel</strong> with a <strong>Supabase</strong> cloud backend. The code lives on <strong>GitHub</strong>. You develop locally, push to GitHub, and Vercel auto-deploys.</p>
@@ -167,6 +169,16 @@ git push origin main</div>
     </div>
 
     <div class="wf-step">
+      <div class="wf-step-num">—</div>
+      <div class="wf-step-content">
+        <h3>Or deploy directly via CLI</h3>
+        <p>You can also skip the git push and deploy straight from Reasonix:</p>
+        <div class="wf-code">npx vercel deploy --prod --yes</div>
+        <p>This builds and deploys your current local files immediately without committing to GitHub. Useful for quick hotfixes.</p>
+      </div>
+    </div>
+
+    <div class="wf-step">
       <div class="wf-step-num">4</div>
       <div class="wf-step-content">
         <h3>Verify the live site</h3>
@@ -187,6 +199,7 @@ git push origin main</div>
       </tbody>
     </table>
     <div class="wf-note">⚠️ Editing data in Supabase dashboard (via SQL Editor or Table Editor) will affect your live app immediately.</div>
+    <div class="wf-note">💡 Or just use the <strong>Admin Panel</strong> at <strong>/admin.html</strong> — it syncs directly with your Supabase database and lets you view/delete users and messages without opening the Supabase dashboard.</div>
 
     <h2>📁 Key Files</h2>
     <table class="wf-table">
@@ -208,10 +221,15 @@ git push origin main</div>
       <li><strong>Supabase keys are sensitive</strong>  -  never commit them to GitHub</li>
       <li><strong>Socket.io won't work on Vercel</strong>  -  chat uses Supabase Realtime instead</li>
       <li><strong>Photo uploads</strong> now go to Supabase Storage, not local <code>uploads/</code> folder</li>
+      <li><strong>Active Now filter</strong> uses a heartbeat (<code>POST /api/heartbeat</code>) to track online presence — make sure both <code>api/index.js</code> (Vercel) and <code>server.js</code> (local) have this endpoint</li>
+      <li><strong>Dual heartbeat system:</strong> <code>nav.js</code> pings every 30s (sidebar + activity), <code>global.js</code> pings every 45s (fallback + activity-triggered)</li>
+      <li><strong>Search bar</strong> on Discover page searches names, bios, genders, and interests — uses haystack approach for fast matching</li>
+      <li><strong>Vibe tags</strong> on member cards are deterministic per user ID — same user always shows same tags; search finds them</li>
     </ul>
 
     <div class="wf-footer">
-      Spark - Social App | Workflow Guide v1.0
+      Spark - Social App | Workflow Guide v1.0<br>
+      by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a>
     </div>
   </div>
 </body>

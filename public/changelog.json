@@ -1,5 +1,51 @@
 [
   {
+    "version": "v1.6",
+    "date": "May 10, 2026",
+    "items": [
+      "Fixed sidebar presence showing 'Offline · just now' even while actively online — now shows '🟢 Online now' with green dot",
+      "Enhanced heartbeat system: 30-45s interval with activity-triggered updates (scroll, click, keypress, touch)",
+      "Visibility-aware heartbeat: fast mode (30s) when tab visible, slow mode (3min) when hidden",
+      "Added beforeunload handler with fetch+keepalive to mark user offline on tab close",
+      "Fixed navigator.sendBeacon auth issue — switched to fetch with keepalive for reliable offline signal",
+      "Browse page: 30s presence polling refreshes status dots without full page re-render",
+      "Chat page: partner status updates every 30s via existing polling loop",
+      "Search bar now searches bio, gender, and interests (not just names)",
+      "Fallback tags on member cards made deterministic per user ID — search now finds consistent tag matches",
+      "Haystack search approach: builds a single lowercase string from all member fields for fast matching",
+      "Server conversations endpoint: added lastSeen recency fallback (5-min window) alongside onlineUsers map",
+      "Added incremental search: filters as you type without page reload",
+      "Search bar binding moved from inline oninput to addEventListener for cross-browser reliability",
+      "added var (not let) for currentFilter to ensure inline handler accessibility"
+    ]
+  },
+  {
+    "version": "v1.5",
+    "date": "May 8, 2026",
+    "items": [
+      "Fixed 'Active Now' filter on Discover page — now correctly filters by online + recently active users (15-min window)",
+      "Added heartbeat API endpoint (POST /api/heartbeat) to keep lastSeen fresh without WebSockets",
+      "Frontend heartbeat pings every 2 minutes — open a Spark tab to appear active",
+      "Active Now filter shows users online or active within 5 minutes (API-level) / 15 minutes (frontend-level)",
+      "Status dots on member cards now show green for recently-active users, not just socket-connected ones",
+      "Added fade transition when switching between filter pills",
+      "Empty state message when no active users are found",
+      "Active Now section hides automatically when a filter other than 'All' is selected",
+      "Refined auth card layout for 13-14 inch laptop screens — tighter vertical rhythm, reduced spacing",
+      "Reduced card padding, logo size, heading sizes, form gaps, and button heights for better laptop fit",
+      "Reduced background blob sizes, glow intensity, and floating element opacity for cleaner atmosphere",
+      "Updated input fields with inset shadows and password visibility toggle (eye icon)",
+      "Replaced emoji input icons with clean SVG icons across all auth forms",
+      "Refined tab toggle — softer green glow without harsh borders",
+      "Improved social divider with green gradient lines and proper Facebook SVG icon",
+      "Updated floating community text: 'Looking for new friends! ✨', 'Good vibes here ✨'",
+      "Added ambient glow particles for subtle background depth",
+      "Rewrote Privacy Policy with generic, privacy-forward tone — removed 'we collect', removed db.json/messages/photos specifics",
+      "Rewrote Terms section 6 (Privacy) with same neutral tone",
+      "Removed 'and Privacy Policy' link from login page terms note — shows only 'Terms'"
+    ]
+  },
+  {
     "version": "v1.4",
     "date": "May 8, 2026",
     "items": [
@@ -9,26 +55,25 @@
       "Added Google OAuth login with Supabase (working - live)",
       "Added Facebook OAuth login with Supabase (pending Facebook App setup in Supabase dashboard)",
       "Created auth-callback.html page for OAuth redirect handling",
-      "Redesigned homepage auth card - wider (460px), premium glassmorphism, tighter spacing",
+      "Redesigned homepage auth card — wider (460px), premium glassmorphism, tighter spacing",
       "Added social login buttons with Google and Facebook branding",
       "Added input field icons (email, password, username) to login/register forms",
-      "Refined tab active state - softer green glow without border",
+      "Refined tab active state — softer green glow without border",
       "Refined scrollbar, hover effects, and micro-interactions across all pages",
       "Added floating social elements and ambient glow to homepage background",
-      "Polished Cebu brand identity - 'Meet real people around Cebu'",
+      "Polished Cebu brand identity — 'Meet real people around Cebu'",
       "Terms and Privacy link added below social login section",
       "Responsive design improvements for tablets and small screens"
-    ,
+    ]
+  },
   {
-    "note": "Deploy Tip",
+    "version": "v1.4 — Deploy Tip",
     "date": "May 8, 2026",
     "items": [
       "Batch multiple git commits before deploying to save Vercel free tier slots. Instead of pushing each change separately, accumulate changes locally and push them together with one deploy.",
       "Workflow: make changes → test on localhost → commit → repeat → when ready, push all commits at once → deploy once",
       "This way 1 deployment = 1 Vercel slot instead of 5+ for the same set of changes"
     ]
-  }
-]
   },
   {
     "version": "v1.3",
@@ -39,9 +84,9 @@
       "Redesigned chat input with Messenger-style pill, SVG icons (emoji, photo, send)",
       "Fixed profile photo upload on Vercel (direct REST API to Supabase Storage)",
       "Rewrote FAQ page for end-users (removed backend/admin content)",
-      "Created journey.html - full vibe coding story page with modern layout",
+      "Created journey.html — full vibe coding story page with modern layout",
       "Integrated multi-AI workflow: Claude (architecture), DeepSeek (coding), ChatGPT (design)",
-      "Cleaned up Vercel projects - deleted 3 duplicate projects",
+      "Cleaned up Vercel projects — deleted 3 duplicate projects",
       "Added Database Access section to documentation",
       "Updated workspace guide with localhost-first review workflow",
       "Removed contact modal from profile page, added email link in footer",
@@ -55,14 +100,14 @@
     "version": "v1.2",
     "date": "May 7, 2026",
     "items": [
-      "Phase 1 - Supabase local setup: installed Docker Desktop and initialized local Supabase instance",
+      "Phase 1 — Supabase local setup: installed Docker Desktop and initialized local Supabase instance",
       "Supabase running at http://127.0.0.1:54323 (Studio), port 54321 (API), 54322 (PostgreSQL)",
       "Migration plan from lowdb (JSON) to Supabase (PostgreSQL) established",
       "Project backup created before migration",
-      "Phase 2 - Created Supabase tables: users, messages, contacts",
-      "Phase 3 - Migrated existing data from db.json to Supabase (5 users, 19 messages, 2 contacts)",
-      "Phase 4 - Replaced all lowdb queries with @supabase/supabase-js across all routes and socket events",
-      "Phase 5 - Moved file uploads to Supabase Storage (profile photos, chat files)",
+      "Phase 2 — Created Supabase tables: users, messages, contacts",
+      "Phase 3 — Migrated existing data from db.json to Supabase (5 users, 19 messages, 2 contacts)",
+      "Phase 4 — Replaced all lowdb queries with @supabase/supabase-js across all routes and socket events",
+      "Phase 5 — Moved file uploads to Supabase Storage (profile photos, chat files)",
       "Removed lowdb dependency from project",
       "lowdb JSON database fully replaced by Supabase PostgreSQL",
       "Created cloud Supabase project (CWD) at hpezaqvtufrvvczyixwc.supabase.co",
@@ -90,7 +135,7 @@
       "Renamed app from \"dating\" to \"social\" throughout",
       "Added error logging system (logger.js, /api/logs, logs.html)",
       "Added contact form on Profile page with Formspree integration",
-      "Added documentation.html - full HTML technical docs",
+      "Added documentation.html — full HTML technical docs",
       "Added Terms & Conditions page (terms.html)",
       "Added Privacy Policy page (privacy.html)",
       "Added FAQ & Troubleshooting page (faq.html)",
@@ -98,10 +143,10 @@
       "Fixed PDF generator alignment for feature sections",
       "Moved Docs link from navbar to Admin panel",
       "Replaced all em dashes with regular dashes across docs",
-      "Premium UI redesign - glassmorphism, ambient blobs, floating elements, noise texture",
+      "Premium UI redesign — glassmorphism, ambient blobs, floating elements, noise texture",
       "Improved login page with cinematic gradient, animated glow, premium card",
       "Improved browse page with premium member cards, hover lift, soft background",
-      "Improved chat page - neutral background, message animations, online pulse, better bubbles",
+      "Improved chat page — neutral background, message animations, online pulse, better bubbles",
       "Fixed send button compression and avatar loading in chat",
       "Added consistent ambient backgrounds across all pages via style.css"
     ]

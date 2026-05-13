@@ -93,6 +93,39 @@ app.post('/api/register', async (req, res) => {
     const hashed = bcrypt.hashSync(password, 10);
     const { data: user, error } = await supabase.from('users').insert({ username, email, password: hashed }).select('id, username').single();
     if (error) throw error;
+
+    // ── Send welcome message from Spark system user ──
+    try {
+      // Find or create the Spark system user
+      const SPARK_EMAIL = 'hello@spark.community';
+      let { data: sparkUser } = await supabase.from('users').select('id').eq('email', SPARK_EMAIL).maybeSingle();
+      if (!sparkUser) {
+        const sparkPw = bcrypt.hashSync('spark_' + Date.now(), 10);
+        const { data: newSpark } = await supabase.from('users').insert({
+          username: 'Spark',
+          email: SPARK_EMAIL,
+          password: sparkPw,
+          photo: '/spark-icon.svg'
+        }).select('id').single();
+        if (newSpark) sparkUser = newSpark;
+      } else {
+        // Ensure existing Spark user has no name (so it doesn't appear on Browse page)
+        await supabase.from('users').update({ name: null, photo: '/spark-icon.svg' }).eq('id', sparkUser.id);
+      }
+      if (sparkUser) {
+        const welcomeMsg = `Hey 👋 welcome to Spark!\n\nYou're now part of Cebu's local social community ✨\n\nComplete your profile to meet people nearby, or browse members to start connecting.`;
+        await supabase.from('messages').insert({
+          sender_id: sparkUser.id,
+          receiver_id: user.id,
+          content: welcomeMsg,
+          type: 'text'
+        });
+      }
+    } catch (_) {
+      // Don't block registration if welcome message fails
+      console.log('Welcome message skipped:', _.message);
+    }
+
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, userId: user.id, username: user.username });
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -112,10 +145,13 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/auth/supabase-callback', async (req, res) => {
   try {
     const { access_token, email, name, avatar } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email required' });
+    if (!email && !name) return res.status(400).json({ error: 'Email required' });
+    // If Facebook didn't return email, generate a placeholder
+    const userEmail = email || (name ? name.toLowerCase().replace(/\s+/g, '') + '_fb_' + Date.now() + '@facebook.cebuspark.com' : null);
+    if (!userEmail) return res.status(400).json({ error: 'Email required' });
 
     // Check if user exists
-    const { data: existing } = await supabase.from('users').select('id, username, name, photo').eq('email', email).maybeSingle();
+    const { data: existing } = await supabase.from('users').select('id, username, name, photo').eq('email', userEmail).maybeSingle();
 
     if (existing) {
       // Update profile info if needed
@@ -130,13 +166,43 @@ app.post('/api/auth/supabase-callback', async (req, res) => {
     }
 
     // Create new user
-    const username = email.split('@')[0] + Math.floor(Math.random() * 1000);
+    const username = userEmail.split('@')[0] + Math.floor(Math.random() * 1000);
     const { data: user, error } = await supabase.from('users').insert({
-      username, email, password: 'oauth_' + Date.now(),
+      username, email: userEmail, password: 'oauth_' + Date.now(),
       name: name || null, photo: avatar || null
     }).select('id, username').single();
 
     if (error) throw error;
+
+    // ── Send welcome message from Spark system user ──
+    try {
+      const SPARK_EMAIL = 'hello@spark.community';
+      let { data: sparkUser } = await supabase.from('users').select('id').eq('email', SPARK_EMAIL).maybeSingle();
+      if (!sparkUser) {
+        const sparkPw = bcrypt.hashSync('spark_' + Date.now(), 10);
+        const { data: newSpark } = await supabase.from('users').insert({
+          username: 'Spark',
+          email: SPARK_EMAIL,
+          password: sparkPw,
+          photo: '/spark-icon.svg'
+        }).select('id').single();
+        if (newSpark) sparkUser = newSpark;
+      } else {
+        await supabase.from('users').update({ name: null, photo: '/spark-icon.svg' }).eq('id', sparkUser.id);
+      }
+      if (sparkUser) {
+        const welcomeMsg = `Hey 👋 welcome to Spark!\n\nYou're now part of Cebu's local social community ✨\n\nComplete your profile to meet people nearby, or browse members to start connecting.`;
+        await supabase.from('messages').insert({
+          sender_id: sparkUser.id,
+          receiver_id: user.id,
+          content: welcomeMsg,
+          type: 'text'
+        });
+      }
+    } catch (_) {
+      console.log('Welcome message skipped:', _.message);
+    }
+
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, userId: user.id, username: user.username, hasProfile: false });
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -199,7 +265,25 @@ app.put('/api/profile', authMiddleware, upload.single('photo'), async (req, res)
     }
 
     const updates = { name, age: parseInt(age), gender, bio, photo };
-    await supabase.from('users').update(updates).eq('id', req.user.id);
+
+    // Add interests if provided
+    if (req.body.interests) {
+      try {
+        updates.interests = JSON.parse(req.body.interests);
+      } catch (_) {
+        updates.interests = req.body.interests;
+      }
+    }
+
+    try {
+      await supabase.from('users').update(updates).eq('id', req.user.id);
+    } catch (err) {
+      // If column missing, return clear migration instruction
+      if (err.message?.includes('interests') || err.code === 'PGRST204') {
+        return res.status(400).json({ error: 'Please run the database migration first: ALTER TABLE users ADD COLUMN interests JSONB DEFAULT \'[]\'::jsonb;' });
+      }
+      throw err;
+    }
     res.json({ success: true, photo });
   } catch (err) {
     logger.error('Profile update error', err.message);
@@ -207,10 +291,37 @@ app.put('/api/profile', authMiddleware, upload.single('photo'), async (req, res)
   }
 });
 
+// ── Heartbeat (keeps lastSeen fresh for online presence) ─────────────────────
+app.post('/api/heartbeat', authMiddleware, async (req, res) => {
+  try {
+    const now = new Date().toISOString();
+    await supabase.from('users').update({ lastSeen: now }).eq('id', req.user.id);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Logout (set lastSeen to 6min ago so 5min online window doesn't catch it) ──
+app.post('/api/logout', authMiddleware, async (req, res) => {
+  try {
+    // Set lastSeen to 6 minutes ago so the "within 5min" online check returns false
+    const sixMinAgo = new Date(Date.now() - 6 * 60 * 1000).toISOString();
+    await supabase.from('users').update({ lastSeen: sixMinAgo }).eq('id', req.user.id);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/api/members', authMiddleware, async (req, res) => {
   try {
-    const { data: users } = await supabase.from('users').select('*').not('name', 'is', null).order('id');
-    res.json((users || []).map(({ password, email, ...safe }) => ({ ...safe, online: false })));
+    const { data: users } = await supabase.from('users').select('*').order('id');
+    const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    res.json((users || []).map(({ password, email, ...safe }) => ({
+      ...safe,
+      online: safe.id === req.user.id || (safe.lastSeen && safe.lastSeen >= fiveMinAgo)
+    })));
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -239,10 +350,12 @@ app.get('/api/conversations', authMiddleware, async (req, res) => {
     const { data: partners } = await supabase.from('users').select('id, username, name, photo, lastSeen').in('id', partnerIds);
     const conversations = [];
     for (const partner of partners || []) {
-      const { data: lastMsg } = await supabase.from('messages').select('content')
+      const { data: lastMsg } = await supabase.from('messages').select('content, created_at')
         .or(`and(sender_id.eq.${myId},receiver_id.eq.${partner.id}),and(sender_id.eq.${partner.id},receiver_id.eq.${myId})`)
         .order('created_at', { ascending: false }).limit(1).maybeSingle();
-      conversations.push({ id: partner.id, username: partner.username, name: partner.name, photo: partner.photo, last_message: lastMsg?.content, online: false, lastSeen: partner.lastSeen });
+      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+      const isOnline = partner.lastSeen && partner.lastSeen >= fiveMinAgo;
+      conversations.push({ id: partner.id, username: partner.username, name: partner.name, photo: partner.photo, last_message: lastMsg?.content, last_message_time: lastMsg?.created_at || partner.lastSeen, online: isOnline, lastSeen: partner.lastSeen });
     }
     res.json(conversations);
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -350,9 +463,25 @@ const uploadChat = multer({
   limits: { fileSize: 10 * 1024 * 1024 }
 });
 
+const DAILY_UPLOAD_LIMIT = 20;
+
 app.post('/api/chat/upload', authMiddleware, uploadChat.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+    // Check daily upload limit per user
+    const today = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count } = await supabase
+      .from('messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('sender_id', req.user.id)
+      .in('type', ['image', 'file'])
+      .gte('created_at', today);
+
+    if (count >= DAILY_UPLOAD_LIMIT) {
+      return res.status(429).json({ error: `Daily upload limit reached (${DAILY_UPLOAD_LIMIT} per day).` });
+    }
+
     const url = await uploadToSupabase(req.file, 'chat');
     const isImage = req.file.mimetype.startsWith('image/');
     res.json({ url, type: isImage ? 'image' : 'file', fileName: req.file.originalname });

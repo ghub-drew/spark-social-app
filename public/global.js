@@ -2,6 +2,68 @@
   const token = localStorage.getItem('token');
   if (!token) return;
 
+  // ── Heartbeat: keep lastSeen fresh so other users see us online ──
+  let heartbeatTimer = null;
+  let fastMode = true;        // 45s when visible, 3min when hidden
+  let lastActivityHeartbeat = 0; // throttle activity-triggered heartbeats
+
+  function sendHeartbeat() {
+    fetch('/api/heartbeat', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` }
+    }).catch(() => {}); // silent fail — no big deal if offline
+  }
+
+  function scheduleHeartbeat() {
+    if (heartbeatTimer) clearInterval(heartbeatTimer);
+    const interval = fastMode ? 45_000 : 180_000; // 45s or 3min
+    heartbeatTimer = setInterval(sendHeartbeat, interval);
+  }
+
+  function onUserActivity() {
+    // Throttle: at most one activity-triggered heartbeat per 15s
+    const now = Date.now();
+    if (now - lastActivityHeartbeat < 15_000) return;
+    lastActivityHeartbeat = now;
+    sendHeartbeat();
+  }
+
+  // Fire immediately, then schedule
+  sendHeartbeat();
+  scheduleHeartbeat();
+
+  // ── Activity tracking: heartbeat on user interaction ──────────
+  ['scroll', 'click', 'keypress', 'touchstart', 'mousemove'].forEach(evt => {
+    document.addEventListener(evt, onUserActivity, { passive: true });
+  });
+
+  // ── Visibility: fast heartbeat when visible, slow when hidden ──
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      fastMode = false;
+      scheduleHeartbeat();
+    } else {
+      fastMode = true;
+      scheduleHeartbeat();
+      sendHeartbeat(); // immediate refresh on return
+      // Notify nav.js that we're back online
+      if (typeof window.updateDrawerPresence === 'function') {
+        window.updateDrawerPresence(true);
+      }
+    }
+  });
+
+  // ── Before unload: notify server we're going offline ───────────
+  window.addEventListener('beforeunload', () => {
+    // fetch with keepalive supports custom headers (unlike sendBeacon)
+    fetch('/api/logout', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: '{}',
+      keepalive: true
+    }).catch(() => {});
+  });
+
   const IS_CHAT = window.location.pathname.includes('chat.html');
 
   // ── Browser notification permission ──────────────────────────

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spark - Profile</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,8 +13,8 @@
     <button class="hamburger-btn" id="menuToggle" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
-    <a href="browse.html" class="hamburger-logo">✦ Spark</a>
-    <a href="profile.html" class="hamburger-avatar" id="hamburgerAvatar">?</a>
+    <a href="/discover" class="hamburger-logo">✦ Spark</a>
+    <a href="/profile" class="hamburger-avatar" id="hamburgerAvatar">?</a>
   </nav>
 
   <!-- Overlay + Drawer -->
@@ -27,9 +28,9 @@
       </div>
     </div>
     <div class="drawer-links">
-      <a href="browse.html" class="drawer-link"><span class="drawer-icon">👥</span> Discover</a>
-      <a href="profile.html" class="drawer-link active"><span class="drawer-icon">👤</span> Profile</a>
-      <a href="chat.html" class="drawer-link"><span class="drawer-icon">💬</span> Messages</a>
+      <a href="/discover" class="drawer-link"><span class="drawer-icon">👥</span> Discover</a>
+      <a href="/profile" class="drawer-link active"><span class="drawer-icon">👤</span> Profile</a>
+      <a href="/messages" class="drawer-link"><span class="drawer-icon">💬</span> Messages</a>
     </div>
     <div class="drawer-footer">
       <a href="#" class="drawer-link drawer-logout" onclick="logout()"><span class="drawer-icon">🚪</span> Logout</a>
@@ -38,11 +39,11 @@
 
   <!-- Desktop navbar -->
   <nav class="navbar">
-    <a href="browse.html" class="logo-small">✦ Spark</a>
+    <a href="/discover" class="logo-small">✦ Spark</a>
     <div class="nav-links">
-      <a href="browse.html">Discover</a>
-      <a href="chat.html">Messages</a>
-      <a href="profile.html" class="active">Profile</a>
+      <a href="/discover">Discover</a>
+      <a href="/messages">Messages</a>
+      <a href="/profile" class="active">Profile</a>
       <div class="nav-user">
         <div class="nav-user-avatar-placeholder" id="navInitial">?</div>
         <span class="nav-user-name" id="navName">...</span>
@@ -96,6 +97,26 @@
           <label>Bio</label>
           <textarea id="bio" placeholder="Write a short bio about yourself..." rows="4" maxlength="300"></textarea>
           <span class="char-count"><span id="bioCount">0</span>/300</span>
+        </div>
+
+        <!-- ── Interests Section ── -->
+        <div class="interests-section">
+          <h3>Interests ✨</h3>
+          <p class="helper-text">Choose interests that match your vibe. Interests help people discover you and start conversations.</p>
+
+          <div class="interest-counter">
+            <span class="count-num" id="interestCount">0</span>
+            <span class="count-max"> / 10 selected</span>
+            <span style="color:#9ca3af;font-weight:400;margin-left:8px;font-size:12px;">(min 3)</span>
+          </div>
+
+          <div class="interest-chips" id="presetChips"></div>
+
+          <div class="interest-add-row">
+            <input type="text" id="customInterestInput" placeholder="Add your own..." maxlength="30">
+            <button type="button" class="btn-interest-add" id="addInterestBtn" onclick="addCustomInterest()">Add</button>
+          </div>
+          <p class="interest-hint" id="interestHint">Press Enter or click Add</p>
         </div>
 
         <div id="profileError" class="error-msg hidden"></div>
@@ -157,11 +178,72 @@
     }
   </script>
   <script>
-    if (!localStorage.getItem('token')) window.location.href = 'index.html';
+    if (!localStorage.getItem('token')) window.location.href = '/';
 
     const token = localStorage.getItem('token');
 
-    // Load existing profile
+    // ── Interests ──────────────────────────────────────────────
+    const PRESET_INTERESTS = [
+      'Tech', 'Coffee', 'Gaming', 'Anime', 'Fitness', 'Travel', 'Music', 'Books',
+      'Photography', 'Movies', 'Food', 'Business', 'Coding', 'Art', 'Pets',
+      'Basketball', 'Nature', 'Cars', 'K-pop'
+    ];
+    const MAX_INTERESTS = 10;
+    const MIN_INTERESTS = 3;
+    let selectedInterests = [];
+
+    function renderInterests() {
+      const container = document.getElementById('presetChips');
+      const allChips = [...new Set([...PRESET_INTERESTS, ...selectedInterests])];
+      container.innerHTML = allChips.map(interest => {
+        const isSelected = selectedInterests.includes(interest);
+        return `<span class="interest-chip ${isSelected ? 'selected' : ''}" onclick="toggleInterest('${interest.replace(/'/g, "\\'")}')">
+          ${interest}
+          ${isSelected ? '<span class="chip-remove">✕</span>' : ''}
+        </span>`;
+      }).join('');
+      document.getElementById('interestCount').textContent = selectedInterests.length;
+      document.getElementById('addInterestBtn').disabled = selectedInterests.length >= MAX_INTERESTS;
+    }
+
+    function toggleInterest(interest) {
+      const idx = selectedInterests.indexOf(interest);
+      if (idx > -1) {
+        selectedInterests.splice(idx, 1);
+      } else {
+        if (selectedInterests.length >= MAX_INTERESTS) return;
+        selectedInterests.push(interest);
+      }
+      renderInterests();
+    }
+
+    function addCustomInterest() {
+      const input = document.getElementById('customInterestInput');
+      const val = input.value.trim();
+      if (!val) return;
+      if (selectedInterests.length >= MAX_INTERESTS) return;
+      if (selectedInterests.includes(val)) {
+        input.value = '';
+        document.getElementById('interestHint').textContent = 'Already added!';
+        setTimeout(() => document.getElementById('interestHint').textContent = 'Press Enter or click Add', 2000);
+        return;
+      }
+      selectedInterests.push(val);
+      input.value = '';
+      renderInterests();
+      document.getElementById('interestHint').textContent = `"${val}" added!`;
+      setTimeout(() => document.getElementById('interestHint').textContent = 'Press Enter or click Add', 2000);
+    }
+
+    // Allow Enter key to add custom interest
+    document.getElementById('customInterestInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addCustomInterest();
+      }
+    });
+
+    // Load existing profile + interests
     fetch('/api/profile/me', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(user => {
@@ -171,6 +253,11 @@
         if (user.gender) document.getElementById('gender').value = user.gender;
         if (user.bio) { document.getElementById('bio').value = user.bio; updateCount(); }
         if (user.photo) document.getElementById('photoPreview').src = user.photo;
+        // Load interests
+        if (user.interests && Array.isArray(user.interests)) {
+          selectedInterests = user.interests;
+        }
+        renderInterests();
       });
 
     document.getElementById('bio').addEventListener('input', updateCount);
@@ -195,6 +282,14 @@
       formData.append('age', document.getElementById('age').value);
       formData.append('gender', document.getElementById('gender').value);
       formData.append('bio', document.getElementById('bio').value);
+      // Append interests
+      if (selectedInterests.length < MIN_INTERESTS) {
+        document.getElementById('profileError').textContent = `Select at least ${MIN_INTERESTS} interests (${selectedInterests.length}/${MIN_INTERESTS})`;
+        document.getElementById('profileError').classList.remove('hidden');
+        btn.disabled = false; btn.textContent = 'Save Profile';
+        return;
+      }
+      formData.append('interests', JSON.stringify(selectedInterests));
       const photoFile = document.getElementById('photoInput').files[0];
       if (photoFile) formData.append('photo', photoFile);
 
@@ -207,7 +302,7 @@
         const data = await res.json();
         if (!res.ok) throw new Error(data.error);
         document.getElementById('profileSuccess').classList.remove('hidden');
-        setTimeout(() => window.location.href = 'browse.html', 1000);
+        setTimeout(() => window.location.href = '/discover', 1000);
       } catch (err) {
         document.getElementById('profileError').textContent = err.message;
         document.getElementById('profileError').classList.remove('hidden');
@@ -250,8 +345,13 @@
 
 
     function logout() {
-      localStorage.clear();
-      window.location.href = 'index.html';
+      fetch('/api/logout', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      }).catch(() => {}).finally(() => {
+        localStorage.clear();
+        window.location.href = '/';
+      });
     }
   </script>
   <script src="nav.js"></script>
@@ -259,11 +359,11 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="global.js"></script>
   <div class="page-footer">
-    <a href="terms.html">Terms</a>
+    <a href="/terms">Terms</a>
     <span style="color:var(--border);margin:0 8px;">|</span>
-    <a href="privacy.html">Privacy</a>
+    <a href="/privacy">Privacy</a>
     <span style="color:var(--border);margin:0 8px;">|</span>
-    <a href="faq.html">FAQ</a>
+    <a href="/faq">FAQ</a>
     <span style="color:var(--border);margin:0 8px;">|</span>
     <a href="mailto:siomai2025@gmail.com">Contact</a>
   </div>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spark - Social App</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -61,9 +62,9 @@
     .card-glow {
       position: fixed;
       top: 50%; left: 50%;
-      width: 600px; height: 600px;
+      width: 480px; height: 480px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(74,222,128,0.2) 0%, rgba(34,197,94,0.08) 30%, transparent 65%);
+      background: radial-gradient(circle, rgba(74,222,128,0.15) 0%, rgba(34,197,94,0.06) 30%, transparent 65%);
       border-radius: 50%;
       filter: blur(60px);
       pointer-events: none;
@@ -72,7 +73,7 @@
     }
     @keyframes glowPulse {
       0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-      50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.85; }
+      50% { transform: translate(-50%, -50%) scale(1.06); opacity: 0.8; }
     }
 
     /* ── Ambient floating blobs ── */
@@ -80,30 +81,30 @@
       position: fixed;
       border-radius: 50%;
       filter: blur(100px);
-      opacity: 0.15;
+      opacity: 0.08;
       pointer-events: none;
       z-index: 0;
-      animation: floatBlob 14s ease-in-out infinite;
+      animation: floatBlob 18s ease-in-out infinite;
     }
     .blob-1 {
-      width: 700px; height: 700px;
+      width: 600px; height: 600px;
       background: #4ade80;
       top: -250px; right: -200px;
       animation-delay: 0s;
     }
     .blob-2 {
-      width: 500px; height: 500px;
+      width: 400px; height: 400px;
       background: #22c55e;
-      bottom: -200px; left: -150px;
+      bottom: -180px; left: -150px;
       animation-delay: -5s;
     }
     .blob-3 {
-      width: 400px; height: 400px;
+      width: 300px; height: 300px;
       background: #86efac;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       animation-delay: -10s;
-      opacity: 0.1;
+      opacity: 0.06;
     }
 
     @keyframes floatBlob {
@@ -140,14 +141,38 @@
       box-shadow: 0 0 24px rgba(255,255,255,0.03);
     }
 
-    .float-el-1 { top: 12%; left: 6%; background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 16px; padding: 10px 16px; font-size: 12px; color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.04); animation: floatBlob 8s ease-in-out infinite; }
-    .float-el-2 { top: 20%; right: 6%; width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.07); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 2px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 24px rgba(255,255,255,0.03); animation: floatBlob 10s ease-in-out infinite; animation-delay: -3s; }
-    .float-el-3 { bottom: 28%; left: 4%; width: 40px; height: 40px; border-radius: 50%; background: rgba(34,197,94,0.12); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 2px solid rgba(34,197,94,0.15); animation: floatBlob 9s ease-in-out infinite; animation-delay: -6s; box-shadow: 0 0 20px rgba(34,197,94,0.08); }
-    .float-el-4 { bottom: 35%; right: 5%; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 12px; padding: 8px 14px; font-size: 11px; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.08); animation: floatBlob 11s ease-in-out infinite; animation-delay: -2s; box-shadow: 0 4px 16px rgba(0,0,0,0.03); }
-    .float-el-5 { top: 50%; left: 2%; width: 9px; height: 9px; border-radius: 50%; background: rgba(134,239,172,0.25); animation: floatBlob 7s ease-in-out infinite; animation-delay: -5s; box-shadow: 0 0 12px rgba(134,239,172,0.08); }
-    .float-el-6 { top: 45%; right: 3%; width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.15); animation: floatBlob 13s ease-in-out infinite; animation-delay: -7s; box-shadow: 0 0 8px rgba(255,255,255,0.05); }
-    .float-el-7 { top: 60%; left: 10%; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.06); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 2px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 16px; animation: floatBlob 12s ease-in-out infinite; animation-delay: -1s; }
-    .float-el-8 { bottom: 15%; right: 10%; background: rgba(255,255,255,0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 12px; padding: 6px 12px; font-size: 10px; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.06); animation: floatBlob 8s ease-in-out infinite; animation-delay: -4s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    .float-el-1 { top: 10%; left: 4%; background: rgba(255,255,255,0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 14px; padding: 7px 14px; font-size: 11px; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 4px 16px rgba(0,0,0,0.03); animation: floatBlob 10s ease-in-out infinite; }
+    .float-el-2 { top: 16%; right: 4%; width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.05); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 2px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 0 20px rgba(255,255,255,0.02); animation: floatBlob 12s ease-in-out infinite; animation-delay: -3s; }
+    .float-el-3 { bottom: 30%; left: 3%; width: 32px; height: 32px; border-radius: 50%; background: rgba(34,197,94,0.08); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: 2px solid rgba(34,197,94,0.12); animation: floatBlob 11s ease-in-out infinite; animation-delay: -6s; box-shadow: 0 0 16px rgba(34,197,94,0.08); display: flex; align-items: center; justify-content: center; font-size: 13px; color: rgba(255,255,255,0.4); }
+    .float-el-4 { bottom: 38%; right: 3%; background: rgba(255,255,255,0.06); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 12px; padding: 6px 12px; font-size: 10px; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.06); animation: floatBlob 13s ease-in-out infinite; animation-delay: -2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    .float-el-5 { top: 58%; left: 1.5%; width: 7px; height: 7px; border-radius: 50%; background: rgba(134,239,172,0.2); animation: floatBlob 9s ease-in-out infinite; animation-delay: -5s; box-shadow: 0 0 10px rgba(134,239,172,0.06); }
+    .float-el-6 { top: 42%; right: 1.5%; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.12); animation: floatBlob 15s ease-in-out infinite; animation-delay: -7s; box-shadow: 0 0 6px rgba(255,255,255,0.03); }
+    .float-el-7 { top: 65%; left: 10%; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.04); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: 2px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 12px; animation: floatBlob 14s ease-in-out infinite; animation-delay: -1s; }
+    .float-el-8 { bottom: 15%; right: 10%; background: rgba(255,255,255,0.05); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 12px; padding: 6px 12px; font-size: 10px; color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.05); animation: floatBlob 10s ease-in-out infinite; animation-delay: -4s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+    .float-el-9 { top: 38%; left: 1.5%; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.04); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: 2px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 11px; animation: floatBlob 16s ease-in-out infinite; animation-delay: -8s; box-shadow: 0 0 12px rgba(255,255,255,0.01); }
+    .float-el-10 { bottom: 42%; left: 6%; width: 22px; height: 22px; border-radius: 50%; background: rgba(134,239,172,0.06); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); border: 1.5px solid rgba(134,239,172,0.08); display: flex; align-items: center; justify-content: center; font-size: 9px; animation: floatBlob 11s ease-in-out infinite; animation-delay: -2s; box-shadow: 0 0 10px rgba(134,239,172,0.04); }
+
+    /* ── Ambient glow particles ── */
+    .particle {
+      position: fixed; pointer-events: none; z-index: 0;
+      border-radius: 50%;
+      animation: particleFloat 12s ease-in-out infinite;
+    }
+    .particle-1 { top: 15%; left: 15%; width: 3px; height: 3px; background: rgba(134,239,172,0.2); animation-delay: 0s; }
+    .particle-2 { top: 25%; right: 20%; width: 2px; height: 2px; background: rgba(255,255,255,0.12); animation-delay: -3s; }
+    .particle-3 { top: 60%; left: 25%; width: 3px; height: 3px; background: rgba(74,222,128,0.12); animation-delay: -6s; }
+    .particle-4 { bottom: 30%; right: 15%; width: 2px; height: 2px; background: rgba(255,255,255,0.1); animation-delay: -2s; }
+    .particle-5 { top: 45%; left: 8%; width: 3px; height: 3px; background: rgba(134,239,172,0.15); animation-delay: -8s; }
+    .particle-6 { bottom: 20%; left: 20%; width: 2px; height: 2px; background: rgba(255,255,255,0.15); animation-delay: -4s; }
+    .particle-7 { top: 10%; right: 10%; width: 3px; height: 3px; background: rgba(74,222,128,0.1); animation-delay: -7s; }
+    .particle-8 { bottom: 45%; right: 8%; width: 2px; height: 2px; background: rgba(255,255,255,0.12); animation-delay: -5s; }
+
+    @keyframes particleFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+      25% { transform: translateY(-20px) scale(1.3); opacity: 0.6; }
+      50% { transform: translateY(-10px) scale(0.9); opacity: 0.4; }
+      75% { transform: translateY(-30px) scale(1.1); opacity: 0.5; }
+    }
 
     @keyframes twinkle {
       0%, 100% { opacity: 0.08; transform: scale(1); }
@@ -156,28 +181,38 @@
 
     /* ── Auth container with premium glassmorphism ── */
     .auth-container {
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
       border-radius: 32px;
-      padding: 34px 40px 36px;
+      padding: 28px 44px 30px;
       width: 100%;
-      max-width: 440px;
+      max-width: 480px;
       box-shadow:
-        0 50px 120px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.25) inset,
-        0 0 80px rgba(74, 222, 128, 0.08);
+        0 60px 140px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+        0 0 100px rgba(74, 222, 128, 0.10);
       position: relative;
       z-index: 1;
       animation: cardFadeIn 0.8s ease-out, cardFloat 5s ease-in-out 0.8s infinite;
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+      overflow: hidden;
+    }
+    .auth-container::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.25) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
     .auth-container:hover {
       transform: translateY(-6px) scale(1.005);
       box-shadow:
-        0 60px 140px rgba(0, 0, 0, 0.4),
-        0 0 0 1px rgba(255, 255, 255, 0.3) inset,
-        0 0 100px rgba(74, 222, 128, 0.12);
+        0 70px 160px rgba(0, 0, 0, 0.42),
+        0 0 0 1px rgba(255, 255, 255, 0.35) inset,
+        0 0 120px rgba(74, 222, 128, 0.14);
     }
 
     /* ── Subtle card float animation ── */
@@ -194,14 +229,15 @@
     /* ── Logo section ── */
     .logo {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
       position: relative;
+      z-index: 1;
     }
     .logo-glow {
       position: absolute;
-      top: -10px; left: 50%;
+      top: -6px; left: 50%;
       transform: translateX(-50%);
-      width: 80px; height: 80px;
+      width: 64px; height: 64px;
       background: radial-gradient(circle, rgba(74,222,128,0.2) 0%, transparent 70%);
       border-radius: 50%;
       pointer-events: none;
@@ -212,9 +248,9 @@
       50% { transform: translateX(-50%) scale(1.3); opacity: 1; }
     }
     .logo-icon {
-      font-size: 48px;
+      font-size: 38px;
       display: block;
-      margin-bottom: 2px;
+      margin-bottom: 0;
       position: relative;
       z-index: 1;
       animation: pulseGlow 3s ease-in-out infinite;
@@ -224,30 +260,30 @@
       50% { filter: drop-shadow(0 0 30px rgba(22, 163, 74, 0.8)); }
     }
     .logo h1 {
-      font-size: 40px;
+      font-size: 34px;
       font-weight: 900;
       color: #16a34a;
       letter-spacing: -1.5px;
-      margin: 0 0 10px;
+      margin: 0 0 6px;
       line-height: 1.05;
       position: relative;
       z-index: 1;
     }
     .logo .tagline {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       color: #1a1a2e;
-      margin: 0 0 4px;
+      margin: 0 0 2px;
       line-height: 1.35;
       position: relative;
       z-index: 1;
     }
     .logo .subtagline {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
       color: #6b7280;
       margin: 0;
-      line-height: 1.45;
+      line-height: 1.4;
       position: relative;
       z-index: 1;
     }
@@ -256,17 +292,19 @@
     .tabs {
       display: flex;
       gap: 4px;
-      background: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.5);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-radius: 16px;
       padding: 4px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(229,231,235,0.2);
+      margin-bottom: 18px;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.08) inset;
+      position: relative;
+      z-index: 1;
     }
     .tab {
       flex: 1;
-      padding: 12px;
+      padding: 10px;
       border: none;
       background: transparent;
       border-radius: 12px;
@@ -281,7 +319,9 @@
     .tab.active {
       background: white;
       color: #16a34a;
-      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.15);
+      box-shadow:
+        0 4px 16px rgba(34, 197, 94, 0.18),
+        0 0 0 1px rgba(34, 197, 94, 0.08);
       border: none;
     }
     .tab:hover:not(.active) {
@@ -290,16 +330,16 @@
     }
 
     /* ── Forms ── */
-    .auth-form { width: 100%; }
+    .auth-form { width: 100%; position: relative; z-index: 1; }
     .hidden { display: none !important; }
 
-    .form-group { margin-bottom: 16px; }
+    .form-group { margin-bottom: 12px; }
     .form-group label {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: #374151;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       letter-spacing: -0.01em;
     }
 
@@ -308,8 +348,13 @@
     }
     .input-icon {
       position: absolute; left: 14px; z-index: 2;
-      font-size: 15px; opacity: 0.5; pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.45; pointer-events: none;
       line-height: 1;
+    }
+    .input-icon svg {
+      width: 16px; height: 16px;
+      display: block;
     }
     .input-wrap input, .input-wrap select, .input-wrap textarea {
       padding-left: 40px;
@@ -317,8 +362,8 @@
 
     input, select, textarea {
       width: 100%;
-      padding: 14px 16px;
-      border: 1.5px solid rgba(229,231,235,0.7);
+      padding: 12px 16px;
+      border: 1.5px solid rgba(209,213,219,0.5);
       border-radius: 14px;
       font-size: 15px;
       font-family: 'Inter', sans-serif;
@@ -327,21 +372,39 @@
       outline: none;
       background: rgba(255,255,255,0.7);
       backdrop-filter: blur(4px);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
     }
     input:focus, select:focus, textarea:focus {
       border-color: #22c55e;
       background: rgba(255,255,255,0.95);
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12), 0 4px 12px rgba(34,197,94,0.06);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), 0 0 0 4px rgba(34, 197, 94, 0.10), 0 4px 12px rgba(34,197,94,0.06);
     }
     input::placeholder {
       color: #9ca3af;
       font-weight: 400;
     }
 
+    /* ── Password visibility toggle ── */
+    .pw-toggle {
+      position: absolute; right: 12px; z-index: 2;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; display: flex; align-items: center; justify-content: center;
+      opacity: 0.35; transition: opacity 0.2s;
+    }
+    .pw-toggle:hover { opacity: 0.7; }
+    .pw-toggle svg {
+      width: 18px; height: 18px;
+      display: block;
+    }
+    .input-wrap input[type="password"] ~ .pw-toggle,
+    .input-wrap input[type="text"] ~ .pw-toggle {
+      /* toggle sits inside the input, pushing text padding */
+    }
+
     /* ── Button ── */
     .btn-primary {
       width: 100%;
-      padding: 15px 20px;
+      padding: 13px 20px;
       background: linear-gradient(135deg, #22c55e, #16a34a);
       color: white;
       border: none;
@@ -351,14 +414,14 @@
       font-family: 'Inter', sans-serif;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      margin-top: 12px;
+      margin-top: 10px;
       letter-spacing: -0.01em;
       position: relative;
       overflow: hidden;
     }
     .btn-primary:hover {
-      transform: translateY(-3px) scale(1.01);
-      box-shadow: 0 20px 40px rgba(22, 163, 74, 0.35), 0 0 20px rgba(34,197,94,0.1);
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 32px rgba(22, 163, 74, 0.3);
     }
     .btn-primary:active {
       transform: translateY(-1px) scale(1);
@@ -373,7 +436,7 @@
     /* ── Forgot password link ── */
     .forgot-link {
       text-align: right;
-      margin: -8px 0 4px;
+      margin: -4px 0 2px;
     }
     .forgot-link a {
       font-size: 13px;
@@ -397,40 +460,41 @@
       color: #6b7280;
       cursor: pointer;
       padding: 0;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       transition: color 0.2s;
     }
     .btn-back:hover { color: #16a34a; }
 
     /* ── Social Login ── */
     .social-divider {
-      display: flex; align-items: center; gap: 16px;
-      margin: 18px 0 16px;
+      display: flex; align-items: center; gap: 14px;
+      margin: 14px 0 14px;
     }
     .social-divider-line {
       flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(156,163,175,0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(34,197,94,0.15), transparent);
     }
     .social-divider-text {
-      font-size: 11px; color: rgba(156,163,175,0.6); white-space: nowrap;
+      font-size: 11px; color: rgba(107,114,128,0.6); white-space: nowrap;
       letter-spacing: 0.03em; font-weight: 500;
     }
     .social-btns {
-      display: flex; gap: 10px;
+      display: flex; justify-content: center;
     }
     .social-auth-btn {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      gap: 8px; padding: 10px 14px;
-      border-radius: 12px; font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 10px 24px;
+      border-radius: 14px; font-size: 14px; font-weight: 600;
       font-family: 'Inter', sans-serif; cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      background: white; border: 1px solid rgba(229,231,235,0.5);
+      background: white; border: 1px solid rgba(209,213,219,0.4);
       color: #374151; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      min-width: 240px;
     }
     .social-auth-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-      border-color: #d1d5db;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      border-color: #cbd5e1;
     }
     .social-auth-btn:active {
       transform: translateY(0) scale(0.98);
@@ -439,10 +503,10 @@
     .social-auth-btn span { line-height: 1; }
     .terms-note {
       text-align: center; font-size: 11px; color: #9ca3af;
-      margin: 14px 0 0; line-height: 1.4;
+      margin: 12px 0 0; line-height: 1.5;
     }
-    .terms-note a { color: #16a34a; text-decoration: none; font-weight: 500; }
-    .terms-note a:hover { text-decoration: underline; }
+    .terms-note a { color: #16a34a; text-decoration: none; font-weight: 500; transition: opacity 0.2s; }
+    .terms-note a:hover { text-decoration: underline; opacity: 0.8; }
 
     /* ── Error / Success messages ── */
     .error-msg {
@@ -466,40 +530,42 @@
 
     /* ── Forgot password title ── */
     .forgot-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       color: #1a1a2e;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .forgot-desc {
-      font-size: 13px;
+      font-size: 12px;
       color: #6b7280;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
 
     /* ── Responsive ── */
     @media (max-width: 520px) {
       body.auth-page { padding: 12px; }
-      .auth-container { padding: 24px 26px 28px; border-radius: 24px; }
-      .logo { margin-bottom: 20px; }
-      .logo-icon { font-size: 36px; }
-      .logo h1 { font-size: 28px; margin-bottom: 8px; }
-      .logo .tagline { font-size: 15px; }
-      .logo .subtagline { font-size: 13px; }
-      .tabs { margin-bottom: 16px; border-radius: 14px; }
-      .tab { padding: 10px; font-size: 13px; border-radius: 10px; }
-      .form-group { margin-bottom: 14px; }
-      input, select, textarea { padding: 12px 14px; font-size: 14px; }
-      .btn-primary { padding: 13px 18px; font-size: 15px; border-radius: 14px; }
-      .social-divider { margin: 16px 0 12px; gap: 10px; }
+      .auth-container { padding: 20px 18px 24px; border-radius: 24px; max-width: 100%; }
+      .logo { margin-bottom: 16px; }
+      .logo-icon { font-size: 30px; }
+      .logo h1 { font-size: 24px; margin-bottom: 6px; }
+      .logo .tagline { font-size: 14px; }
+      .logo .subtagline { font-size: 12px; }
+      .tabs { margin-bottom: 14px; border-radius: 14px; }
+      .tab { padding: 8px; font-size: 12px; border-radius: 10px; }
+      .form-group { margin-bottom: 10px; }
+      input, select, textarea { padding: 10px 14px; font-size: 14px; }
+      .btn-primary { padding: 11px 18px; font-size: 14px; border-radius: 14px; }
+      .social-divider { margin: 12px 0 10px; gap: 10px; }
       .social-btns { gap: 8px; }
-      .social-auth-btn { padding: 9px 10px; font-size: 13px; gap: 6px; }
+      .social-auth-btn { padding: 9px 16px; font-size: 13px; gap: 6px; min-width: 0; width: 100%; }
       .social-auth-btn svg { width: 18px; height: 18px; }
-      .blob-1 { width: 200px; height: 200px; }
-      .blob-2 { width: 160px; height: 160px; }
-      .card-glow { width: 300px; height: 300px; }
+      .blob-1 { width: 160px; height: 160px; }
+      .blob-2 { width: 120px; height: 120px; }
+      .card-glow { width: 240px; height: 240px; }
       .float-el-1, .float-el-2, .float-el-3, .float-el-4,
-      .float-el-5, .float-el-6 { display: none; }
+      .float-el-5, .float-el-6, .float-el-7, .float-el-8,
+      .float-el-9, .float-el-10 { display: none; }
+      .particle { display: none; }
       .sparkle { display: none; }
     }
   </style>
@@ -512,14 +578,26 @@
   <div class="blob blob-3"></div>
 
   <!-- Floating social elements -->
-  <div class="float-el float-el-1">💬 Say hi!</div>
-  <div class="float-el float-el-2">👤</div>
-  <div class="float-el float-el-3"></div>
+  <div class="float-el float-el-1">Looking for new friends! ✨</div>
+  <div class="float-el float-el-2">💚</div>
+  <div class="float-el float-el-3">🌟</div>
   <div class="float-el float-el-4">🟢 Online now</div>
   <div class="float-el float-el-5"></div>
   <div class="float-el float-el-6"></div>
-  <div class="float-el float-el-7">💚</div>
-  <div class="float-el float-el-8">Good vibes ✨</div>
+  <div class="float-el float-el-7">☕</div>
+  <div class="float-el float-el-8">Good vibes here ✨</div>
+  <div class="float-el float-el-9">😊</div>
+  <div class="float-el float-el-10">💬</div>
+
+  <!-- Ambient glow particles -->
+  <div class="particle particle-1"></div>
+  <div class="particle particle-2"></div>
+  <div class="particle particle-3"></div>
+  <div class="particle particle-4"></div>
+  <div class="particle particle-5"></div>
+  <div class="particle particle-6"></div>
+  <div class="particle particle-7"></div>
+  <div class="particle particle-8"></div>
 
  
 
@@ -542,15 +620,22 @@
       <div class="form-group">
         <label>Email</label>
         <div class="input-wrap">
-          <span class="input-icon">✉️</span>
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+          </span>
           <input type="email" id="loginEmail" placeholder="you@email.com" required>
         </div>
       </div>
       <div class="form-group">
         <label>Password</label>
         <div class="input-wrap">
-          <span class="input-icon">🔒</span>
-          <input type="password" id="loginPassword" placeholder="••••••••" required>
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input type="password" id="loginPassword" placeholder="••••••••" required style="padding-right:44px;">
+          <button type="button" class="pw-toggle" onclick="togglePw('loginPassword', this)" tabindex="-1" aria-label="Toggle password visibility">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
       </div>
       <div class="forgot-link">
@@ -566,17 +651,13 @@
         <span class="social-divider-line"></span>
       </div>
       <div class="social-btns">
-        <button type="button" class="social-auth-btn" onclick="signInWithGoogle()" id="googleBtn" title="Sign in with Google">
+        <button type="button" class="social-auth-btn social-auth-btn--google" onclick="signInWithGoogle()" id="googleBtn" title="Sign in with Google">
           <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.54 28.59A14.5 14.5 0 0 1 9.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 0 0 0 24c0 3.77.87 7.35 2.56 10.56l7.98-5.97z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 5.97C6.51 42.62 14.62 48 24 48z"/></svg>
-          <span>Google</span>
-        </button>
-        <button type="button" class="social-auth-btn" onclick="signInWithFacebook()" id="facebookBtn" title="Sign in with Facebook">
-          <span class="fb-icon">f</span>
-          <span>Facebook</span>
+          <span>Sign in with Google</span>
         </button>
       </div>
       <p id="socialError" class="error-msg hidden" style="margin-top:10px;"></p>
-      <p class="terms-note">By continuing, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+      <p class="terms-note">By continuing, you agree to our <a href="/terms">Terms</a>.</p>
     </form>
 
     <!-- Register Form -->
@@ -584,22 +665,32 @@
       <div class="form-group">
         <label>Username</label>
         <div class="input-wrap">
-          <span class="input-icon">👤</span>
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
           <input type="text" id="regUsername" placeholder="coolname123" required>
         </div>
       </div>
       <div class="form-group">
         <label>Email</label>
         <div class="input-wrap">
-          <span class="input-icon">✉️</span>
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+          </span>
           <input type="email" id="regEmail" placeholder="you@email.com" required>
         </div>
       </div>
       <div class="form-group">
         <label>Password</label>
         <div class="input-wrap">
-          <span class="input-icon">🔒</span>
-          <input type="password" id="regPassword" placeholder="••••••••" required minlength="6">
+          <span class="input-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input type="password" id="regPassword" placeholder="••••••••" required minlength="6" style="padding-right:44px;">
+          <button type="button" class="pw-toggle" onclick="togglePw('regPassword', this)" tabindex="-1" aria-label="Toggle password visibility">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
       </div>
       <div id="registerError" class="error-msg hidden"></div>
       <button type="submit" class="btn-primary">Create Account</button>
@@ -616,7 +707,9 @@
         <div class="form-group">
           <label>Email Address</label>
           <div class="input-wrap">
-            <span class="input-icon">✉️</span>
+            <span class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            </span>
             <input type="email" id="forgotEmail" placeholder="you@email.com">
           </div>
         </div>
@@ -628,11 +721,27 @@
       <div id="forgotStep2" class="hidden">
         <div class="form-group">
           <label>New Password</label>
-          <input type="password" id="newPassword" placeholder="Min. 6 characters" minlength="6">
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="newPassword" placeholder="Min. 6 characters" minlength="6" style="padding-right:44px;">
+            <button type="button" class="pw-toggle" onclick="togglePw('newPassword', this)" tabindex="-1" aria-label="Toggle password visibility">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
         <div class="form-group">
           <label>Confirm New Password</label>
-          <input type="password" id="confirmPassword" placeholder="Re-enter new password" minlength="6">
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="confirmPassword" placeholder="Re-enter new password" minlength="6" style="padding-right:44px;">
+            <button type="button" class="pw-toggle" onclick="togglePw('confirmPassword', this)" tabindex="-1" aria-label="Toggle password visibility">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
         <button type="button" class="btn-primary" onclick="resetPassword()">Reset Password</button>
       </div>
@@ -740,7 +849,7 @@
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userId);
         localStorage.setItem('username', data.username);
-        window.location.href = data.hasProfile ? 'browse.html' : 'profile.html';
+        window.location.href = data.hasProfile ? '/discover' : 'profile.html';
       } catch (err) {
         errorEl.textContent = err.message === 'Failed to fetch' ? 'Cannot reach server. Open the app via http://localhost:3000' : err.message;
         errorEl.classList.remove('hidden');
@@ -778,6 +887,17 @@
       }
     }
 
+    // ── Password visibility toggle ───────────────────────────────
+    function togglePw(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const isPw = input.type === 'password';
+      input.type = isPw ? 'text' : 'password';
+      btn.innerHTML = isPw
+        ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+        : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    }
+
     // ── OAuth Helpers ────────────────────────────────────────────
     const SUPABASE_URL = 'https://hpezaqvtufrvvczyixwc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZXphcXZ0dWZydnZjenlpeHdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNDk5MTksImV4cCI6MjA5MzcyNTkxOX0.WzUQH4ZGn33Omv02m0ZtQgdYCXihGnHsOuhJmwGPXXI';
@@ -808,29 +928,6 @@
         if (!sb) throw new Error('Supabase not loaded. Try again.');
         const { data, error } = await sb.auth.signInWithOAuth({
           provider: 'google',
-          options: { redirectTo: getRedirectUrl() }
-        });
-        if (error) throw error;
-      } catch (err) {
-        errEl.textContent = err.message;
-        errEl.classList.remove('hidden');
-        btn.disabled = false;
-        btn.innerHTML = orig;
-      }
-    }
-
-    async function signInWithFacebook() {
-      const btn = document.getElementById('facebookBtn');
-      const errEl = document.getElementById('socialError');
-      const orig = btn.innerHTML;
-      errEl.classList.add('hidden');
-      btn.disabled = true;
-      btn.innerHTML = '<span style="font-size:13px;">Loading...</span>';
-      try {
-        const sb = getSupabase();
-        if (!sb) throw new Error('Supabase not loaded. Try again.');
-        const { data, error } = await sb.auth.signInWithOAuth({
-          provider: 'facebook',
           options: { redirectTo: getRedirectUrl() + '/auth-callback.html' }
         });
         if (error) throw error;
@@ -841,6 +938,8 @@
         btn.innerHTML = orig;
       }
     }
+
+
 
     // ── Check for OAuth session on page load ──
     (async function checkSession() {
@@ -866,7 +965,7 @@
                   localStorage.setItem('token', data.token);
                   localStorage.setItem('userId', data.userId);
                   localStorage.setItem('username', data.username);
-                  window.location.href = data.hasProfile ? 'browse.html' : 'profile.html';
+                  window.location.href = data.hasProfile ? '/discover' : 'profile.html';
                   return;
                 }
               }
@@ -895,7 +994,7 @@
             localStorage.setItem('token', data.token);
             localStorage.setItem('userId', data.userId);
             localStorage.setItem('username', data.username);
-            window.location.href = 'browse.html';
+            window.location.href = '/discover';
           }
         }
       } catch (_) {}
