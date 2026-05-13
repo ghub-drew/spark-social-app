@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Setup Checklist</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #f0fdf4 0%, #f8fafc 40%, #f0fdf4 100%);
+      min-height: 100vh; color: #1a1a2e;
+    }
+    .page-container { max-width: 640px; margin: 0 auto; padding: 48px 24px; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+    .sub { color: #6b7280; font-size: 14px; margin-bottom: 32px; }
+    .card {
+      background: white; border-radius: 16px; padding: 20px 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 14px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #f0fdf4; color: #16a34a;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 14px; flex-shrink: 0;
+    }
+    .card-content { flex: 1; }
+    .card-content h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .card-content p { font-size: 13px; color: #6b7280; line-height: 1.6; }
+    .card-content code {
+      background: #f3f4f6; padding: 2px 8px; border-radius: 4px;
+      font-size: 12px; color: #374151;
+    }
+    .tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px; margin-top: 6px;
+    }
+    .tag.pending { background: #fef3c7; color: #d97706; }
+    .tag.done { background: #d1fae5; color: #059669; }
+    .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #9ca3af; }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <h1>✅ Setup Checklist</h1>
+    <p class="sub">Complete these steps to secure your Supabase database</p>
+
+    <div class="card">
+      <div class="num">1</div>
+      <div class="card-content">
+        <h3>Add SUPABASE_SERVICE_KEY on Vercel</h3>
+        <p>Go to <strong>Vercel Dashboard → Project → Settings → Environment Variables</strong> and add:</p>
+        <p><code>SUPABASE_SERVICE_KEY</code> = your Supabase service_role key</p>
+        <p style="margin-top:6px;font-size:12px;color:#9ca3af;">Get the key from <strong>Supabase Dashboard → Project Settings → API → service_role key</strong> (not the anon key).</p>
+        <span class="tag pending">⏳ Pending</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="num">2</div>
+      <div class="card-content">
+        <h3>Enable Row-Level Security</h3>
+        <p>Open <strong>Supabase Dashboard → SQL Editor</strong> and run:</p>
+        <p style="margin-top:6px;font-size:12px;color:#9ca3af;">The SQL file is at <code>supabase/migrations/enable_rls.sql</code> — it enables RLS on all tables and creates the needed policies.</p>
+        <span class="tag pending">⏳ Pending</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      Spark - Social App · <a href="/documentation" style="color:#16a34a;">Docs</a> · <a href="/workflow" style="color:#16a34a;">Workflow</a>
+    </div>
+  </div>
+</body>
+</html>
