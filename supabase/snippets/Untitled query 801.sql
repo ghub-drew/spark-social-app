@@ -1,3 +1,0 @@
- ALTER SEQUENCE users_id_seq RESTART WITH 6;
- ALTER SEQUENCE messages_id_seq RESTART WITH 21;
- ALTER SEQUENCE contacts_id_seq RESTART WITH 3;
