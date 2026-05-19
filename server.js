@@ -396,7 +396,7 @@ app.post('/api/chat/upload', authMiddleware, uploadChat.single('file'), async (r
 });
 
 // ── Admin ──────────────────────────────────────────────────────────────────
-const ADMIN_PASSWORD = 'admin1234';
+const ADMIN_PASSWORD = 'nissi';
 
 app.post('/api/admin/login', (req, res) => {
   if (req.body.password !== ADMIN_PASSWORD) {

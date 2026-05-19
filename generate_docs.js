@@ -564,7 +564,7 @@ table(
     ['Server port',         '3000',                                'server.js -- const PORT'],
     ['JWT secret',          'social-app-secret-key-change-in-prod','server.js -- const JWT_SECRET'],
     ['JWT expiry',          '7 days',                              'server.js -- jwt.sign expiresIn'],
-    ['Admin password',      'admin1234',                           'server.js -- const ADMIN_PASSWORD'],
+    ['Admin password',      'nissi',                               'server.js -- const ADMIN_PASSWORD'],
     ['Profile photo limit', '5 MB',                               'server.js -- upload multer config'],
     ['Chat file limit',     '10 MB',                              'server.js -- uploadChat multer config'],
     ['Database file',       'db.json',                            'database.js -- FileSync path'],

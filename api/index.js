@@ -46,7 +46,7 @@ const supabase = require('../database');
 const logger = require('../logger');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'social-app-secret-key-change-in-prod';
-const ADMIN_PASSWORD = 'admin1234';
+const ADMIN_PASSWORD = 'nissi';
 
 app.use(express.json());
 
