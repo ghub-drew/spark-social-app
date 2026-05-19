@@ -344,7 +344,7 @@ npm install</div>
         <li>Browse & chat pages poll member status every 30s — dots update without page refresh</li>
         <li>Tab close / logout: <code>beforeunload</code> sends offline signal via fetch+keepalive (not broken sendBeacon)</li>
         <li><code>/api/logout</code> sets <code>lastSeen</code> to 6 min ago so the 5-min online window correctly marks offline</li>
-        <li>Online window: API marks user as online if <code>lastSeen</code> is within last 5 minutes or socket-connected</li>
+        <li>Online window: API marks user as online if <code>lastSeen</code> is within last 5 minutes or heartbeat is active</li>
         <li>Status labels: "Online now", "Active Xm ago", "Offline" — human-readable, no awkward combinations</li>
       </ul>
 
@@ -464,7 +464,7 @@ npm install</div>
             <tr><td class="route">&nbsp;&nbsp;logger.js</td><td>Error logging module  -  writes timestamped entries to error.log</td></tr>
             <tr><td class="route">&nbsp;&nbsp;error.log</td><td>Auto-generated log file (created at runtime)</td></tr>
             <tr><td class="route">&nbsp;&nbsp;database.js</td><td>Supabase client setup  -  exports @supabase/supabase-js instance</td></tr>
-            <tr><td class="route">&nbsp;&nbsp;db.json</td><td>Legacy JSON database (archived - Supabase now active)</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;db.json</td><td>Legacy JSON database (fully migrated to Supabase — kept for reference only)</td></tr>
             <tr><td class="route">&nbsp;&nbsp;generate_docs.js</td><td>Script to regenerate this documentation</td></tr>
             <tr><td class="route">&nbsp;&nbsp;package.json</td><td>npm dependency manifest</td></tr>
             <tr><td class="route">&nbsp;&nbsp;public/</td><td>-- static frontend files served by Express</td></tr>
@@ -476,7 +476,7 @@ npm install</div>
             <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;logs.html</td><td>Error log viewer (admin-only, auto-refresh)</td></tr>
             <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;documentation.html</td><td>This page  -  technical documentation</td></tr>
             <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;nav.js</td><td>Shared navbar chip (name + avatar)</td></tr>
-            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;global.js</td><td>Persistent socket, notifications, tab-title flash</td></tr>
+            <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;global.js</td><td>Presence heartbeat, Supabase Realtime notifications, tab-title flash</td></tr>
             <tr><td class="route">&nbsp;&nbsp;&nbsp;&nbsp;style.css</td><td>All styles for all pages</td></tr>
             <tr><td class="route">&nbsp;&nbsp;uploads/</td><td>Profile photos + chat files (exclude from git)</td></tr>
           </tbody>
@@ -531,7 +531,7 @@ npm install</div>
             <tr><td class="route">bio</td><td>string | null</td><td>Short bio, max 300 characters</td></tr>
             <tr><td class="route">photo</td><td>string | null</td><td>Server path, e.g. /uploads/photo.jpg</td></tr>
             <tr><td class="route">created_at</td><td>ISO string</td><td>Registration timestamp</td></tr>
-            <tr><td class="route">lastSeen</td><td>ISO string</td><td>Updated on socket disconnect</td></tr>
+            <tr><td class="route">lastSeen</td><td>ISO string</td><td>Updated via heartbeat every 30-45s + on tab close/logout</td></tr>
           </tbody>
         </table>
       </div>
