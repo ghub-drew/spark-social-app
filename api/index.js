@@ -5,6 +5,18 @@ const app = express();
 // Health check - no heavy deps needed
 app.get('/api/health', (req, res) => res.json({ ok: true, env: !!process.env.SUPABASE_URL }));
 
+// Keep-alive endpoint — pinged by Vercel Cron to prevent Supabase from pausing
+// Supabase free tier pauses projects after 7 days of inactivity
+app.get('/api/keepalive', async (req, res) => {
+  try {
+    const supabase = require('../database');
+    const { data } = await supabase.from('users').select('id').limit(1);
+    res.json({ ok: true, alive: !!data });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://hpezaqvtufrvvczyixwc.supabase.co';
