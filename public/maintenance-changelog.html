@@ -209,7 +209,7 @@
             <span class="tl-date">June 3, 2026</span>
           </div>
           <h3>A screenshot changed the direction</h3>
-          <p>Andrew shared a screenshot of <strong>Claude Code's Routines panel</strong> — the interface for setting up automated scheduled agents. The question was: how should a maintenance routine be structured so that security updates are checked automatically, but nothing is ever applied without approval?</p>
+          <p>Andrew shared a screenshot of <strong>Claude Code's Routines panel</strong>, the interface for setting up automated scheduled agents. The question was: how should a maintenance routine be structured so that security updates are checked automatically, but nothing is ever applied without approval?</p>
           <p>Three requirements were on the table:</p>
           <ul style="margin:6px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.8;">
             <li>Check all tech stack packages for new security updates</li>
@@ -228,7 +228,7 @@
             <span class="tl-date">June 3, 2026</span>
           </div>
           <h3>The two-stage approach was proposed</h3>
-          <p>Rather than one routine trying to do everything, a split design was recommended. Stage 1 runs on a schedule and only scans — it never changes anything. Stage 2 only runs when Andrew manually triggers it after reviewing the findings.</p>
+          <p>Rather than one routine trying to do everything, a split design was recommended. Stage 1 runs on a schedule and only scans. It never changes anything. Stage 2 only runs when Andrew manually triggers it after reviewing the findings.</p>
           <p>The key insight: routines cannot pause and wait for human input mid-run. So the approval gate had to be a completely separate action, not a step inside the same routine.</p>
           <div class="tl-decision">
             <div class="tl-option chosen">✅ Two-stage split: scan first, update only on approval</div>
@@ -263,12 +263,12 @@
           <h3>The page went through several rounds of refinement</h3>
           <p>The first version was good but had rough edges. Over several back-and-forth exchanges, these improvements were made:</p>
           <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
-            <li><strong>No em dashes</strong> — Andrew asked to remove all of them and replace with cleaner punctuation throughout the page</li>
-            <li><strong>Collapsible stages</strong> — Stage 1 and Stage 2 sections were converted to expandable accordions so the big picture was visible first</li>
-            <li><strong>Alert clarified</strong> — the vague "notification" was corrected to explain that GitHub automatically emails andrewsdlc@gmail.com when an issue is opened</li>
-            <li><strong>Stage 2 corrected</strong> — removed the incorrect "second routine" idea; the actual approval is just opening Claude Code and typing a message</li>
-            <li><strong>More collapsibles</strong> — What Gets Checked, Why It Matters, FAQ, and the Setup section were all made collapsible too</li>
-            <li><strong>Time updated</strong> — changed from 7:30 AM to 8:00 AM</li>
+            <li><strong>No em dashes:</strong> Andrew asked to remove all of them and replace with cleaner punctuation throughout the page</li>
+            <li><strong>Collapsible stages:</strong> Stage 1 and Stage 2 sections were converted to expandable accordions so the big picture was visible first</li>
+            <li><strong>Alert clarified:</strong> the vague "notification" was corrected to explain that GitHub automatically emails andrewsdlc@gmail.com when an issue is opened</li>
+            <li><strong>Stage 2 corrected:</strong> removed the incorrect "second routine" idea; the actual approval is just opening Claude Code and typing a message</li>
+            <li><strong>More collapsibles:</strong> What Gets Checked, Why It Matters, FAQ, and the Setup section were all made collapsible too</li>
+            <li><strong>Time updated:</strong> changed from 7:30 AM to 8:00 AM</li>
           </ul>
         </div>
       </div>
@@ -282,7 +282,7 @@
             <span class="tl-date">June 3, 2026</span>
           </div>
           <h3>The branching process was clarified</h3>
-          <p>Andrew asked a smart question: should the update process go from GitHub down to local, or the other way around? The answer was the other way — always local first, then GitHub, then Vercel. Never the reverse.</p>
+          <p>Andrew asked a smart question: should the update process go from GitHub down to local, or the other way around? The answer was the other way: always local first, then GitHub, then Vercel. Never the reverse.</p>
           <p>This led to a fuller explanation of the branching approach:</p>
           <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
             <li>Updates are applied on a new local branch, not on <code>main</code></li>
@@ -307,8 +307,8 @@
           <h3>Local vs Remote was decided</h3>
           <p>When Andrew opened the Routines panel and saw the <strong>Local / Remote</strong> choice, the answer was clear: <strong>Remote</strong>. A Local routine requires the computer to be on and Claude Code to be running at exactly 8 AM. A Remote routine runs in the cloud regardless of whether the machine is on or not.</p>
           <div class="tl-decision">
-            <div class="tl-option chosen">✅ Remote — runs in the cloud at 8 AM daily, no matter what</div>
-            <div class="tl-option skipped">Local — requires machine to be on and Claude Code open</div>
+            <div class="tl-option chosen">✅ Remote: runs in the cloud at 8 AM daily, no matter what</div>
+            <div class="tl-option skipped">Local: requires machine to be on and Claude Code open</div>
           </div>
         </div>
       </div>
