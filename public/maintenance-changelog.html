@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Maintenance Story</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cl-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .cl-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .cl-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+
+    /* Timeline */
+    .timeline { position: relative; margin-top: 36px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 18px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), #86efac, transparent);
+    }
+
+    .tl-entry {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 32px;
+      position: relative;
+      animation: fadeUp 0.4s ease-out both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .tl-dot {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 2px 8px rgba(22,163,74,0.15);
+    }
+    .tl-dot.blue { border-color: #2563eb; box-shadow: 0 2px 8px rgba(37,99,235,0.15); }
+    .tl-dot.amber { border-color: #d97706; box-shadow: 0 2px 8px rgba(217,119,6,0.15); }
+
+    .tl-card {
+      flex: 1;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(229,231,235,0.5);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    .tl-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .tl-step {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f0fdf4;
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 20px;
+      border: 1px solid #86efac;
+    }
+    .tl-step.blue { background: #eff6ff; color: #2563eb; border-color: #93c5fd; }
+    .tl-step.amber { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
+    .tl-date { font-size: 11px; color: var(--muted); }
+
+    .tl-card h3 { font-size: 15px; font-weight: 800; color: var(--text); margin: 0 0 6px; }
+    .tl-card p { font-size: 13px; line-height: 1.75; color: #6b7280; margin: 0 0 8px; }
+    .tl-card p:last-child { margin-bottom: 0; }
+
+    .tl-quote {
+      background: #f8fafc;
+      border-left: 3px solid #e5e7eb;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-style: italic;
+      color: #9ca3af;
+      margin: 10px 0 0;
+      line-height: 1.6;
+    }
+    .tl-quote strong { color: #6b7280; font-style: normal; }
+
+    .tl-outcome {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 20px;
+      padding: 3px 10px;
+    }
+    .tl-outcome.blue { color: #2563eb; background: #eff6ff; border-color: #93c5fd; }
+
+    /* Decision box */
+    .tl-decision {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tl-option {
+      flex: 1;
+      min-width: 120px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .tl-option.chosen { background: #f0fdf4; border: 1.5px solid var(--primary); color: #166534; font-weight: 600; }
+    .tl-option.skipped { background: #f8fafc; border: 1px solid #e5e7eb; color: #9ca3af; text-decoration: line-through; }
+
+    .cl-footer {
+      text-align: center;
+      padding: 20px 0;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div style="background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;font-weight:800;color:var(--primary);">✦ Spark</span>
+      <span style="background:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #93c5fd;">Maintenance Story</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button onclick="window.open('maintenance.html','_self')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">← Admin</button>
+      <button onclick="window.open('maintenance-workflow.html','_blank')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">🛡️ Workflow</button>
+    </div>
+  </div>
+
+  <div class="cl-page">
+    <h1>🛡️ How the Maintenance Workflow Was Born</h1>
+    <p class="subtitle">The full story, from a folder shared in a chat to a working security system.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:36px;">by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a></p>
+
+    <div class="timeline">
+
+      <!-- Step 1 -->
+      <div class="tl-entry" style="animation-delay:0.05s">
+        <div class="tl-dot">📁</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 1</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>The app folder was shared</h3>
+          <p>Andrew opened a conversation and pointed to his project folder at <code>C:\Users\andre\Documents\Deepseek\Code App</code>. No explanation yet, just a simple ask: <em>"can you check this app folder and tell me what it is."</em></p>
+          <p>The project was explored, reading the <code>package.json</code>, scanning the folder structure, peeking at <code>server.js</code> and the HTML pages inside <code>public/</code>.</p>
+          <div class="tl-quote">"can you check this app folder and tell me what it is"</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="tl-entry" style="animation-delay:0.1s">
+        <div class="tl-dot">🔍</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 2</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>The app was identified as Spark</h3>
+          <p>After reading the structure, it became clear this was a full-stack social networking app called <strong>Spark</strong>, running on Node.js, Express, Socket.io, Supabase, and deployed on Vercel. It had user auth, real-time chat, image uploads, a feed, profile pages, and even some productivity tools like todos and journaling.</p>
+          <div class="tl-outcome">✦ Spark social app identified</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="tl-entry" style="animation-delay:0.15s">
+        <div class="tl-dot blue">🖼️</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step blue">Step 3</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>A screenshot changed the direction</h3>
+          <p>Andrew shared a screenshot of <strong>Claude Code's Routines panel</strong> — the interface for setting up automated scheduled agents. The question was: how should a maintenance routine be structured so that security updates are checked automatically, but nothing is ever applied without approval?</p>
+          <p>Three requirements were on the table:</p>
+          <ul style="margin:6px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.8;">
+            <li>Check all tech stack packages for new security updates</li>
+            <li>Send an alert when updates are found</li>
+            <li>Wait for approval before doing anything</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="tl-entry" style="animation-delay:0.2s">
+        <div class="tl-dot">💡</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 4</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>The two-stage approach was proposed</h3>
+          <p>Rather than one routine trying to do everything, a split design was recommended. Stage 1 runs on a schedule and only scans — it never changes anything. Stage 2 only runs when Andrew manually triggers it after reviewing the findings.</p>
+          <p>The key insight: routines cannot pause and wait for human input mid-run. So the approval gate had to be a completely separate action, not a step inside the same routine.</p>
+          <div class="tl-decision">
+            <div class="tl-option chosen">✅ Two-stage split: scan first, update only on approval</div>
+            <div class="tl-option skipped">One routine that scans and updates automatically</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="tl-entry" style="animation-delay:0.25s">
+        <div class="tl-dot">📄</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 5</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>A plain English page was requested first</h3>
+          <p>Before setting up anything technical, Andrew wanted to fully understand the process. The request was to create a page explaining the whole workflow in plain English, so he could read through it and make sure it made sense before committing to the setup.</p>
+          <div class="tl-quote">"can you create a maintenance-workflow page first explaining the process so i can understand it first, in plain english"</div>
+          <div class="tl-outcome">📄 maintenance-workflow.html created</div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="tl-entry" style="animation-delay:0.3s">
+        <div class="tl-dot blue">✏️</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step blue">Step 6</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>The page went through several rounds of refinement</h3>
+          <p>The first version was good but had rough edges. Over several back-and-forth exchanges, these improvements were made:</p>
+          <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
+            <li><strong>No em dashes</strong> — Andrew asked to remove all of them and replace with cleaner punctuation throughout the page</li>
+            <li><strong>Collapsible stages</strong> — Stage 1 and Stage 2 sections were converted to expandable accordions so the big picture was visible first</li>
+            <li><strong>Alert clarified</strong> — the vague "notification" was corrected to explain that GitHub automatically emails andrewsdlc@gmail.com when an issue is opened</li>
+            <li><strong>Stage 2 corrected</strong> — removed the incorrect "second routine" idea; the actual approval is just opening Claude Code and typing a message</li>
+            <li><strong>More collapsibles</strong> — What Gets Checked, Why It Matters, FAQ, and the Setup section were all made collapsible too</li>
+            <li><strong>Time updated</strong> — changed from 7:30 AM to 8:00 AM</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="tl-entry" style="animation-delay:0.35s">
+        <div class="tl-dot amber">🌿</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step amber">Step 7</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>The branching process was clarified</h3>
+          <p>Andrew asked a smart question: should the update process go from GitHub down to local, or the other way around? The answer was the other way — always local first, then GitHub, then Vercel. Never the reverse.</p>
+          <p>This led to a fuller explanation of the branching approach:</p>
+          <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
+            <li>Updates are applied on a new local branch, not on <code>main</code></li>
+            <li>Andrew tests the app at localhost:3000 on that branch</li>
+            <li>If it passes, the branch is pushed and a GitHub PR is opened</li>
+            <li>Andrew merges the PR, and Vercel auto-deploys</li>
+            <li>If anything breaks locally, the branch is deleted and nothing is harmed</li>
+          </ul>
+          <div class="tl-quote">"are we doing a PR on this right from GitHub to my local? as i already have my files in my local as well"</div>
+          <div class="tl-outcome">✅ Branching process confirmed as the right approach</div>
+        </div>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="tl-entry" style="animation-delay:0.4s">
+        <div class="tl-dot blue">☁️</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step blue">Step 8</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Local vs Remote was decided</h3>
+          <p>When Andrew opened the Routines panel and saw the <strong>Local / Remote</strong> choice, the answer was clear: <strong>Remote</strong>. A Local routine requires the computer to be on and Claude Code to be running at exactly 8 AM. A Remote routine runs in the cloud regardless of whether the machine is on or not.</p>
+          <div class="tl-decision">
+            <div class="tl-option chosen">✅ Remote — runs in the cloud at 8 AM daily, no matter what</div>
+            <div class="tl-option skipped">Local — requires machine to be on and Claude Code open</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 9 -->
+      <div class="tl-entry" style="animation-delay:0.45s">
+        <div class="tl-dot">🛡️</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 9</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>The maintenance system is ready to set up</h3>
+          <p>After all the planning, refining, and documenting, the maintenance workflow is fully designed and ready to activate. The copy-paste instructions for the Stage 1 routine live inside <code>maintenance-workflow.html</code> under the Setup section.</p>
+          <p>The final system in plain English:</p>
+          <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
+            <li>Every day at 8 AM, a remote Claude routine scans your packages for vulnerabilities</li>
+            <li>If it finds something, it opens a GitHub Issue and GitHub emails you</li>
+            <li>You review the issue, then open Claude Code and say what to update</li>
+            <li>Updates go on a new local branch, you test at localhost, then approve the PR</li>
+            <li>Vercel deploys automatically once the PR is merged</li>
+          </ul>
+          <div class="tl-outcome">🛡️ Maintenance workflow fully documented and ready</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cl-footer">
+      Spark - Social App | Maintenance Story · June 3, 2026<br>
+      by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a>
+    </div>
+  </div>
+
+</body>
+</html>

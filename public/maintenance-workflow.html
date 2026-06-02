@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Maintenance Workflow</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .wf-page {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .wf-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .wf-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
+    .wf-page h2 {
+      font-size: 18px; font-weight: 800; color: var(--primary);
+      margin: 40px 0 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .wf-page p { font-size: 14px; line-height: 1.75; color: var(--text); margin-bottom: 10px; }
+    .wf-page ul { margin: 6px 0 12px 20px; }
+    .wf-page li { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 5px; }
+
+    /* Flow diagram */
+    .flow-diagram {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px 20px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .flow-box {
+      background: white;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .flow-box.green {
+      border-color: var(--primary);
+      background: #f0fdf4;
+      color: var(--primary);
+    }
+    .flow-box.yellow {
+      border-color: #d97706;
+      background: #fffbeb;
+      color: #92400e;
+    }
+    .flow-box.blue {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #1e40af;
+    }
+    .flow-arrow {
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .flow-divider {
+      width: 100%;
+      border: none;
+      border-top: 1.5px dashed #e5e7eb;
+      margin: 16px 0;
+    }
+    .flow-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    /* Steps */
+    .wf-step {
+      display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start;
+    }
+    .wf-step-num {
+      background: var(--primary); color: white; width: 26px; height: 26px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; flex-shrink: 0; margin-top: 2px;
+    }
+    .wf-step-num.stage2 { background: #2563eb; }
+    .wf-step-content { flex: 1; }
+    .wf-step-content h3 { margin: 0 0 5px; font-size: 15px; font-weight: 700; color: var(--text); }
+    .wf-step-content p { margin: 0 0 6px; font-size: 14px; line-height: 1.65; }
+
+    /* Note / warning boxes */
+    .wf-note {
+      background: #f0fdf4; border-left: 3px solid var(--primary);
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-size: 13px; line-height: 1.6; margin: 10px 0; color: #166534;
+    }
+    .wf-warning {
+      background: #fffbeb; border-left: 3px solid #d97706;
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-size: 13px; line-height: 1.6; margin: 10px 0; color: #92400e;
+    }
+    .wf-info {
+      background: #eff6ff; border-left: 3px solid #2563eb;
+      padding: 12px 16px; border-radius: 0 8px 8px 0;
+      font-size: 13px; line-height: 1.6; margin: 10px 0; color: #1e40af;
+    }
+
+    /* Stage headers */
+    .stage-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      margin: 28px 0 16px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .stage-header.s1 { background: #f0fdf4; border: 1.5px solid #86efac; color: #166534; }
+    .stage-header.s2 { background: #eff6ff; border: 1.5px solid #93c5fd; color: #1e40af; }
+    .stage-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+    .stage-badge.blue { background: #2563eb; }
+
+    /* Package table */
+    .wf-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0 16px; }
+    .wf-table th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid #e5e7eb; color: var(--text); }
+    .wf-table td { padding: 9px 12px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+    .badge-risk {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    }
+    .badge-risk.high { background: #fee2e2; color: #991b1b; }
+    .badge-risk.medium { background: #fef3c7; color: #92400e; }
+    .badge-risk.low { background: #f0fdf4; color: #166534; }
+
+    /* Collapsible stages */
+    .stage-header {
+      cursor: pointer;
+      user-select: none;
+      justify-content: space-between;
+    }
+    .stage-header:hover { filter: brightness(0.97); }
+    .stage-header-left { display: flex; align-items: center; gap: 12px; }
+    .stage-chevron {
+      font-size: 13px;
+      transition: transform 0.25s ease;
+      color: inherit;
+      opacity: 0.6;
+    }
+    .stage-chevron.open { transform: rotate(180deg); }
+    .collapsible-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+    .collapsible-body.open {
+      max-height: 2000px;
+      opacity: 1;
+    }
+
+    /* Section collapsibles (h2 level) */
+    .section-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none;
+      font-size: 18px; font-weight: 800; color: var(--primary);
+      margin: 40px 0 0; padding: 14px 18px;
+      background: #f8fafc; border: 1.5px solid #e5e7eb; border-radius: 12px;
+      transition: background 0.15s;
+    }
+    .section-toggle:hover { background: #f1f5f9; }
+    .section-toggle-left { display: flex; align-items: center; gap: 8px; }
+    .section-chevron {
+      font-size: 13px; opacity: 0.5;
+      transition: transform 0.25s ease;
+    }
+    .section-chevron.open { transform: rotate(180deg); }
+    .section-body {
+      overflow: hidden; max-height: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+    .section-body.open { max-height: 5000px; opacity: 1; }
+    .section-body-inner { padding: 16px 4px 4px; }
+
+    /* FAQ */
+    .faq-item { margin-bottom: 20px; }
+    .faq-q { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .faq-a { font-size: 14px; line-height: 1.7; color: var(--muted); }
+
+    .wf-footer { text-align: center; padding: 24px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 40px; }
+
+    /* Intro highlight box */
+    .intro-box {
+      background: white;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin: 24px 0;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .intro-box strong { color: var(--primary); }
+
+    @media (max-width: 600px) {
+      .flow-row { flex-direction: column; align-items: flex-start; }
+      .flow-arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <div style="background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;font-weight:800;color:var(--primary);">✦ Spark</span>
+      <span style="background:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #93c5fd;">Maintenance</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button onclick="window.open('maintenance.html','_self')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">← Admin</button>
+      <button onclick="window.open('site-workflow.html','_blank')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">⚙️ Dev Workflow</button>
+    </div>
+  </div>
+
+  <div class="wf-page">
+    <h1>🛡️ Maintenance Workflow</h1>
+    <p class="subtitle">How Spark stays secure and up-to-date, automatically.</p>
+    <p style="font-size:13px;color:var(--muted);margin-top:-28px;margin-bottom:36px;">by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a></p>
+
+    <!-- Intro -->
+    <div class="intro-box">
+      Think of this like a <strong>home security check</strong>. Every day, an automated assistant quietly inspects your app's packages and libraries, the building blocks your app runs on. If it finds anything that needs attention, it <strong>notifies you first</strong>. You review it, decide if you want to update, and only then does anything change. <strong>Nothing is ever updated without your approval.</strong>
+    </div>
+
+    <!-- Big picture flow -->
+    <h2>🗺️ The Big Picture</h2>
+    <p>The whole process is split into two separate stages. Stage 1 runs automatically every day. Stage 2 only runs when you choose to trigger it.</p>
+
+    <div class="flow-diagram">
+      <div class="flow-label">Stage 1: Automated (runs daily at 8:00 AM)</div>
+      <div class="flow-row">
+        <div class="flow-box green">⏰ Daily Scan Starts</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">🔍 Check all packages</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box yellow">⚠️ Found updates?</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box green">📋 Create report + notify you</div>
+      </div>
+
+      <hr class="flow-divider">
+
+      <div class="flow-label">Stage 2: Manual (runs only when YOU trigger it)</div>
+      <div class="flow-row">
+        <div class="flow-box blue">📧 GitHub email arrives</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box blue">💬 You tell Claude to apply</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box blue">🌿 New local branch created</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box blue">🧪 You test at localhost</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box blue">📬 PR opened on GitHub</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box blue">✅ You merge</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box green">🚀 Vercel deploys</div>
+      </div>
+    </div>
+
+    <div class="wf-note">
+      ✋ <strong>Your approval is the gate.</strong> Stage 2 only happens when you open Claude Code and tell me to apply the updates. Nothing changes on its own.
+    </div>
+
+    <!-- Stage 1 detail -->
+    <div class="stage-header s1" onclick="toggleStage('stage1')">
+      <div class="stage-header-left">
+        <span class="stage-badge">STAGE 1</span>
+        Daily Security Scan: Runs automatically, no action needed from you
+      </div>
+      <span class="stage-chevron" id="stage1-chevron">▼</span>
+    </div>
+
+    <div class="collapsible-body" id="stage1-body">
+      <div class="wf-step" style="margin-top:16px;">
+        <div class="wf-step-num">1</div>
+        <div class="wf-step-content">
+          <h3>The scan wakes up at 8:00 AM every day</h3>
+          <p>A Claude routine is scheduled to run every morning. It opens your project and starts checking everything. You don't have to do anything. Your computer doesn't even need to be on; this runs in the cloud.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">2</div>
+        <div class="wf-step-content">
+          <h3>It checks your packages for security issues</h3>
+          <p>It runs two checks against your app's dependencies (the external code libraries your app uses):</p>
+          <ul>
+            <li><strong>Security vulnerabilities:</strong> known weaknesses that hackers could exploit</li>
+            <li><strong>Outdated versions:</strong> packages that have newer, safer releases available</li>
+          </ul>
+          <p>It focuses on your most critical packages first, the ones that handle passwords, logins, and file uploads.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">3</div>
+        <div class="wf-step-content">
+          <h3>If nothing is found, it stops quietly</h3>
+          <p>If everything is up to date and no vulnerabilities are found, the scan ends silently. You won't be disturbed with unnecessary notifications.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">4</div>
+        <div class="wf-step-content">
+          <h3>If issues ARE found, it creates a report and emails you</h3>
+          <p>The routine opens a <strong>GitHub Issue</strong> in your repo with a clear summary: what package, what the risk is, and what version to upgrade to. GitHub then automatically sends that to your email (<strong>andrewsdlc@gmail.com</strong>) because you are the repo owner. No extra setup needed.</p>
+          <p>The report will look something like this:</p>
+          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px;font-size:13px;line-height:1.7;font-family:monospace;margin-top:8px;">
+            📋 <strong>Security Scan: 3 June 2026</strong><br><br>
+            🔴 <strong>HIGH:</strong> jsonwebtoken 9.0.2 → 9.0.3<br>
+            &nbsp;&nbsp;&nbsp;Token forgery vulnerability (CVE-2024-XXXX)<br><br>
+            🟡 <strong>MEDIUM:</strong> multer 1.4.5 → 2.0.0<br>
+            &nbsp;&nbsp;&nbsp;File path traversal risk in older versions<br><br>
+            🟢 <strong>LOW:</strong> express 4.18.2 → 4.21.0<br>
+            &nbsp;&nbsp;&nbsp;Minor patches, no known exploits<br><br>
+            ⏳ Waiting for your approval before making any changes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2 detail -->
+    <div class="stage-header s2" onclick="toggleStage('stage2')" style="margin-top:12px;">
+      <div class="stage-header-left">
+        <span class="stage-badge blue">STAGE 2</span>
+        Update Run: Only starts when you manually trigger it
+      </div>
+      <span class="stage-chevron" id="stage2-chevron">▼</span>
+    </div>
+
+    <div class="collapsible-body" id="stage2-body">
+      <div class="wf-step" style="margin-top:16px;">
+        <div class="wf-step-num">1</div>
+        <div class="wf-step-content">
+          <h3>You receive a GitHub email and review the report</h3>
+          <p>GitHub sends an email to <strong>andrewsdlc@gmail.com</strong> the moment the issue is opened. Open the email, click the issue link, read what needs updating, and decide which packages you want to approve.</p>
+          <p>You don't have to approve everything. You can skip low-priority items and only act on the critical ones.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">2</div>
+        <div class="wf-step-content">
+          <h3>You open Claude Code and tell me to apply the updates</h3>
+          <p>Open Claude Code in your project folder and type something like this:</p>
+          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.7;font-family:monospace;margin:8px 0;">
+            "Apply the security updates from GitHub Issue #[number]. Update only the packages listed."
+          </div>
+          <div class="wf-info">
+            💡 This is your approval gate. I cannot apply any updates unless you open a session and explicitly tell me to. Nothing runs in the background.
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">3</div>
+        <div class="wf-step-content">
+          <h3>I create a new local branch and apply the updates</h3>
+          <p>I will create a separate branch on your local machine called something like <code>security/june-2026-updates</code>. The updates are applied there, not on your <code>main</code> branch. Your live site is completely untouched at this point.</p>
+          <p>I also run <code>npm audit</code> again after updating to confirm the vulnerabilities are actually resolved before you even start testing.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">4</div>
+        <div class="wf-step-content">
+          <h3>You test the app locally at localhost:3000</h3>
+          <p>Start the local server and click through the app. Log in, browse, send a message, upload a photo. Make sure everything still works the same as before. Take as long as you need — your live site is still running the old safe version while you do this.</p>
+          <div class="wf-warning">
+            ⚠️ Your local server shares the same Supabase database as the live site. So any test data you write locally will appear on the real app. This is fine for package updates since you are only changing code, not the database.
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">5</div>
+        <div class="wf-step-content">
+          <h3>If happy, tell me to push and open a PR</h3>
+          <p>When everything looks good locally, tell me:</p>
+          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.7;font-family:monospace;margin:8px 0;">
+            "Looks good, push it and open a PR."
+          </div>
+          <p>I will push the branch to GitHub and open a pull request from <code>security/june-2026-updates</code> into <code>main</code>. The PR shows a clean list of exactly what changed.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">6</div>
+        <div class="wf-step-content">
+          <h3>You review and merge the PR on GitHub</h3>
+          <p>Open the PR link on GitHub, take a final look at the changes, then click <strong>Merge pull request</strong>. This is your last checkpoint before anything touches the live site.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">7</div>
+        <div class="wf-step-content">
+          <h3>Vercel auto-deploys the updated version</h3>
+          <p>The moment you merge, Vercel detects the change to <code>main</code> and deploys automatically. Within 1-2 minutes your live site at <strong>cebuspark.com</strong> is running the new, updated packages.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- What gets checked -->
+    <div class="section-toggle" onclick="toggleSection('checked')">
+      <div class="section-toggle-left">📦 What Gets Checked</div>
+      <span class="section-chevron" id="checked-chevron">▼</span>
+    </div>
+    <div class="section-body" id="checked-body">
+      <div class="section-body-inner">
+        <p>These are the packages the scan pays closest attention to, ranked by how security-sensitive they are:</p>
+        <table class="wf-table">
+          <thead>
+            <tr>
+              <th>Package</th>
+              <th>What it does in your app</th>
+              <th>Risk level if outdated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>jsonwebtoken</code></td>
+              <td>Handles login tokens, proves you are who you say you are</td>
+              <td><span class="badge-risk high">HIGH</span></td>
+            </tr>
+            <tr>
+              <td><code>bcryptjs</code></td>
+              <td>Encrypts passwords before storing them</td>
+              <td><span class="badge-risk high">HIGH</span></td>
+            </tr>
+            <tr>
+              <td><code>multer</code></td>
+              <td>Handles photo/file uploads from users</td>
+              <td><span class="badge-risk high">HIGH</span></td>
+            </tr>
+            <tr>
+              <td><code>socket.io</code></td>
+              <td>Powers real-time chat between users</td>
+              <td><span class="badge-risk medium">MEDIUM</span></td>
+            </tr>
+            <tr>
+              <td><code>express</code></td>
+              <td>The core web server framework the app runs on</td>
+              <td><span class="badge-risk medium">MEDIUM</span></td>
+            </tr>
+            <tr>
+              <td><code>@supabase/supabase-js</code></td>
+              <td>Connects your app to the database and file storage</td>
+              <td><span class="badge-risk low">LOW</span></td>
+            </tr>
+            <tr>
+              <td><code>pdfkit</code></td>
+              <td>Generates PDFs for exports</td>
+              <td><span class="badge-risk low">LOW</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Why this matters -->
+    <div class="section-toggle" onclick="toggleSection('why')">
+      <div class="section-toggle-left">🤔 Why Does This Matter?</div>
+      <span class="section-chevron" id="why-chevron">▼</span>
+    </div>
+    <div class="section-body" id="why-body">
+      <div class="section-body-inner">
+        <p>Every package your app uses is written by other developers. When they discover a bug or security hole in their code, they release a fix, a new version. If you don't update, your app keeps running the broken version, and hackers who know about that weakness can exploit it.</p>
+        <div class="wf-warning">
+          ⚠️ <strong>Real example:</strong> In 2022, a vulnerability was found in <code>jsonwebtoken</code> that let attackers forge login tokens, meaning someone could log in as any user without a password. Apps that updated within days were safe. Apps that didn't stayed exposed for months.
+        </div>
+        <p>The goal of this maintenance routine is to make sure you always know within 24 hours when something like that happens, and you can fix it with a single click.</p>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section-toggle" onclick="toggleSection('faq')">
+      <div class="section-toggle-left">❓ Common Questions</div>
+      <span class="section-chevron" id="faq-chevron">▼</span>
+    </div>
+    <div class="section-body" id="faq-body">
+      <div class="section-body-inner">
+        <div class="faq-item">
+          <div class="faq-q">What if I'm busy and don't act on the notification right away?</div>
+          <div class="faq-a">That's fine. The report stays in your GitHub Issues until you're ready. The next day's scan will also re-check and remind you if there are still outstanding issues. Critical vulnerabilities will be flagged more urgently.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What if an update breaks my app?</div>
+          <div class="faq-a">Because updates are applied on a separate branch, your <code>main</code> branch and your live site are never touched. If something breaks during local testing, just tell me to delete the branch and that's it. Nothing was harmed. You start fresh when you're ready to try again.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Can I skip updates I don't want?</div>
+          <div class="faq-a">Yes. You're in control. You can close a GitHub Issue to dismiss a low-priority update, or tell me to skip specific packages. Only what you approve gets touched.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Will this touch my database or user data?</div>
+          <div class="faq-a">No. This routine only updates the code packages your app uses. It never modifies your Supabase database, user accounts, messages, or photos.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">What's the difference between a security vulnerability and an outdated version?</div>
+          <div class="faq-a">A <strong>security vulnerability</strong> is a confirmed exploit. Someone has found a way to attack apps using that package version. That's urgent. An <strong>outdated version</strong> just means a newer release exists, but there may be no known attack yet. The scan flags both, but you should always prioritize the security vulnerabilities.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Setup section -->
+    <div class="section-toggle" onclick="toggleSection('setup')">
+      <div class="section-toggle-left">⚙️ Setup: Copy These Into the Routines Panel</div>
+      <span class="section-chevron" id="setup-chevron">▼</span>
+    </div>
+    <div class="section-body" id="setup-body">
+      <div class="section-body-inner">
+        <p>You only need to set this up once. Below is the exact text to paste into Claude Code Routines.</p>
+
+        <!-- Setup Stage 1 -->
+        <div class="stage-header s1" onclick="toggleSection('setup-stage1')" style="margin-top:16px;">
+          <div class="stage-header-left">
+            <span class="stage-badge">STAGE 1</span>
+            Daily Scan Routine — paste this into a new routine
+          </div>
+          <span class="stage-chevron" id="setup-stage1-chevron">▼</span>
+        </div>
+        <div class="collapsible-body" id="setup-stage1-body">
+          <div style="padding-top:14px;">
+            <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Name field:</p>
+            <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;font-size:13px;font-family:monospace;margin-bottom:16px;">
+              Spark Daily Security Scan
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Instructions field:</p>
+            <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.8;font-family:monospace;white-space:pre-wrap;margin-bottom:8px;">You are a daily security scanner for the Spark social app.
+
+Project location: C:\Users\andre\Documents\Deepseek\Code App
+
+Follow these steps in order:
+
+1. Run: npm outdated
+   This checks if any packages have newer versions available.
+
+2. Run: npm audit
+   This checks for known security vulnerabilities.
+
+3. If both commands show no issues, stop here. Do not open any GitHub Issues or make any changes to any files.
+
+4. If there are any findings, open a GitHub Issue in this repo with:
+   - Title: "Security Scan [today's date] - Updates Found"
+   - Body: a clear list of each package showing current version, latest version, and severity (HIGH / MEDIUM / LOW)
+   - Close the body with: "Waiting for owner approval. No changes have been made."
+
+5. Do not install, update, or modify any files under any circumstances.</div>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Trigger:</p>
+            <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;font-size:13px;font-family:monospace;margin-bottom:6px;">
+              Daily at 8:00 AM
+            </div>
+            <div class="wf-note" style="margin-top:10px;">
+              Make sure the GitHub connector is added in the Connectors tab so the routine can open issues in your repo.
+            </div>
+          </div>
+        </div>
+
+        <!-- Setup Stage 2 -->
+        <div class="stage-header s2" onclick="toggleSection('setup-stage2')" style="margin-top:12px;">
+          <div class="stage-header-left">
+            <span class="stage-badge blue">STAGE 2</span>
+            What to say to Claude when you are ready to update
+          </div>
+          <span class="stage-chevron" id="setup-stage2-chevron">▼</span>
+        </div>
+        <div class="collapsible-body" id="setup-stage2-body">
+          <div style="padding-top:14px;">
+            <p>No second routine needed. Just open Claude Code in your project folder and type this, replacing the issue number with the one from your email:</p>
+            <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.8;font-family:monospace;white-space:pre-wrap;margin-bottom:8px;">Apply the security updates from GitHub Issue #[number].
+Create a new branch for this. Update only the packages listed.
+Run npm audit after to confirm the fixes worked.
+Let me know when it's ready so I can test locally.</div>
+            <div class="wf-note" style="margin-top:8px;">
+              After you test at localhost:3000 and everything looks good, come back and say: <strong>"Looks good, push it and open a PR."</strong>
+            </div>
+            <div class="wf-info" style="margin-top:8px;">
+              💡 To skip a specific package: "Skip the express update, only do jsonwebtoken and multer."<br>
+              💡 To abort if something breaks: "Something broke, delete the branch and leave main as is."
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="wf-footer">
+      Spark - Social App | Maintenance Workflow v1.0<br>
+      by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a>
+    </div>
+  </div>
+  <script>
+    function toggleStage(id) { toggleSection(id); }
+    function toggleSection(id) {
+      const body = document.getElementById(id + '-body');
+      const chevron = document.getElementById(id + '-chevron');
+      if (!body || !chevron) return;
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      chevron.classList.toggle('open', !isOpen);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spark - Maintenance</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .m-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .m-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .m-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 48px; }
+
+    .m-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 560px) { .m-cards { grid-template-columns: 1fr; } }
+
+    .m-card {
+      background: white;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 28px 24px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+      text-decoration: none;
+      display: block;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .m-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 6px 24px rgba(22,163,74,0.12);
+      transform: translateY(-2px);
+    }
+    .m-card.blue:hover {
+      border-color: #2563eb;
+      box-shadow: 0 6px 24px rgba(37,99,235,0.1);
+    }
+
+    .m-card-icon {
+      font-size: 32px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .m-card-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .m-card-badge.green { background: #f0fdf4; color: var(--primary); border: 1px solid #86efac; }
+    .m-card-badge.blue  { background: #eff6ff; color: #2563eb;        border: 1px solid #93c5fd; }
+
+    .m-card h2 { font-size: 17px; font-weight: 800; color: var(--text); margin: 0 0 8px; }
+    .m-card p  { font-size: 13px; line-height: 1.7; color: var(--muted); margin: 0; }
+
+    .m-card-arrow {
+      margin-top: 18px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .m-card.blue .m-card-arrow { color: #2563eb; }
+
+    .m-footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 48px; }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div style="background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;font-weight:800;color:var(--primary);">✦ Spark</span>
+      <span style="background:#eff6ff;color:#2563eb;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #93c5fd;">Maintenance</span>
+    </div>
+    <button onclick="window.open('admin.html','_self')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">← Admin</button>
+  </div>
+
+  <div class="m-page">
+    <h1>🛡️ Maintenance</h1>
+    <p class="subtitle">Everything related to keeping Spark secure and up-to-date.</p>
+    <p style="font-size:13px;color:var(--muted);margin-top:-40px;margin-bottom:40px;">by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a></p>
+
+    <div class="m-cards">
+
+      <a class="m-card" href="maintenance-workflow.html">
+        <span class="m-card-icon">📋</span>
+        <span class="m-card-badge green">Workflow</span>
+        <h2>Maintenance Workflow</h2>
+        <p>How the daily security scan works, how updates are applied safely through a local branch and PR, and the copy-paste setup instructions for the Routine.</p>
+        <div class="m-card-arrow">Open guide →</div>
+      </a>
+
+      <a class="m-card blue" href="maintenance-changelog.html">
+        <span class="m-card-icon">📖</span>
+        <span class="m-card-badge blue">Story</span>
+        <h2>Maintenance Story</h2>
+        <p>The full origin story of how this maintenance system was designed, from the first folder scan to the final branching process, told step by step on a timeline.</p>
+        <div class="m-card-arrow">Read story →</div>
+      </a>
+
+    </div>
+
+    <div class="m-footer">
+      Spark - Social App | Maintenance Hub<br>
+      by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a>
+    </div>
+  </div>
+
+</body>
+</html>
