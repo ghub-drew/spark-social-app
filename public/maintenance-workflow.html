@@ -263,7 +263,7 @@
     <p>The whole process is split into two separate stages. Stage 1 runs automatically every day. Stage 2 only runs when you choose to trigger it.</p>
 
     <div class="flow-diagram">
-      <div class="flow-label">Stage 1: Automated (runs daily at 8:00 AM)</div>
+      <div class="flow-label">Stage 1: Automated (runs daily at 9:00 AM)</div>
       <div class="flow-row">
         <div class="flow-box green">⏰ Daily Scan Starts</div>
         <div class="flow-arrow">→</div>
@@ -311,7 +311,7 @@
       <div class="wf-step" style="margin-top:16px;">
         <div class="wf-step-num">1</div>
         <div class="wf-step-content">
-          <h3>The scan wakes up at 8:00 AM every day</h3>
+          <h3>The scan wakes up at 9:00 AM every day</h3>
           <p>A Claude routine is scheduled to run every morning. It opens your project and starts checking everything. You don't have to do anything. Your computer doesn't even need to be on; this runs in the cloud.</p>
         </div>
       </div>
@@ -332,8 +332,8 @@
       <div class="wf-step">
         <div class="wf-step-num">3</div>
         <div class="wf-step-content">
-          <h3>If nothing is found, it stops quietly</h3>
-          <p>If everything is up to date and no vulnerabilities are found, the scan ends silently. You won't be disturbed with unnecessary notifications.</p>
+          <h3>It always sends you a GitHub email, no matter what</h3>
+          <p>Whether updates are found or not, the routine always opens a GitHub Issue so you get an email confirmation that the scan ran. If everything is clean, the issue will say so. This way you can verify the workflow is actually running before relying on it fully.</p>
         </div>
       </div>
 
@@ -577,17 +577,17 @@ Follow these steps in order:
 2. Run: npm audit
    This checks for known security vulnerabilities.
 
-3. If both commands show no issues, stop here. Do not open any GitHub Issues or make any changes to any files.
-
-4. If there are any findings, open a GitHub Issue in this repo with:
-   - Title: "Security Scan [today's date] - Updates Found"
-   - Body: a clear list of each package showing current version, latest version, and severity (HIGH / MEDIUM / LOW)
+3. Always open a GitHub Issue regardless of what was found, with:
+   - Title: "Security Scan [today's date] - All Clear" if no issues found
+   - Title: "Security Scan [today's date] - Updates Found" if issues were found
+   - Body: a summary of what was checked and what was found (or confirmed clean)
+   - If updates were found, list each package with current version, latest version, and severity (HIGH / MEDIUM / LOW)
    - Close the body with: "Waiting for owner approval. No changes have been made."
 
-5. Do not install, update, or modify any files under any circumstances.</div>
+4. Do not install, update, or modify any files under any circumstances.</div>
             <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Trigger:</p>
             <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;font-size:13px;font-family:monospace;margin-bottom:6px;">
-              Daily at 8:00 AM
+              Daily at 9:00 AM
             </div>
             <div class="wf-note" style="margin-top:10px;">
               Make sure the GitHub connector is added in the Connectors tab so the routine can open issues in your repo.
