@@ -383,6 +383,50 @@
         </div>
       </div>
 
+      <!-- Step 12 -->
+      <div class="tl-entry" style="animation-delay:0.6s">
+        <div class="tl-dot amber">🔍</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step amber">Step 12</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Testing revealed three important discoveries</h3>
+          <p>Multiple manual test runs were triggered to verify the full workflow. Each run showed a green tick but no GitHub Issue was created and no email arrived. Diagnosing this uncovered three key lessons:</p>
+          <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
+            <li><strong>Remote routines have no npm:</strong> the original instructions used <code>npm outdated</code> and <code>npm audit</code>. Remote cloud agents have no terminal, so these commands silently failed. The fix was switching to web API calls against the npm registry instead.</li>
+            <li><strong>GitHub does not email you about your own actions:</strong> all test issues were created via the <code>gh</code> CLI authenticated as <code>ghub-drew</code>. GitHub never emails the account that performed the action. No amount of Watch settings would fix this.</li>
+            <li><strong>The mention fix:</strong> adding <code>cc @ghub-drew</code> to the issue body triggers an email via the @mention system, which works even when the issue is on your own repo — as long as it is created by a different account (Claude's integration, not ghub-drew).</li>
+          </ul>
+          <p>The AI also independently simulated the full scan — reading package.json from GitHub, checking the npm registry API for each package, and creating a real GitHub Issue — to confirm each step worked before blaming the routine.</p>
+          <div class="tl-outcome amber">🔍 Three lessons learned, all three fixed</div>
+        </div>
+      </div>
+
+      <!-- Step 13 -->
+      <div class="tl-entry" style="animation-delay:0.65s">
+        <div class="tl-dot">📦</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 13</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Real scan results: 6 out of 7 packages have updates</h3>
+          <p>The AI simulation of the scan found that most of Spark's packages are behind the latest versions:</p>
+          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;font-size:12px;line-height:1.9;font-family:monospace;margin:10px 0;">
+            🔴 jsonwebtoken: 9.0.2 → 9.0.3<br>
+            🔴 bcryptjs: 2.4.3 → 3.0.3 (major)<br>
+            🔴 multer: 1.4.5 → 2.1.1 (major)<br>
+            🟡 express: 4.18.2 → 5.2.1 (major)<br>
+            🟡 socket.io: 4.7.4 → 4.8.3<br>
+            🟢 @supabase/supabase-js: 2.105.3 → 2.107.0<br>
+            ✅ pdfkit: 0.18.0 — up to date
+          </div>
+          <p>These updates are waiting for owner approval. No changes have been made to the repo.</p>
+          <div class="tl-outcome">📦 Real scan data confirmed, updates awaiting approval</div>
+        </div>
+      </div>
+
     </div>
 
     <div class="cl-footer">

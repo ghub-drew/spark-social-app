@@ -334,9 +334,12 @@
       <div class="wf-step">
         <div class="wf-step-num">3</div>
         <div class="wf-step-content">
-          <h3>It always sends you a GitHub email, no matter what</h3>
-          <p>Whether updates are found or not, the routine always creates a GitHub Issue directly in <strong>ghub-drew/spark-social-app</strong> so you get an email confirmation that the scan ran. If everything is clean, the issue will say so. This way you can verify the workflow is actually running before relying on it fully.</p>
-          <p>You can check your issues here at any time: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:var(--primary);font-weight:600;">github.com/ghub-drew/spark-social-app/issues</a></p>
+          <h3>It always creates a GitHub Issue and notifies you</h3>
+          <p>Whether updates are found or not, the routine always creates a GitHub Issue directly in <strong>ghub-drew/spark-social-app</strong> so you have a record of every scan. The issue body starts with <code>cc @ghub-drew</code> to trigger an email notification to you.</p>
+          <div class="wf-warning" style="margin-top:10px;">
+            ⚠️ <strong>Important:</strong> GitHub does not email you about actions performed by your own account. The routine runs as Claude's GitHub integration, not as ghub-drew, so the mention of <code>@ghub-drew</code> in the issue body is what triggers the email to <strong>andrewsdlc@gmail.com</strong>.
+          </div>
+          <p style="margin-top:8px;">You can also check issues directly at any time: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:var(--primary);font-weight:600;">github.com/ghub-drew/spark-social-app/issues</a></p>
         </div>
       </div>
 
@@ -745,6 +748,7 @@ Follow these steps in order:
    or by searching for recent CVEs for each package.
 
 4. Create a GitHub Issue in ghub-drew/spark-social-app regardless of what was found, with:
+   - Start the body with: "cc @ghub-drew"
    - Title: "Security Scan [today's date] - All Clear" if no issues found
    - Title: "Security Scan [today's date] - Updates Found" if issues were found
    - Body: a summary of what was checked and what was found (or confirmed clean)
