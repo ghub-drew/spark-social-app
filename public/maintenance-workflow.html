@@ -957,10 +957,9 @@ Follow these steps in order:
             <p>No second routine needed. Just open Claude Code in your project folder and type this, replacing the issue number with the one from your email:</p>
             <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.8;font-family:monospace;white-space:pre-wrap;margin-bottom:8px;">Apply the security updates from GitHub Issue #[number].
 Create a new branch for this. Update only the packages listed.
-Run npm audit after to confirm the fixes worked.
-Let me know when it's ready so I can test locally.</div>
+Push to GitHub and open a PR so I can review the Vercel preview.</div>
             <div class="wf-note" style="margin-top:8px;">
-              After you test at localhost:3000 and everything looks good, come back and say: <strong>"Looks good, push it and open a PR."</strong>
+              Once the PR is open, check the Vercel preview URL and review the diff on GitHub. When everything looks good, merge the PR. Then run <strong>git pull origin main</strong> to sync your local machine.
             </div>
             <div class="wf-info" style="margin-top:8px;">
               💡 To skip a specific package: "Skip the express update, only do jsonwebtoken and multer."<br>
