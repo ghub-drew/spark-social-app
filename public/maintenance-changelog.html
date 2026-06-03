@@ -420,10 +420,76 @@
             🟡 express: 4.18.2 → 5.2.1 (major)<br>
             🟡 socket.io: 4.7.4 → 4.8.3<br>
             🟢 @supabase/supabase-js: 2.105.3 → 2.107.0<br>
-            ✅ pdfkit: 0.18.0 — up to date
+            ✅ pdfkit: 0.18.0, up to date
           </div>
           <p>These updates are waiting for owner approval. No changes have been made to the repo.</p>
           <div class="tl-outcome">📦 Real scan data confirmed, updates awaiting approval</div>
+        </div>
+      </div>
+
+      <!-- Step 14 -->
+      <div class="tl-entry" style="animation-delay:0.7s">
+        <div class="tl-dot amber">🔑</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step amber">Step 14</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Claude's GitHub integration is read-only. A PAT was needed.</h3>
+          <p>The routine kept completing with a green tick but never created a GitHub Issue. Looking at the run log revealed the real error: <code>403 Resource not accessible by integration</code>. Claude's built-in GitHub App only has read access to issues and cannot create them.</p>
+          <p>The fix was to create a <strong>Personal Access Token (PAT)</strong> on GitHub with the <code>repo</code> scope, and add it to the routine instructions. The routine then calls the GitHub REST API directly using that token, bypassing the read-only integration entirely.</p>
+          <div class="tl-outcome amber">🔑 PAT created and added to routine instructions</div>
+        </div>
+      </div>
+
+      <!-- Step 15 -->
+      <div class="tl-entry" style="animation-delay:0.75s">
+        <div class="tl-dot blue">⚙️</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step blue">Step 15</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>GitHub Actions workflow added to solve the email problem</h3>
+          <p>Even with the PAT working, no email arrived. The reason: the PAT authenticates as <code>ghub-drew</code>, and GitHub never emails you about your own actions. No watch settings or @mention in the issue body can override this.</p>
+          <p>The solution was a <strong>GitHub Actions workflow</strong> at <code>.github/workflows/notify-on-issue.yml</code>. Every time a new issue is opened, the <code>github-actions[bot]</code> automatically posts a comment mentioning <code>@ghub-drew</code>. Because the comment comes from a different identity (the bot, not ghub-drew), GitHub emails the owner.</p>
+          <p>The first attempt failed in 3 seconds because the workflow was missing <code>permissions: issues: write</code> and the explicit <code>github-token</code>. The fix was a one-line addition to the workflow file.</p>
+          <div class="tl-outcome blue">⚙️ GitHub Actions workflow live and sending emails</div>
+        </div>
+      </div>
+
+      <!-- Step 16 -->
+      <div class="tl-entry" style="animation-delay:0.8s">
+        <div class="tl-dot">🎉</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 16</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Full system confirmed working — Issue #6, bot comment, email</h3>
+          <p>On the final test run, everything worked end to end for the first time:</p>
+          <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
+            <li>Routine ran and created <strong>Issue #6</strong> with a properly formatted security report including a full dependency table and CVE details</li>
+            <li><strong>GitHub Actions bot</strong> posted a comment on the issue mentioning @ghub-drew</li>
+            <li><strong>Email arrived</strong> at andrewsdlc@gmail.com from github-actions[bot] with the notification</li>
+          </ul>
+          <p>All 5 test issues (#1 to #5) were closed to keep the repo clean. Issue #6 remains as the first real security scan on record.</p>
+          <div class="tl-outcome">🎉 Maintenance system fully operational</div>
+        </div>
+      </div>
+
+      <!-- Step 17 -->
+      <div class="tl-entry" style="animation-delay:0.85s">
+        <div class="tl-dot blue">📧</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step blue">Step 17</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Email improved to include full scan report</h3>
+          <p>The first working email only said "a new security scan issue has been opened." The actual findings were only visible by clicking through to GitHub. This was improved immediately.</p>
+          <p>The GitHub Actions workflow was updated so the bot comment now includes the <strong>full issue body</strong> — the complete dependency table, all CVE details, and the exact Claude Code command to type when approving updates. The email now delivers everything you need to make a decision without opening GitHub.</p>
+          <div class="tl-outcome blue">📧 Full scan report now delivered directly to email</div>
         </div>
       </div>
 

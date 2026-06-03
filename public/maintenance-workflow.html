@@ -924,7 +924,7 @@ Follow these steps in order:
             <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Why it is needed: GitHub will not email you about actions performed by your own account (the PAT authenticates as ghub-drew). The workflow fixes this by posting a bot comment on every new issue, which triggers a real email notification.</p>
             <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">This workflow is already in the repo at <code>.github/workflows/notify-on-issue.yml</code>. No action needed from you — it runs automatically on GitHub's servers every time a new issue is opened.</p>
             <div class="wf-note">
-              The full notification chain: Routine creates issue via PAT → GitHub Actions bot posts comment mentioning @ghub-drew → GitHub emails andrewsdlc@gmail.com about the mention.
+              The full notification chain: Routine creates issue via PAT → GitHub Actions bot posts a comment mentioning @ghub-drew and including the full scan report → GitHub emails andrewsdlc@gmail.com with the complete findings. No need to open GitHub to see what was found.
             </div>
           </div>
         </div>
