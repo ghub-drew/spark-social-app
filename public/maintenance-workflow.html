@@ -454,11 +454,23 @@
         <div class="wf-step-num">6</div>
         <div class="wf-step-content">
           <h3>Run git pull to sync your local machine</h3>
-          <p>Your local <code>main</code> is still on the old version. Run this to bring it in sync:</p>
+          <p>After merging, your live site and GitHub are already updated. But your local machine is still on the old version. Run this:</p>
           <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;font-size:13px;font-family:monospace;margin:8px 0;">
             git pull origin main
           </div>
-          <p>This is the only step that happens on your local machine after merging. Everything else (deploy, preview, live site) is handled by GitHub and Vercel.</p>
+          <div class="wf-info" style="margin-top:8px;">
+            💡 <strong>This is the only step where the direction is GitHub → your local machine.</strong> Everything else in this process flows local → GitHub. This step is the reverse: it downloads the merged changes from GitHub and brings them down to your machine so everything is in sync.
+          </div>
+          <table class="wf-table" style="margin-top:12px;">
+            <thead>
+              <tr><th>Where</th><th>Status after merging</th><th>After git pull</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>GitHub main</td><td>✅ Updated</td><td>✅ Updated</td></tr>
+              <tr><td>cebuspark.com</td><td>✅ Updated (Vercel auto-deployed)</td><td>✅ Updated</td></tr>
+              <tr><td>Your local machine</td><td>❌ Still old version</td><td>✅ Now in sync</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
