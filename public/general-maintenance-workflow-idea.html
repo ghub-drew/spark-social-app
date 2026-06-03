@@ -218,20 +218,22 @@
     <div class="phase">
       <div class="phase-header">
         <div class="phase-num blue">📄</div>
-        <div class="phase-title">Step 2: Document first</div>
-        <span class="phase-label blue">Write before you build</span>
+        <div class="phase-title">Step 2: Talk to Claude, Claude documents it</div>
+        <span class="phase-label blue">You describe, AI writes</span>
       </div>
-      <p>Write out what you want to happen in plain English. Not code. Not commands. Just words. This is the most important step and the one most people skip.</p>
+      <p>You do not write the documentation yourself. You describe what you want to Claude in plain English — conversationally, the way you would explain it to a friend. Claude then creates the documentation page for you.</p>
+      <p>The questions to answer are:</p>
       <ul>
         <li>What should the routine check?</li>
         <li>What happens when it finds something?</li>
         <li>How will you be notified?</li>
         <li>What is your approval process before anything gets updated?</li>
-        <li>What is the update process: create a branch, push to GitHub, open a PR, test the Vercel preview, merge, then git pull?</li>
+        <li>What is the update process: branch, PR, Vercel preview, merge, git pull?</li>
       </ul>
-      <p>For Spark, this became the <a href="maintenance-workflow.html" target="_blank" style="color:var(--primary);font-weight:600;">Maintenance Workflow page</a>, written entirely in plain English before a single routine was created. That page became the reference for everything that followed, and was updated many times as reality corrected the first draft.</p>
+      <p>You do not need to know the answers in technical detail. Just describe the outcome you want. Claude figures out the how and puts it into a documentation page.</p>
+      <p>For Spark, this became the <a href="maintenance-workflow.html" target="_blank" style="color:var(--primary);font-weight:600;">Maintenance Workflow page</a>. Andrew never wrote a single line of it. He described what he wanted, Claude created the page, and it was updated by Claude every time something was discovered through testing.</p>
       <div class="info">
-        💡 If you cannot explain the process clearly enough to write it down, you do not understand it well enough to automate it yet. The documentation page is not a deliverable. It is your thinking on paper.
+        💡 The actual documentation starts after the first implementation. The first version is based on what you think will happen. Every version after that is based on what actually happened. Claude updates it each time.
       </div>
     </div>
 
