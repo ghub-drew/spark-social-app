@@ -265,32 +265,34 @@
     <div class="flow-diagram">
       <div class="flow-label">Stage 1: Automated (runs daily at 9:00 AM)</div>
       <div class="flow-row">
-        <div class="flow-box green">⏰ Daily Scan Starts</div>
+        <div class="flow-box green">⏰ Scan starts</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box">🔍 Check all packages</div>
+        <div class="flow-box">📄 Reads package.json</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box yellow">⚠️ Found updates?</div>
+        <div class="flow-box">🔍 Checks npm registry + CVEs</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box green">📋 Create report + notify you</div>
+        <div class="flow-box green">📋 Creates GitHub Issue</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box green">🤖 Bot comments with full report</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box green">📧 Email arrives at Gmail</div>
       </div>
 
       <hr class="flow-divider">
 
-      <div class="flow-label">Stage 2: Manual (runs only when YOU trigger it)</div>
+      <div class="flow-label">Stage 2: Manual (only when updates are found and you decide to act)</div>
       <div class="flow-row">
-        <div class="flow-box blue">📧 GitHub email arrives</div>
+        <div class="flow-box yellow">⚠️ Updates found, you decide to act</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">💬 You tell Claude to apply</div>
+        <div class="flow-box blue">💬 Tell Claude to apply</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">🌿 New local branch created</div>
+        <div class="flow-box blue">🌿 New local branch + updates applied</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">🧪 You test at localhost</div>
+        <div class="flow-box blue">🧪 Test at localhost</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">📬 PR opened on GitHub</div>
+        <div class="flow-box blue">📬 Push + PR opened</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">✅ You merge</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-box blue">⬇️ git pull origin main</div>
+        <div class="flow-box blue">✅ Merge + git pull</div>
         <div class="flow-arrow">→</div>
         <div class="flow-box green">🚀 Vercel deploys</div>
       </div>
