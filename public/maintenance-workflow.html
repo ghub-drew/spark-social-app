@@ -462,8 +462,42 @@
         </div>
       </div>
 
-      <div class="wf-note" style="margin-top:8px;margin-bottom:8px;">
-        📌 <strong>When is localhost useful?</strong> For security package updates, the Vercel preview is sufficient. Localhost testing is more valuable when making major code changes (new features, bug fixes) where you want to iterate quickly without waiting for Vercel to build each time, or when you need to debug something with live console logs.
+      <div style="background:#f8fafc;border:1.5px solid #e5e7eb;border-radius:12px;padding:18px 20px;margin-top:12px;margin-bottom:8px;">
+        <p style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;">📌 When to use PR vs localhost</p>
+        <table class="wf-table" style="margin:0;">
+          <thead>
+            <tr>
+              <th>Situation</th>
+              <th>Use PR + Vercel preview</th>
+              <th>Use localhost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Security package updates</td>
+              <td>✅ Yes — review diff, test preview, merge</td>
+              <td>Not needed</td>
+            </tr>
+            <tr>
+              <td>New features or bug fixes</td>
+              <td>When ready to deploy</td>
+              <td>✅ Yes — iterate quickly without pushing every change</td>
+            </tr>
+            <tr>
+              <td>Saving Vercel deployments</td>
+              <td>Each push triggers a build</td>
+              <td>✅ Yes — test locally first, push only when ready</td>
+            </tr>
+            <tr>
+              <td>Database</td>
+              <td colspan="2" style="color:#92400e;background:#fffbeb;">⚠️ Both localhost and Vercel preview share the same Supabase database. Real user data is always involved.</td>
+            </tr>
+            <tr>
+              <td>git pull</td>
+              <td colspan="2">Not a workflow choice. Always run after merging a PR to sync your local machine with GitHub.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
