@@ -635,6 +635,94 @@ Follow these steps in order:
             <div class="wf-note" style="margin-top:10px;">
               Make sure the GitHub connector is added in the Connectors tab so the routine can open issues in your repo.
             </div>
+
+            <!-- Mockups -->
+            <p style="font-size:13px;font-weight:700;color:var(--text);margin:24px 0 10px;">What it looks like when set up:</p>
+
+            <!-- Mockup 1: Setup form -->
+            <div style="background:#1a1a1a;border-radius:12px;padding:20px;margin-bottom:16px;font-family:'Inter',sans-serif;">
+              <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">Step 1: Fill in the routine form</div>
+
+              <div style="margin-bottom:12px;">
+                <div style="font-size:11px;color:#9ca3af;margin-bottom:4px;">Name *</div>
+                <div style="background:#2a2a2a;border:1px solid #3a3a3a;border-radius:8px;padding:10px 14px;font-size:13px;color:#e5e7eb;">Spark Daily Security Scan</div>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div style="font-size:11px;color:#9ca3af;margin-bottom:4px;">Instructions</div>
+                <div style="background:#2a2a2a;border:1px solid #3a3a3a;border-radius:8px;padding:10px 14px;font-size:12px;color:#e5e7eb;line-height:1.7;">
+                  You are a daily security scanner for the Spark social app.<br><br>
+                  GitHub repo: <span style="color:#60a5fa;">https://github.com/ghub-drew/spark-social-app</span><br><br>
+                  Follow these steps in order:<br>
+                  1. Run: <span style="color:#86efac;">npm outdated</span><br>
+                  2. Run: <span style="color:#86efac;">npm audit</span><br>
+                  3. Always open a GitHub Issue regardless of what was found...<br>
+                  4. Do not install, update, or modify any files under any circumstances.
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <div style="background:#2a2a2a;border:1px solid #3a3a3a;border-radius:6px;padding:5px 10px;font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:5px;">
+                  <span style="color:#86efac;">⑂</span> ghub-drew/spark-social-app
+                </div>
+              </div>
+
+              <div style="background:#2a2a2a;border:1px solid #3a3a3a;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
+                <div style="font-size:11px;color:#9ca3af;margin-bottom:8px;">Select a trigger</div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#e5e7eb;">
+                  <span style="color:#60a5fa;">⏰</span> Runs daily at 9:00 AM GMT+8
+                </div>
+              </div>
+
+              <div style="display:flex;justify-content:flex-end;gap:8px;">
+                <div style="background:#2a2a2a;border:1px solid #3a3a3a;border-radius:8px;padding:8px 18px;font-size:13px;color:#9ca3af;">Cancel</div>
+                <div style="background:#16a34a;border-radius:8px;padding:8px 18px;font-size:13px;color:white;font-weight:600;">Create</div>
+              </div>
+            </div>
+
+            <!-- Mockup 2: Active routine -->
+            <div style="background:#1a1a1a;border-radius:12px;padding:20px;font-family:'Inter',sans-serif;">
+              <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;">Step 2: Routine is now active</div>
+
+              <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:20px;">
+                <div>
+                  <div style="margin-bottom:16px;">
+                    <div style="font-size:11px;color:#6b7280;margin-bottom:6px;">Status</div>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:#e5e7eb;">
+                      <span style="width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;"></span>
+                      <span style="color:#22c55e;font-weight:600;">Active</span>
+                      <span style="color:#6b7280;font-size:12px;">Next run: today at 9:00 AM</span>
+                    </div>
+                  </div>
+                  <div style="margin-bottom:16px;">
+                    <div style="font-size:11px;color:#6b7280;margin-bottom:6px;">Repositories</div>
+                    <div style="font-size:13px;color:#e5e7eb;display:flex;align-items:center;gap:5px;">
+                      <span style="color:#86efac;">⑂</span> ghub-drew/spark-social-app
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size:11px;color:#6b7280;margin-bottom:6px;">Repeats</div>
+                    <div style="font-size:13px;color:#e5e7eb;font-weight:600;">Runs daily at 9:00 AM GMT+8</div>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:8px;">Instructions</div>
+                  <div style="background:#2a2a2a;border-radius:8px;padding:12px;font-size:12px;color:#d1d5db;line-height:1.7;">
+                    You are a daily security scanner for the Spark social app.<br><br>
+                    GitHub repo: <span style="color:#60a5fa;">https://github.com/ghub-drew/spark-social-app</span><br><br>
+                    1. Run: <span style="color:#86efac;">npm outdated</span><br>
+                    2. Run: <span style="color:#86efac;">npm audit</span><br>
+                    3. Always open a GitHub Issue...<br>
+                    4. Do not modify any files.
+                  </div>
+                  <div style="margin-top:12px;">
+                    <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Runs</div>
+                    <div style="font-size:12px;color:#6b7280;font-style:italic;">No runs yet</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
