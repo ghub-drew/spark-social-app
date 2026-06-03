@@ -154,7 +154,7 @@
 
     <!-- The cycle -->
     <div class="g-h2">🔄 The Real Process</div>
-    <p>Based on what actually happened building the Spark maintenance system, the honest process looks like this. It is not six tidy phases — it is four steps with a fix loop in the middle.</p>
+    <p>Based on what actually happened building the Spark maintenance system, the honest process looks like this. It is not six tidy phases. It is four steps with a fix loop in the middle.</p>
 
     <div class="cycle">
       <div class="cycle-step">
@@ -229,7 +229,7 @@
         <li>What is your approval process before anything gets updated?</li>
         <li>What is the update process: local branch, PR, then deploy?</li>
       </ul>
-      <p>For Spark, this became the <a href="maintenance-workflow.html" target="_blank" style="color:var(--primary);font-weight:600;">Maintenance Workflow page</a>, written entirely in plain English before a single routine was created. That page became the reference for everything that followed — and was updated many times as reality corrected the first draft.</p>
+      <p>For Spark, this became the <a href="maintenance-workflow.html" target="_blank" style="color:var(--primary);font-weight:600;">Maintenance Workflow page</a>, written entirely in plain English before a single routine was created. That page became the reference for everything that followed, and was updated many times as reality corrected the first draft.</p>
       <div class="info">
         💡 If you cannot explain the process clearly enough to write it down, you do not understand it well enough to automate it yet. The documentation page is not a deliverable. It is your thinking on paper.
       </div>
@@ -256,11 +256,11 @@
     <div class="phase">
       <div class="phase-header">
         <div class="phase-num amber">🧪</div>
-        <div class="phase-title">Step 4: Test, Fix, and Document — repeat</div>
+        <div class="phase-title">Step 4: Test, Fix, and Document. Repeat.</div>
         <span class="phase-label amber">The real work</span>
       </div>
       <p>Run the routine manually. See what breaks. Fix it. Update your documentation. Run it again. Repeat until it works end to end with your own eyes.</p>
-      <p>For Spark, this loop uncovered these issues one by one — each fixed before the next was even visible:</p>
+      <p>For Spark, this loop uncovered these issues one by one, each fixed before the next was even visible:</p>
       <ul>
         <li><strong>Remote routines have no npm.</strong> The instructions used <code>npm outdated</code> and <code>npm audit</code> which silently failed. Fixed by switching to npm registry web APIs.</li>
         <li><strong>Claude's GitHub integration is read-only.</strong> It could not create issues. Fixed by creating a Personal Access Token (PAT) with repo scope.</li>
