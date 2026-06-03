@@ -227,7 +227,7 @@
         <li>What happens when it finds something?</li>
         <li>How will you be notified?</li>
         <li>What is your approval process before anything gets updated?</li>
-        <li>What is the update process: local branch, PR, then deploy?</li>
+        <li>What is the update process: create a branch, push to GitHub, open a PR, test the Vercel preview, merge, then git pull?</li>
       </ul>
       <p>For Spark, this became the <a href="maintenance-workflow.html" target="_blank" style="color:var(--primary);font-weight:600;">Maintenance Workflow page</a>, written entirely in plain English before a single routine was created. That page became the reference for everything that followed, and was updated many times as reality corrected the first draft.</p>
       <div class="info">
@@ -268,9 +268,15 @@
         <li><strong>The Actions workflow failed on the first try.</strong> Missing <code>permissions: issues: write</code>. Fixed with a one-line addition.</li>
         <li><strong>The email only said "a new issue was opened."</strong> Not useful on its own. Fixed by having the bot comment include the full scan report body.</li>
       </ul>
+      <p>Two more things were discovered during the update process itself:</p>
+      <ul>
+        <li><strong>Localhost testing is not needed for package updates.</strong> Vercel automatically builds a live preview URL for every PR. That preview runs in the same cloud environment as production, making it more reliable than localhost. Localhost is still useful for major code changes where you want fast iteration without pushing to GitHub every time.</li>
+        <li><strong>A temporary branch is always required before opening a PR.</strong> You cannot PR directly from main to main. The branch holds the proposed changes safely while you review. Once merged, the branch disappears.</li>
+        <li><strong>git pull is the only step that flows GitHub → local.</strong> Every other step in the process goes local → GitHub. After merging a PR, GitHub and Vercel are already updated. git pull is what brings your local machine in sync.</li>
+      </ul>
       <p>Each fix was immediately documented in the workflow page. The documentation was updated 10+ times throughout this process. That is normal.</p>
       <div class="note">
-        The loop ends when you see the full chain working with your own eyes: routine runs, issue is created, bot comments, email arrives with the full report. That is your sign-off.
+        The loop ends when you see the full chain working with your own eyes: routine runs, issue is created, bot comments, email arrives with the full report, PR is opened, Vercel preview builds, you merge, cebuspark.com is live. That is your sign-off.
       </div>
     </div>
 
