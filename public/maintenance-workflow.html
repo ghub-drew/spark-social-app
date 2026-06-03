@@ -290,6 +290,8 @@
         <div class="flow-arrow">→</div>
         <div class="flow-box blue">✅ You merge</div>
         <div class="flow-arrow">→</div>
+        <div class="flow-box blue">⬇️ git pull origin main</div>
+        <div class="flow-arrow">→</div>
         <div class="flow-box green">🚀 Vercel deploys</div>
       </div>
     </div>
@@ -434,6 +436,18 @@
 
       <div class="wf-step">
         <div class="wf-step-num">7</div>
+        <div class="wf-step-content">
+          <h3>Pull the merged changes to your local machine</h3>
+          <p>After merging on GitHub, your local <code>main</code> is still on the old version. Run this to bring it back in sync:</p>
+          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;font-size:13px;font-family:monospace;margin:8px 0;">
+            git pull origin main
+          </div>
+          <p>Without this step, your local machine thinks it is still on the pre-update version even though GitHub and Vercel are already running the new one. Always pull after merging.</p>
+        </div>
+      </div>
+
+      <div class="wf-step">
+        <div class="wf-step-num">8</div>
         <div class="wf-step-content">
           <h3>Vercel auto-deploys the updated version</h3>
           <p>The moment you merge, Vercel detects the change to <code>main</code> and deploys automatically. Within 1-2 minutes your live site at <strong>cebuspark.com</strong> is running the new, updated packages.</p>
