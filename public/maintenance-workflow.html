@@ -500,7 +500,7 @@
 
     <!-- Why this matters -->
     <div class="section-toggle" onclick="toggleSection('why')">
-      <div class="section-toggle-left">🤔 Why Does This Matter?</div>
+      <div class="section-toggle-left">🤔 Why Does This Matter and Why Daily?</div>
       <span class="section-chevron" id="why-chevron">▼</span>
     </div>
     <div class="section-body" id="why-body">
@@ -510,6 +510,47 @@
           ⚠️ <strong>Real example:</strong> In 2022, a vulnerability was found in <code>jsonwebtoken</code> that let attackers forge login tokens, meaning someone could log in as any user without a password. Apps that updated within days were safe. Apps that didn't stayed exposed for months.
         </div>
         <p>The goal of this maintenance routine is to make sure you always know within 24 hours when something like that happens, and you can fix it with a single click.</p>
+
+        <h3 style="font-size:15px;font-weight:800;color:var(--text);margin:24px 0 10px;">Why run it daily and not weekly or monthly?</h3>
+        <p>Security vulnerabilities are published publicly the moment they are discovered. That means the same day a weakness is announced, attackers already know about it and start scanning for apps that haven't patched yet. The longer your window between scans, the longer you are exposed without knowing it.</p>
+
+        <table class="wf-table" style="margin-top:10px;">
+          <thead>
+            <tr>
+              <th>Scan frequency</th>
+              <th>Max days exposed before you find out</th>
+              <th>Verdict</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Daily</strong></td>
+              <td>1 day</td>
+              <td><span class="badge-risk low" style="font-size:11px;">Best</span></td>
+            </tr>
+            <tr>
+              <td>Weekly</td>
+              <td>7 days</td>
+              <td><span class="badge-risk medium" style="font-size:11px;">Acceptable</span></td>
+            </tr>
+            <tr>
+              <td>Monthly</td>
+              <td>30 days</td>
+              <td><span class="badge-risk high" style="font-size:11px;">Risky</span></td>
+            </tr>
+            <tr>
+              <td>Manual only</td>
+              <td>Unknown — whenever you remember</td>
+              <td><span class="badge-risk high" style="font-size:11px;">Risky</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:12px;">Daily is also low noise. Most days the scan runs, finds nothing, and you get a quiet "All Clear" email. It only becomes urgent when something real is found. You are not being interrupted every morning for no reason — you are just keeping a 24-hour safety net running in the background.</p>
+
+        <div class="wf-note" style="margin-top:12px;">
+          Spark handles real user accounts, passwords, login tokens, and file uploads. These are exactly the things attackers target. A daily check means you are never more than one day behind on protecting your users.
+        </div>
       </div>
     </div>
 
