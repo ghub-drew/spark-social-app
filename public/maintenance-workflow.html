@@ -335,9 +335,9 @@
         <div class="wf-step-num">3</div>
         <div class="wf-step-content">
           <h3>It always creates a GitHub Issue and notifies you</h3>
-          <p>Whether updates are found or not, the routine always creates a GitHub Issue directly in <strong>ghub-drew/spark-social-app</strong> so you have a record of every scan. The issue body starts with <code>cc @ghub-drew</code> to trigger an email notification to you.</p>
-          <div class="wf-warning" style="margin-top:10px;">
-            ⚠️ <strong>Important:</strong> GitHub does not email you about actions performed by your own account. The routine runs as Claude's GitHub integration, not as ghub-drew, so the mention of <code>@ghub-drew</code> in the issue body is what triggers the email to <strong>andrewsdlc@gmail.com</strong>.
+          <p>Whether updates are found or not, the routine always creates a GitHub Issue in <strong>ghub-drew/spark-social-app</strong> using a Personal Access Token (PAT). This gives it write permission to open issues even as a remote cloud agent.</p>
+          <div class="wf-info" style="margin-top:10px;">
+            💡 <strong>How the email notification works:</strong> GitHub will not email you about actions performed by your own account (the PAT authenticates as ghub-drew). To get around this, a <strong>GitHub Actions workflow</strong> is set up in the repo. The moment any new issue is opened, the Actions bot automatically posts a comment mentioning <code>@ghub-drew</code> — and that comment, coming from a different identity (the Actions bot), triggers a real email to <strong>andrewsdlc@gmail.com</strong>.
           </div>
           <p style="margin-top:8px;">You can also check issues directly at any time: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:var(--primary);font-weight:600;">github.com/ghub-drew/spark-social-app/issues</a></p>
         </div>
@@ -348,16 +348,22 @@
         <div class="wf-step-content">
           <h3>If issues ARE found, it creates a report and emails you</h3>
           <p>The routine opens a <strong>GitHub Issue</strong> in your repo with a clear summary: what package, what the risk is, and what version to upgrade to. GitHub then automatically sends that to your email (<strong>andrewsdlc@gmail.com</strong>) because you are the repo owner. No extra setup needed.</p>
-          <p>The report will look something like this:</p>
-          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px;font-size:13px;line-height:1.7;font-family:monospace;margin-top:8px;">
-            📋 <strong>Security Scan: 3 June 2026</strong><br><br>
-            🔴 <strong>HIGH:</strong> jsonwebtoken 9.0.2 → 9.0.3<br>
-            &nbsp;&nbsp;&nbsp;Token forgery vulnerability (CVE-2024-XXXX)<br><br>
-            🟡 <strong>MEDIUM:</strong> multer 1.4.5 → 2.0.0<br>
-            &nbsp;&nbsp;&nbsp;File path traversal risk in older versions<br><br>
-            🟢 <strong>LOW:</strong> express 4.18.2 → 4.21.0<br>
-            &nbsp;&nbsp;&nbsp;Minor patches, no known exploits<br><br>
-            ⏳ Waiting for your approval before making any changes.
+          <p>The report is based on real findings. Here is what an actual scan of Spark looked like on 3 June 2026:</p>
+          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px;font-size:13px;line-height:1.85;font-family:monospace;margin-top:8px;">
+            📋 <strong>Security Scan 2026-06-03 — Updates Found</strong><br>
+            Packages checked: 7 | Up to date: 1 | Active CVEs: 4<br><br>
+            🔴 <strong>HIGH — multer 1.4.5-lts.1 → 2.1.1 (6 CVEs)</strong><br>
+            &nbsp;&nbsp;CVE-2026-3520 (CVSS 8.7) — DoS via uncontrolled recursion<br>
+            &nbsp;&nbsp;CVE-2025-47935 (CVSS 7.5) — Memory leak from unclosed streams<br><br>
+            🔴 <strong>HIGH — socket.io 4.7.4 → 4.8.3</strong><br>
+            &nbsp;&nbsp;CVE-2026-33151 (CVSS 8.7) — RAM exhaustion via crafted packets<br><br>
+            🟡 <strong>MODERATE — express 4.18.2 → 5.2.1</strong><br>
+            &nbsp;&nbsp;CVE-2024-29041 (CVSS 6.1) — Open redirect via res.redirect()<br><br>
+            🔵 Updates available, no confirmed CVEs:<br>
+            &nbsp;&nbsp;bcryptjs 2.4.3 → 3.0.3 | jsonwebtoken 9.0.2 → 9.0.3<br>
+            &nbsp;&nbsp;@supabase/supabase-js 2.105.3 → 2.107.0<br><br>
+            ✅ Up to date: pdfkit 0.18.0<br><br>
+            ⏳ Waiting for owner approval. No changes have been made.
           </div>
         </div>
       </div>
@@ -838,11 +844,13 @@ Follow these steps in order:
                   <div style="font-size:11px;color:#6b7280;margin-bottom:8px;">Instructions</div>
                   <div style="background:#2a2a2a;border-radius:8px;padding:12px;font-size:12px;color:#d1d5db;line-height:1.7;">
                     You are a daily security scanner for the Spark social app.<br><br>
-                    GitHub repo: <span style="color:#60a5fa;">https://github.com/ghub-drew/spark-social-app</span><br><br>
-                    1. Run: <span style="color:#86efac;">npm outdated</span><br>
-                    2. Run: <span style="color:#86efac;">npm audit</span><br>
-                    3. Always open a GitHub Issue...<br>
-                    4. Do not modify any files.
+                    GitHub repo: <span style="color:#60a5fa;">https://github.com/ghub-drew/spark-social-app</span><br>
+                    GitHub token: <span style="color:#fcd34d;">[YOUR_PAT_TOKEN]</span><br><br>
+                    1. Read package.json from GitHub<br>
+                    2. Check each package via <span style="color:#60a5fa;">registry.npmjs.org</span> API<br>
+                    3. Check npm security advisories<br>
+                    4. Create GitHub Issue via REST API using the token<br>
+                    5. Do not modify any files.
                   </div>
                   <div style="margin-top:12px;">
                     <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Runs</div>
@@ -852,6 +860,72 @@ Follow these steps in order:
               </div>
             </div>
 
+          </div>
+        </div>
+
+        <!-- PAT Setup -->
+        <div class="stage-header" onclick="toggleSection('setup-pat')" style="margin-top:12px;background:#fffbeb;border:1.5px solid #fcd34d;">
+          <div class="stage-header-left" style="color:#92400e;">
+            <span style="background:#92400e;color:white;font-size:11px;font-weight:800;padding:2px 10px;border-radius:20px;">REQUIRED</span>
+            Personal Access Token (PAT) — needed for issue creation
+          </div>
+          <span class="stage-chevron" id="setup-pat-chevron" style="color:#92400e;">▼</span>
+        </div>
+        <div class="collapsible-body" id="setup-pat-body">
+          <div style="padding-top:14px;">
+            <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Why it is needed: Claude's built-in GitHub integration only has read-only access to issues. To create issues the routine needs a PAT with write permission.</p>
+            <p style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Steps to create it:</p>
+            <div class="wf-step" style="margin-bottom:10px;">
+              <div class="wf-step-num" style="background:#92400e;">1</div>
+              <div class="wf-step-content">
+                <p>Go to <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--primary);font-weight:600;">github.com/settings/tokens</a></p>
+              </div>
+            </div>
+            <div class="wf-step" style="margin-bottom:10px;">
+              <div class="wf-step-num" style="background:#92400e;">2</div>
+              <div class="wf-step-content">
+                <p>Click <strong>Generate new token (classic)</strong></p>
+              </div>
+            </div>
+            <div class="wf-step" style="margin-bottom:10px;">
+              <div class="wf-step-num" style="background:#92400e;">3</div>
+              <div class="wf-step-content">
+                <p>Name it <strong>Spark Security Scan</strong>, set expiry to 1 year, tick the <strong>repo</strong> scope only</p>
+              </div>
+            </div>
+            <div class="wf-step" style="margin-bottom:10px;">
+              <div class="wf-step-num" style="background:#92400e;">4</div>
+              <div class="wf-step-content">
+                <p>Click <strong>Generate token</strong> and copy it immediately. GitHub only shows it once.</p>
+              </div>
+            </div>
+            <div class="wf-step" style="margin-bottom:10px;">
+              <div class="wf-step-num" style="background:#92400e;">5</div>
+              <div class="wf-step-content">
+                <p>Paste the token into the routine instructions where it says <code>[YOUR_PAT_TOKEN]</code></p>
+              </div>
+            </div>
+            <div class="wf-warning" style="margin-top:6px;">
+              ⚠️ Keep the token private. Do not commit it to GitHub or share it publicly. It only lives inside the Claude Code routine instructions.
+            </div>
+          </div>
+        </div>
+
+        <!-- GitHub Actions Setup -->
+        <div class="stage-header" onclick="toggleSection('setup-actions')" style="margin-top:12px;background:#eff6ff;border:1.5px solid #93c5fd;">
+          <div class="stage-header-left" style="color:#1e40af;">
+            <span style="background:#2563eb;color:white;font-size:11px;font-weight:800;padding:2px 10px;border-radius:20px;">ALREADY SET UP</span>
+            GitHub Actions Workflow — handles email notification
+          </div>
+          <span class="stage-chevron" id="setup-actions-chevron" style="color:#1e40af;">▼</span>
+        </div>
+        <div class="collapsible-body" id="setup-actions-body">
+          <div style="padding-top:14px;">
+            <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Why it is needed: GitHub will not email you about actions performed by your own account (the PAT authenticates as ghub-drew). The workflow fixes this by posting a bot comment on every new issue, which triggers a real email notification.</p>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">This workflow is already in the repo at <code>.github/workflows/notify-on-issue.yml</code>. No action needed from you — it runs automatically on GitHub's servers every time a new issue is opened.</p>
+            <div class="wf-note">
+              The full notification chain: Routine creates issue via PAT → GitHub Actions bot posts comment mentioning @ghub-drew → GitHub emails andrewsdlc@gmail.com about the mention.
+            </div>
           </div>
         </div>
 
