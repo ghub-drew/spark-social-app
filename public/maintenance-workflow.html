@@ -396,15 +396,9 @@
           <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.7;font-family:monospace;margin:8px 0;">
             "Apply the security updates from GitHub Issue #[number]. Create a branch, apply the updates, push to GitHub and open a PR."
           </div>
-          <p>I will handle all of this in one go:</p>
-          <ul>
-            <li>Create a temporary branch (e.g. <code>security/june-2026-updates</code>): you cannot open a PR directly from main, a branch is always required first</li>
-            <li>Apply the package updates on that branch, not on main</li>
-            <li>Push the branch up to GitHub</li>
-            <li>Open a PR from that branch into main on GitHub</li>
-          </ul>
+          <p>Opening a PR is just creating a temporary branch. I apply the updates on that branch, push it to GitHub, and open the PR from there. Your <code>main</code> branch and live site stay untouched until you merge.</p>
           <div class="wf-info" style="margin-top:8px;">
-            💡 <strong>Direction is always local → GitHub, never the other way around.</strong> Your local machine sends the branch up. GitHub receives it. The PR is a GitHub-only thing comparing two branches. Your local machine never receives a PR. It only ever sends code up.
+            💡 Direction is always local → GitHub, never the other way around.
           </div>
         </div>
       </div>
