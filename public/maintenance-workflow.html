@@ -339,7 +339,7 @@
           <h3>It always creates a GitHub Issue and notifies you</h3>
           <p>Whether updates are found or not, the routine always creates a GitHub Issue in <strong>ghub-drew/spark-social-app</strong> using a Personal Access Token (PAT). This gives it write permission to open issues even as a remote cloud agent.</p>
           <div class="wf-info" style="margin-top:10px;">
-            💡 <strong>How the email notification works:</strong> GitHub will not email you about actions performed by your own account (the PAT authenticates as ghub-drew). To get around this, a <strong>GitHub Actions workflow</strong> is set up in the repo. The moment any new issue is opened, the Actions bot automatically posts a comment mentioning <code>@ghub-drew</code> — and that comment, coming from a different identity (the Actions bot), triggers a real email to <strong>andrewsdlc@gmail.com</strong>.
+            💡 <strong>How the email notification works:</strong> GitHub will not email you about actions performed by your own account (the PAT authenticates as ghub-drew). To get around this, a <strong>GitHub Actions workflow</strong> is set up in the repo. The moment any new issue is opened, the Actions bot automatically posts a comment mentioning <code>@ghub-drew</code>. That comment, coming from a different identity (the Actions bot), triggers a real email to <strong>andrewsdlc@gmail.com</strong>.
           </div>
           <p style="margin-top:8px;">You can also check issues directly at any time: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:var(--primary);font-weight:600;">github.com/ghub-drew/spark-social-app/issues</a></p>
         </div>
@@ -386,7 +386,7 @@
         <div class="wf-step-num">1</div>
         <div class="wf-step-content">
           <h3>You receive the email and decide which updates to approve</h3>
-          <p>The email from <strong>github-actions[bot]</strong> contains the full scan report. Review it and decide which packages to update. You do not have to approve everything — skip low-priority items and focus on the critical ones first.</p>
+          <p>The email from <strong>github-actions[bot]</strong> contains the full scan report. Review it and decide which packages to update. You do not have to approve everything. Skip low-priority items and focus on the critical ones first.</p>
           <p>You can also check the issue directly at: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:#2563eb;font-weight:600;">github.com/ghub-drew/spark-social-app/issues</a></p>
         </div>
       </div>
@@ -401,7 +401,7 @@
           </div>
           <p>I will handle all of this in one go:</p>
           <ul>
-            <li>Create a temporary branch (e.g. <code>security/june-2026-updates</code>) — you cannot open a PR directly from main, a branch is always required first</li>
+            <li>Create a temporary branch (e.g. <code>security/june-2026-updates</code>): you cannot open a PR directly from main, a branch is always required first</li>
             <li>Apply the package updates on that branch, not on main</li>
             <li>Push the branch up to GitHub</li>
             <li>Open a PR from that branch into main on GitHub</li>
@@ -418,10 +418,10 @@
           <h3>Vercel automatically builds a preview URL</h3>
           <p>The moment the branch is pushed, Vercel detects it and builds a live preview of the app with the updates applied. You will see it in two places:</p>
           <ul>
-            <li>Your <strong>Vercel dashboard</strong> under Active Branches — click Preview</li>
+            <li>Your <strong>Vercel dashboard</strong> under Active Branches, click Preview</li>
             <li>A comment posted by Vercel directly inside the GitHub PR</li>
           </ul>
-          <p>The preview URL is temporary and only exists while the PR is open. It is not cebuspark.com — it is a separate test URL running the updated packages in the same cloud environment as production.</p>
+          <p>The preview URL is temporary and only exists while the PR is open. It is not cebuspark.com. It is a separate test URL running the updated packages in the same cloud environment as production.</p>
           <div class="wf-note" style="margin-top:8px;">
             The PR is not live yet. Nothing touches cebuspark.com until you click Merge.
           </div>
@@ -434,8 +434,8 @@
           <h3>Review the PR diff and test the preview URL</h3>
           <p>Open the PR on GitHub at <code>github.com/ghub-drew/spark-social-app/pulls</code>. You will see:</p>
           <ul>
-            <li><strong>The diff</strong> — exactly which package versions changed in package.json</li>
-            <li><strong>The Vercel preview link</strong> — posted as a comment in the PR</li>
+            <li><strong>The diff:</strong> exactly which package versions changed in package.json</li>
+            <li><strong>The Vercel preview link:</strong> posted as a comment in the PR</li>
           </ul>
           <p>Click the preview URL and test the app. Log in, browse, send a message. If everything works the same as before, you are ready to merge.</p>
         </div>
@@ -444,7 +444,7 @@
       <div class="wf-step">
         <div class="wf-step-num">5</div>
         <div class="wf-step-content">
-          <h3>Merge the PR — Vercel deploys automatically</h3>
+          <h3>Merge the PR. Vercel deploys automatically.</h3>
           <p>Click <strong>Merge pull request</strong> on GitHub. That is all. There is no separate push step.</p>
           <p>Merging into <code>main</code> is what triggers Vercel to deploy. Within 1-2 minutes <strong>cebuspark.com</strong> is live on the updated packages. The preview URL disappears once merged.</p>
         </div>
