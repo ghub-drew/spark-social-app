@@ -571,6 +571,105 @@
       </div>
     </div>
 
+    <!-- Git concepts -->
+    <div class="section-toggle" onclick="toggleSection('gitconcepts')">
+      <div class="section-toggle-left">📖 Git Concepts: pull vs merge vs PR vs fork</div>
+      <span class="section-chevron" id="gitconcepts-chevron">▼</span>
+    </div>
+    <div class="section-body" id="gitconcepts-body">
+      <div class="section-body-inner">
+        <p>These four terms are often confused because they sound similar. Here is the plain English difference between each one.</p>
+
+        <!-- git pull -->
+        <div style="border:1.5px solid #e5e7eb;border-radius:12px;padding:18px 20px;margin-bottom:14px;background:white;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700;color:var(--primary);font-family:monospace;">git pull</span>
+            <span style="font-size:12px;color:var(--muted);">local command</span>
+          </div>
+          <p style="margin:0 0 6px;font-size:13px;line-height:1.7;color:var(--text);">A command you run in your terminal. It downloads the latest changes from GitHub and applies them to your local machine automatically in one step.</p>
+          <p style="margin:0;font-size:13px;color:#6b7280;">Think of it as: <em>"Go check GitHub and bring me whatever is new."</em></p>
+          <div style="background:#f8fafc;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:12px;color:var(--text);margin-top:10px;">git pull origin main</div>
+        </div>
+
+        <!-- git merge -->
+        <div style="border:1.5px solid #e5e7eb;border-radius:12px;padding:18px 20px;margin-bottom:14px;background:white;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700;color:var(--primary);font-family:monospace;">git merge</span>
+            <span style="font-size:12px;color:var(--muted);">local command</span>
+          </div>
+          <p style="margin:0 0 6px;font-size:13px;line-height:1.7;color:var(--text);">A command you run in your terminal. It combines two branches together on your local machine. It does not touch GitHub at all.</p>
+          <p style="margin:0 0 6px;font-size:13px;color:#6b7280;">Think of it as: <em>"Take the changes from this branch and fold them into the branch I am currently on."</em></p>
+          <div class="wf-note" style="margin-top:10px;">
+            <strong>git pull = git fetch + git merge</strong> combined. When you run <code>git pull</code>, it first downloads from GitHub (fetch) then merges those changes into your local branch automatically. That is why pull is the command you use most often.
+          </div>
+        </div>
+
+        <!-- Pull Request -->
+        <div style="border:1.5px solid #93c5fd;border-radius:12px;padding:18px 20px;margin-bottom:14px;background:#eff6ff;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="background:#eff6ff;border:1px solid #93c5fd;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700;color:#2563eb;">Pull Request (PR)</span>
+            <span style="font-size:12px;color:var(--muted);">GitHub concept</span>
+          </div>
+          <p style="margin:0 0 6px;font-size:13px;line-height:1.7;color:var(--text);">A PR is not a command. It is a request you make on GitHub asking someone (or yourself) to review and approve changes before they get merged into the main branch. It lives entirely on GitHub, not on your local machine.</p>
+          <p style="margin:0 0 10px;font-size:13px;color:#6b7280;">Think of it as: <em>"Hey, I made some changes on this branch. Can you review them and pull them into main when you are happy?"</em></p>
+          <p style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:6px;">There are two common scenarios:</p>
+          <ul style="margin:0 0 0 18px;font-size:13px;color:#1e40af;line-height:1.8;">
+            <li><strong>Branch to Main (same repo):</strong> you create a branch, push it, open a PR into main. This is what we do for security updates in Spark.</li>
+            <li><strong>Fork to Original (cross-account):</strong> you fork someone else's repo, make changes, and open a PR back to their repo. Common in open source.</li>
+          </ul>
+        </div>
+
+        <!-- Fork -->
+        <div style="border:1.5px solid #fcd34d;border-radius:12px;padding:18px 20px;margin-bottom:6px;background:#fffbeb;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="background:#fffbeb;border:1px solid #fcd34d;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700;color:#92400e;">Fork</span>
+            <span style="font-size:12px;color:var(--muted);">GitHub concept</span>
+          </div>
+          <p style="margin:0 0 6px;font-size:13px;line-height:1.7;color:var(--text);">A fork is a full copy of someone else's GitHub repo saved under your own GitHub account. You use it when you want to contribute to a project you do not own.</p>
+          <p style="margin:0 0 6px;font-size:13px;color:#92400e;">Think of it as: <em>"Make me a complete copy of this repo under my account so I can make changes without touching the original."</em></p>
+          <p style="font-size:13px;color:#92400e;margin:0;">We do not use forks in the Spark maintenance workflow. Everything stays within <code>ghub-drew/spark-social-app</code> using branches.</p>
+        </div>
+
+        <!-- Summary table -->
+        <table class="wf-table" style="margin-top:16px;">
+          <thead>
+            <tr>
+              <th>Term</th>
+              <th>Where it happens</th>
+              <th>What it does</th>
+              <th>Used in Spark?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>git pull</code></td>
+              <td>Your terminal (local)</td>
+              <td>Downloads and applies GitHub changes to your machine</td>
+              <td>Yes, after merging a PR</td>
+            </tr>
+            <tr>
+              <td><code>git merge</code></td>
+              <td>Your terminal (local)</td>
+              <td>Combines two local branches together</td>
+              <td>Indirectly (git pull uses it)</td>
+            </tr>
+            <tr>
+              <td>Pull Request</td>
+              <td>GitHub (remote)</td>
+              <td>Asks for review and approval before merging a branch</td>
+              <td>Yes, branch to main for updates</td>
+            </tr>
+            <tr>
+              <td>Fork</td>
+              <td>GitHub (remote)</td>
+              <td>Copies someone else's repo to your account</td>
+              <td>No</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- FAQ -->
     <div class="section-toggle" onclick="toggleSection('faq')">
       <div class="section-toggle-left">❓ Common Questions</div>
