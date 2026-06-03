@@ -11,14 +11,20 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Post notification comment
+      - name: Post notification comment with full scan details
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const issue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `👋 @ghub-drew — a new security scan issue has been opened. Please review the findings above and decide whether to approve the updates.`
+              body: `👋 @ghub-drew — a new security scan has completed. Full report below.\n\n---\n\n${issue.data.body}\n\n---\n\nTo apply updates, open Claude Code and say: "Apply the security updates from GitHub Issue #${context.issue.number}."`
             });
