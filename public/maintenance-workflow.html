@@ -284,17 +284,17 @@
       <div class="flow-row">
         <div class="flow-box yellow">⚠️ Updates found, you decide to act</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">💬 Tell Claude to apply</div>
+        <div class="flow-box blue">💬 Tell Claude to apply + open PR</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">🌿 New local branch + updates applied</div>
+        <div class="flow-box blue">🔗 Vercel builds preview URL</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">🧪 Test at localhost</div>
+        <div class="flow-box blue">👀 Review diff + test preview</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">📬 Push + PR opened</div>
+        <div class="flow-box blue">✅ Merge PR</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box blue">✅ Merge + git pull</div>
+        <div class="flow-box blue">⬇️ git pull origin main</div>
         <div class="flow-arrow">→</div>
-        <div class="flow-box green">🚀 Vercel deploys</div>
+        <div class="flow-box green">🚀 cebuspark.com live</div>
       </div>
     </div>
 
@@ -385,23 +385,23 @@
       <div class="wf-step" style="margin-top:16px;">
         <div class="wf-step-num">1</div>
         <div class="wf-step-content">
-          <h3>You receive a GitHub email and review the report</h3>
-          <p>GitHub sends an email to <strong>andrewsdlc@gmail.com</strong> the moment the issue is opened. Open the email, click the issue link, read what needs updating, and decide which packages you want to approve.</p>
-          <p>You can also check directly at: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:#2563eb;font-weight:600;">github.com/ghub-drew/spark-social-app/issues</a></p>
-          <p>You don't have to approve everything. You can skip low-priority items and only act on the critical ones.</p>
+          <h3>You receive the email and decide which updates to approve</h3>
+          <p>The email from <strong>github-actions[bot]</strong> contains the full scan report. Review it and decide which packages to update. You do not have to approve everything — skip low-priority items and focus on the critical ones first.</p>
+          <p>You can also check the issue directly at: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:#2563eb;font-weight:600;">github.com/ghub-drew/spark-social-app/issues</a></p>
         </div>
       </div>
 
       <div class="wf-step">
         <div class="wf-step-num">2</div>
         <div class="wf-step-content">
-          <h3>You open Claude Code and tell me to apply the updates</h3>
-          <p>Open Claude Code in your project folder and type something like this:</p>
+          <h3>Tell Claude to apply the updates and open a PR</h3>
+          <p>Open Claude Code in your project folder and type:</p>
           <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.7;font-family:monospace;margin:8px 0;">
-            "Apply the security updates from GitHub Issue #[number]. Update only the packages listed."
+            "Apply the security updates from GitHub Issue #[number]. Create a branch, apply the updates, push to GitHub and open a PR."
           </div>
-          <div class="wf-info">
-            💡 This is your approval gate. I cannot apply any updates unless you open a session and explicitly tell me to. Nothing runs in the background.
+          <p>I will create a new branch, apply the updates, push the branch to GitHub, and open a PR — all in one go.</p>
+          <div class="wf-info" style="margin-top:8px;">
+            💡 <strong>Direction is always local → GitHub, never the other way around.</strong> Your local machine sends the branch up. GitHub receives it. The PR is a GitHub-only thing comparing two branches. Your local machine never receives a PR — it only ever sends code up.
           </div>
         </div>
       </div>
@@ -409,64 +409,55 @@
       <div class="wf-step">
         <div class="wf-step-num">3</div>
         <div class="wf-step-content">
-          <h3>I create a new local branch and apply the updates</h3>
-          <p>I will create a separate branch on your local machine called something like <code>security/june-2026-updates</code>. The updates are applied there, not on your <code>main</code> branch. Your live site is completely untouched at this point.</p>
-          <p>I also run <code>npm audit</code> again after updating to confirm the vulnerabilities are actually resolved before you even start testing.</p>
+          <h3>Vercel automatically builds a preview URL</h3>
+          <p>The moment the branch is pushed, Vercel detects it and builds a live preview of the app with the updates applied. You will see it in two places:</p>
+          <ul>
+            <li>Your <strong>Vercel dashboard</strong> under Active Branches — click Preview</li>
+            <li>A comment posted by Vercel directly inside the GitHub PR</li>
+          </ul>
+          <p>The preview URL is temporary and only exists while the PR is open. It is not cebuspark.com — it is a separate test URL running the updated packages in the same cloud environment as production.</p>
+          <div class="wf-note" style="margin-top:8px;">
+            The PR is not live yet. Nothing touches cebuspark.com until you click Merge.
+          </div>
         </div>
       </div>
 
       <div class="wf-step">
         <div class="wf-step-num">4</div>
         <div class="wf-step-content">
-          <h3>You test the app locally at localhost:3000</h3>
-          <p>Start the local server and click through the app. Log in, browse, send a message, upload a photo. Make sure everything still works the same as before. Take as long as you need. Your live site is still running the old safe version while you do this.</p>
-          <div class="wf-warning">
-            ⚠️ Your local server shares the same Supabase database as the live site. So any test data you write locally will appear on the real app. This is fine for package updates since you are only changing code, not the database.
-          </div>
+          <h3>Review the PR diff and test the preview URL</h3>
+          <p>Open the PR on GitHub at <code>github.com/ghub-drew/spark-social-app/pulls</code>. You will see:</p>
+          <ul>
+            <li><strong>The diff</strong> — exactly which package versions changed in package.json</li>
+            <li><strong>The Vercel preview link</strong> — posted as a comment in the PR</li>
+          </ul>
+          <p>Click the preview URL and test the app. Log in, browse, send a message. If everything works the same as before, you are ready to merge.</p>
         </div>
       </div>
 
       <div class="wf-step">
         <div class="wf-step-num">5</div>
         <div class="wf-step-content">
-          <h3>If happy, tell me to push and open a PR</h3>
-          <p>When everything looks good locally, tell me:</p>
-          <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.7;font-family:monospace;margin:8px 0;">
-            "Looks good, push it and open a PR."
-          </div>
-          <p>I will push your local branch up to GitHub, then open a pull request entirely on GitHub's side — from <code>security/june-2026-updates</code> into <code>main</code>.</p>
-          <div class="wf-info" style="margin-top:8px;">
-            💡 <strong>Direction is always local → GitHub, never the other way around.</strong> Your local machine sends the branch up. GitHub receives it. The PR is then a GitHub-only thing comparing two branches that now both exist on GitHub. Your local machine never receives a PR — it only ever sends code up.
-          </div>
+          <h3>Merge the PR — Vercel deploys automatically</h3>
+          <p>Click <strong>Merge pull request</strong> on GitHub. That is all. There is no separate push step.</p>
+          <p>Merging into <code>main</code> is what triggers Vercel to deploy. Within 1-2 minutes <strong>cebuspark.com</strong> is live on the updated packages. The preview URL disappears once merged.</p>
         </div>
       </div>
 
       <div class="wf-step">
         <div class="wf-step-num">6</div>
         <div class="wf-step-content">
-          <h3>You review and merge the PR on GitHub</h3>
-          <p>Open the PR link on GitHub, take a final look at the changes, then click <strong>Merge pull request</strong>. This is your last checkpoint before anything touches the live site.</p>
-        </div>
-      </div>
-
-      <div class="wf-step">
-        <div class="wf-step-num">7</div>
-        <div class="wf-step-content">
-          <h3>Pull the merged changes to your local machine</h3>
-          <p>After merging on GitHub, your local <code>main</code> is still on the old version. Run this to bring it back in sync:</p>
+          <h3>Run git pull to sync your local machine</h3>
+          <p>Your local <code>main</code> is still on the old version. Run this to bring it in sync:</p>
           <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;font-size:13px;font-family:monospace;margin:8px 0;">
             git pull origin main
           </div>
-          <p>Without this step, your local machine thinks it is still on the pre-update version even though GitHub and Vercel are already running the new one. Always pull after merging.</p>
+          <p>This is the only step that happens on your local machine after merging. Everything else (deploy, preview, live site) is handled by GitHub and Vercel.</p>
         </div>
       </div>
 
-      <div class="wf-step">
-        <div class="wf-step-num">8</div>
-        <div class="wf-step-content">
-          <h3>Vercel auto-deploys the updated version</h3>
-          <p>The moment you merge, Vercel detects the change to <code>main</code> and deploys automatically. Within 1-2 minutes your live site at <strong>cebuspark.com</strong> is running the new, updated packages.</p>
-        </div>
+      <div class="wf-note" style="margin-top:8px;margin-bottom:8px;">
+        📌 <strong>When is localhost useful?</strong> For security package updates, the Vercel preview is sufficient. Localhost testing is more valuable when making major code changes (new features, bug fixes) where you want to iterate quickly without waiting for Vercel to build each time, or when you need to debug something with live console logs.
       </div>
     </div>
 
