@@ -320,10 +320,10 @@
         <div class="wf-step-num">2</div>
         <div class="wf-step-content">
           <h3>It checks your packages for security issues</h3>
-          <p>It runs two checks against your app's dependencies (the external code libraries your app uses):</p>
+          <p>Because this is a remote cloud routine with no terminal access, it checks your packages using web APIs instead of running npm commands directly. It does two things:</p>
           <ul>
-            <li><strong>Security vulnerabilities:</strong> known weaknesses that hackers could exploit</li>
-            <li><strong>Outdated versions:</strong> packages that have newer, safer releases available</li>
+            <li><strong>Outdated versions:</strong> reads your <code>package.json</code> from GitHub, then checks the npm registry API for the latest version of each package</li>
+            <li><strong>Security vulnerabilities:</strong> checks the npm security advisory database for known CVEs affecting your installed versions</li>
           </ul>
           <p>It focuses on your most critical packages first, the ones that handle passwords, logins, and file uploads.</p>
         </div>
@@ -616,20 +616,26 @@ You have access to this GitHub repo via your repository context. Use the GitHub 
 
 Follow these steps in order:
 
-1. Run: npm outdated
-   This checks if any packages have newer versions available.
+1. Read the package.json file from:
+   https://raw.githubusercontent.com/ghub-drew/spark-social-app/main/package.json
+   Extract all dependencies and their current versions.
 
-2. Run: npm audit
-   This checks for known security vulnerabilities.
+2. For each dependency, check the latest version by fetching:
+   https://registry.npmjs.org/[package-name]/latest
+   Compare the latest version with the current version in package.json.
 
-3. Always create a GitHub Issue in the repo ghub-drew/spark-social-app regardless of what was found, with:
+3. Check for known vulnerabilities by fetching:
+   https://registry.npmjs.org/-/npm/v1/security/advisories
+   or by searching for recent CVEs for each package.
+
+4. Create a GitHub Issue in ghub-drew/spark-social-app regardless of what was found, with:
    - Title: "Security Scan [today's date] - All Clear" if no issues found
    - Title: "Security Scan [today's date] - Updates Found" if issues were found
    - Body: a summary of what was checked and what was found (or confirmed clean)
    - If updates were found, list each package with current version, latest version, and severity (HIGH / MEDIUM / LOW)
    - Close the body with: "Waiting for owner approval. No changes have been made."
 
-4. Do not install, update, or modify any files under any circumstances.</div>
+5. Do not install, update, or modify any files under any circumstances.</div>
             <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Trigger:</p>
             <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:12px 16px;font-size:13px;font-family:monospace;margin-bottom:6px;">
               Daily at 9:00 AM
@@ -656,8 +662,9 @@ Follow these steps in order:
                   You are a daily security scanner for the Spark social app.<br><br>
                   GitHub repo: <span style="color:#60a5fa;">https://github.com/ghub-drew/spark-social-app</span><br><br>
                   Follow these steps in order:<br>
-                  1. Run: <span style="color:#86efac;">npm outdated</span><br>
-                  2. Run: <span style="color:#86efac;">npm audit</span><br>
+                  1. Read package.json from GitHub<br>
+                  2. Check each package via <span style="color:#60a5fa;">registry.npmjs.org</span> API<br>
+                  3. Check security advisories database<br>
                   3. Always open a GitHub Issue regardless of what was found...<br>
                   4. Do not install, update, or modify any files under any circumstances.
                 </div>
