@@ -357,7 +357,7 @@
             3. Always create a GitHub Issue in the repo ghub-drew/spark-social-app regardless of what was found...<br>
             4. Do not install, update, or modify any files under any circumstances.
           </div>
-          <p>Andrew did not write a single line of that. His job was to know what he wanted and to ask the right questions. The AI handled the technical translation. That is the whole point of this workflow — Andrew thinks about the outcome, AI figures out how to get there.</p>
+          <p>Andrew did not write a single line of that. His job was to know what he wanted and to ask the right questions. The AI handled the technical translation. That is the whole point of this workflow — Andrew thinks about the outcome. AI figures out how to get there.</p>
           <div class="tl-outcome blue">🤖 Prompt written by AI, process designed by Andrew</div>
         </div>
       </div>
@@ -396,7 +396,7 @@
           <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
             <li><strong>Remote routines have no npm:</strong> the original instructions used <code>npm outdated</code> and <code>npm audit</code>. Remote cloud agents have no terminal, so these commands silently failed. The fix was switching to web API calls against the npm registry instead.</li>
             <li><strong>GitHub does not email you about your own actions:</strong> all test issues were created via the <code>gh</code> CLI authenticated as <code>ghub-drew</code>. GitHub never emails the account that performed the action. No amount of Watch settings would fix this.</li>
-            <li><strong>The mention fix:</strong> adding <code>cc @ghub-drew</code> to the issue body triggers an email via the @mention system, which works even when the issue is on your own repo — as long as it is created by a different account (Claude's integration, not ghub-drew).</li>
+            <li><strong>The mention fix:</strong> adding <code>cc @ghub-drew</code> to the issue body triggers an email via the @mention system, which works even when the issue is on your own repo, as long as it is created by a different account (Claude's integration, not ghub-drew).</li>
           </ul>
           <p>The AI also independently simulated the full scan — reading package.json from GitHub, checking the npm registry API for each package, and creating a real GitHub Issue — to confirm each step worked before blaming the routine.</p>
           <div class="tl-outcome amber">🔍 Three lessons learned, all three fixed</div>
@@ -466,7 +466,7 @@
             <span class="tl-step">Step 16</span>
             <span class="tl-date">June 3, 2026</span>
           </div>
-          <h3>Full system confirmed working — Issue #6, bot comment, email</h3>
+          <h3>Full system confirmed working. Issue #6, bot comment, email arrived.</h3>
           <p>On the final test run, everything worked end to end for the first time:</p>
           <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
             <li>Routine ran and created <strong>Issue #6</strong> with a properly formatted security report including a full dependency table and CVE details</li>
@@ -488,8 +488,32 @@
           </div>
           <h3>Email improved to include full scan report</h3>
           <p>The first working email only said "a new security scan issue has been opened." The actual findings were only visible by clicking through to GitHub. This was improved immediately.</p>
-          <p>The GitHub Actions workflow was updated so the bot comment now includes the <strong>full issue body</strong> — the complete dependency table, all CVE details, and the exact Claude Code command to type when approving updates. The email now delivers everything you need to make a decision without opening GitHub.</p>
+          <p>The GitHub Actions workflow was updated so the bot comment now includes the <strong>full issue body</strong>, the complete dependency table, all CVE details, and the exact Claude Code command to type when approving updates. The email now delivers everything you need to make a decision without opening GitHub.</p>
           <div class="tl-outcome blue">📧 Full scan report now delivered directly to email</div>
+        </div>
+      </div>
+
+      <!-- Step 18 -->
+      <div class="tl-entry" style="animation-delay:0.9s">
+        <div class="tl-dot">🎊</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 18</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>It finally worked. All the way through.</h3>
+          <p>Issue #7 was created by the routine. The GitHub Actions bot posted a comment with the full report. The email landed in Gmail with everything: HIGH SEVERITY section, 7 multer CVEs with clickable links, OUTDATED section, recommended actions. No clicking through to GitHub required.</p>
+          <p>From start to finish, building this system took one full day of back-and-forth conversation, more than 10 test runs, 4 core fixes, and over 30 commits to the repo. Every problem was caught, fixed, and documented in real time.</p>
+          <div style="background:#f0fdf4;border-radius:10px;padding:16px 18px;margin:12px 0;font-size:13px;line-height:1.8;color:#166534;">
+            <strong>What the daily routine now does automatically:</strong><br>
+            1. Reads package.json from GitHub<br>
+            2. Checks each package against the npm registry for updates<br>
+            3. Checks the GitHub Advisory Database for known CVEs<br>
+            4. Creates a GitHub Issue with a full formatted security report<br>
+            5. GitHub Actions bot posts the report as a comment mentioning @ghub-drew<br>
+            6. Gmail receives the full report with CVE details and action items
+          </div>
+          <div class="tl-outcome">🎊 Maintenance system live and fully working as of June 3, 2026</div>
         </div>
       </div>
 
