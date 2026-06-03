@@ -325,13 +325,60 @@
           <p>After all the planning, refining, and documenting, the maintenance workflow is fully designed and ready to activate. The copy-paste instructions for the Stage 1 routine live inside <code>maintenance-workflow.html</code> under the Setup section.</p>
           <p>The final system in plain English:</p>
           <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
-            <li>Every day at 8 AM, a remote Claude routine scans your packages for vulnerabilities</li>
-            <li>If it finds something, it opens a GitHub Issue and GitHub emails you</li>
+            <li>Every day at 9 AM, a remote Claude routine scans your packages for vulnerabilities</li>
+            <li>It always opens a GitHub Issue, even if everything is clean, so you get email confirmation the scan ran</li>
             <li>You review the issue, then open Claude Code and say what to update</li>
             <li>Updates go on a new local branch, you test at localhost, then approve the PR</li>
             <li>Vercel deploys automatically once the PR is merged</li>
           </ul>
           <div class="tl-outcome">🛡️ Maintenance workflow fully documented and ready</div>
+        </div>
+      </div>
+
+      <!-- Step 10 -->
+      <div class="tl-entry" style="animation-delay:0.5s">
+        <div class="tl-dot blue">🤖</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step blue">Step 10</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Andrew did not write the routine prompt. AI did.</h3>
+          <p>One of the most important things about this whole process: Andrew never had to write the routine instructions himself. He described what he wanted in plain conversational language, and AI translated that into the exact technical prompt the routine needed.</p>
+          <p>The final instructions pasted into the Routines panel looked like this:</p>
+          <div style="background:#1a1a1a;border-radius:10px;padding:14px 16px;font-size:12px;line-height:1.8;font-family:monospace;color:#d1d5db;margin:10px 0;">
+            You are a daily security scanner for the Spark social app.<br><br>
+            GitHub repo: <span style="color:#60a5fa;">https://github.com/ghub-drew/spark-social-app</span><br><br>
+            You have access to this GitHub repo via your repository context. Use the GitHub tools available to you to create issues directly in this repo.<br><br>
+            Follow these steps in order:<br>
+            1. Run: <span style="color:#86efac;">npm outdated</span><br>
+            2. Run: <span style="color:#86efac;">npm audit</span><br>
+            3. Always create a GitHub Issue in the repo ghub-drew/spark-social-app regardless of what was found...<br>
+            4. Do not install, update, or modify any files under any circumstances.
+          </div>
+          <p>Andrew did not write a single line of that. His job was to know what he wanted and to ask the right questions. The AI handled the technical translation. That is the whole point of this workflow — Andrew thinks about the outcome, AI figures out how to get there.</p>
+          <div class="tl-outcome blue">🤖 Prompt written by AI, process designed by Andrew</div>
+        </div>
+      </div>
+
+      <!-- Step 11 -->
+      <div class="tl-entry" style="animation-delay:0.55s">
+        <div class="tl-dot">✅</div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-step">Step 11</span>
+            <span class="tl-date">June 3, 2026</span>
+          </div>
+          <h3>Routine activated and first manual test run completed</h3>
+          <p>The routine was created in Claude Code's Routines panel set to Remote, connected to the GitHub repo, and scheduled to run daily at 9:00 AM GMT+8. A manual test run was triggered immediately to verify the workflow end to end.</p>
+          <ul style="margin:8px 0 0 16px;font-size:13px;color:#6b7280;line-height:1.9;">
+            <li>Routine status: <strong style="color:#22c55e;">Active</strong></li>
+            <li>Repo connected: ghub-drew/spark-social-app</li>
+            <li>Schedule: daily at 9:00 AM GMT+8</li>
+            <li>First run: manual, today at 8:37 AM</li>
+            <li>GitHub Issues to watch: <a href="https://github.com/ghub-drew/spark-social-app/issues" target="_blank" style="color:var(--primary);">github.com/ghub-drew/spark-social-app/issues</a></li>
+          </ul>
+          <div class="tl-outcome">✅ Live and running</div>
         </div>
       </div>
 
