@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>General Maintenance Workflow Idea</title>
+  <link rel="icon" type="image/svg+xml" href="/spark-icon.svg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .g-page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .g-page h1 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .g-page p { font-size: 14px; line-height: 1.75; color: var(--text); margin-bottom: 10px; }
+    .g-page .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 36px; }
+
+    /* Intro box */
+    .intro-box {
+      background: white;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin: 24px 0 36px;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    /* Cycle diagram */
+    .cycle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 28px 20px;
+      background: #f8fafc;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 14px;
+      margin: 20px 0 36px;
+    }
+    .cycle-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .cycle-box {
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      min-width: 90px;
+    }
+    .cycle-box.green  { background: #f0fdf4; border: 1.5px solid #86efac; color: var(--primary); }
+    .cycle-box.blue   { background: #eff6ff; border: 1.5px solid #93c5fd; color: #2563eb; }
+    .cycle-box.amber  { background: #fffbeb; border: 1.5px solid #fcd34d; color: #92400e; }
+    .cycle-note { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cycle-arrow { font-size: 18px; color: #d1d5db; font-weight: 700; margin-top: -8px; }
+
+    /* Phase cards */
+    .phase {
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1.5px solid #e5e7eb;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .phase-num {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .phase-num.green  { background: #f0fdf4; border: 1.5px solid #86efac; }
+    .phase-num.blue   { background: #eff6ff; border: 1.5px solid #93c5fd; }
+    .phase-num.amber  { background: #fffbeb; border: 1.5px solid #fcd34d; }
+    .phase-title { font-size: 17px; font-weight: 800; color: var(--text); }
+    .phase-label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 2px 8px; border-radius: 20px; margin-left: auto;
+    }
+    .phase-label.green  { background: #f0fdf4; color: var(--primary); border: 1px solid #86efac; }
+    .phase-label.blue   { background: #eff6ff; color: #2563eb;        border: 1px solid #93c5fd; }
+    .phase-label.amber  { background: #fffbeb; color: #92400e;        border: 1px solid #fcd34d; }
+    .phase p { font-size: 13px; line-height: 1.75; color: #6b7280; margin-bottom: 8px; }
+    .phase ul { margin: 6px 0 8px 18px; }
+    .phase li { font-size: 13px; line-height: 1.7; color: #6b7280; margin-bottom: 4px; }
+
+    /* Note boxes */
+    .note  { background: #f0fdf4; border-left: 3px solid var(--primary); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; line-height: 1.6; margin: 10px 0; color: #166534; }
+    .info  { background: #eff6ff; border-left: 3px solid #2563eb; padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; line-height: 1.6; margin: 10px 0; color: #1e40af; }
+    .warn  { background: #fffbeb; border-left: 3px solid #d97706; padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; line-height: 1.6; margin: 10px 0; color: #92400e; }
+
+    /* Section heading */
+    .g-h2 { font-size: 18px; font-weight: 800; color: var(--primary); margin: 40px 0 14px; display: flex; align-items: center; gap: 8px; }
+
+    /* Tech stack table */
+    .g-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0 16px; }
+    .g-table th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid #e5e7eb; }
+    .g-table td { padding: 9px 12px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+
+    /* Shareable callout */
+    .share-box {
+      background: linear-gradient(135deg, #f0fdf4, #eff6ff);
+      border: 1.5px solid #86efac;
+      border-radius: 14px;
+      padding: 24px;
+      margin: 32px 0;
+      text-align: center;
+    }
+    .share-box h3 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .share-box p { font-size: 13px; color: var(--muted); margin: 0; }
+
+    .g-footer { text-align: center; padding: 20px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div style="background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;font-weight:800;color:var(--primary);">✦ Spark</span>
+      <span style="background:#f0fdf4;color:var(--primary);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid #86efac;">General Idea</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button onclick="window.open('maintenance.html','_self')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">← Maintenance</button>
+      <button onclick="window.open('documentation.html#tech-stack','_blank')" style="background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;color:#6b7280;">📖 Tech Stack</button>
+    </div>
+  </div>
+
+  <div class="g-page">
+    <h1>💡 General Maintenance Workflow Idea</h1>
+    <p class="subtitle">A shareable, step-by-step approach anyone can follow to keep their app secure and well maintained.</p>
+    <p style="font-size:13px;color:var(--muted);margin-top:-28px;margin-bottom:36px;">by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a></p>
+
+    <!-- Intro -->
+    <div class="intro-box">
+      This is not just a technical setup guide. It is a <strong>thinking process</strong>. Before touching any tool or writing any instruction, you need to understand what you are protecting and why. The goal is simple: see everything working from your own eyes before automating it. If you cannot explain it, you are not ready to automate it yet.
+    </div>
+
+    <!-- The cycle -->
+    <div class="g-h2">🔄 The Process</div>
+    <p>Every good maintenance setup follows this cycle. Notice that <strong>testing appears twice</strong> — once before implementing, and once after. That is intentional.</p>
+
+    <div class="cycle">
+      <div class="cycle-step">
+        <div class="cycle-box green">🧠 Think</div>
+        <div class="cycle-note">Understand first</div>
+      </div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-box blue">📄 Document</div>
+        <div class="cycle-note">Write it out</div>
+      </div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-box amber">🧪 Test</div>
+        <div class="cycle-note">See it yourself</div>
+      </div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-box blue">📄 Document</div>
+        <div class="cycle-note">Update from test</div>
+      </div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-box green">⚙️ Implement</div>
+        <div class="cycle-note">Automate it</div>
+      </div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-box amber">🧪 Test</div>
+        <div class="cycle-note">Confirm it works</div>
+      </div>
+    </div>
+
+    <div class="warn">
+      ⚠️ Most people skip straight to "Implement." That is how you end up with automation that runs but does nothing, or worse, does the wrong thing. Always document and test first.
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="g-h2">📋 The Six Phases</div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num green">🧠</div>
+        <div class="phase-title">Phase 1: Think</div>
+        <span class="phase-label green">Start here</span>
+      </div>
+      <p>Before opening any tool, sit down and answer these questions:</p>
+      <ul>
+        <li>What does my app actually do and who uses it?</li>
+        <li>What is my tech stack — what libraries and services is it built on?</li>
+        <li>What are the most sensitive parts of my app? (Passwords, logins, file uploads, payments?)</li>
+        <li>What could go wrong if one of my packages had a known vulnerability?</li>
+        <li>How often do I want to check? Daily, weekly?</li>
+      </ul>
+      <p>For Spark, the tech stack includes Node.js, Express, JWT for auth, bcryptjs for passwords, Multer for file uploads, Socket.io for chat, and Supabase for the database. Each of these is a package written by someone else. Any of them could have a vulnerability discovered tomorrow.</p>
+      <div class="note">
+        You can find your tech stack listed in your app's <code>package.json</code> file or in your documentation. For Spark, it is documented in the <a href="documentation.html#tech-stack" target="_blank" style="color:var(--primary);font-weight:600;">Tech Stack section of the docs</a>.
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num blue">📄</div>
+        <div class="phase-title">Phase 2: Document (first time)</div>
+        <span class="phase-label blue">Write before you build</span>
+      </div>
+      <p>Write out what you want to happen in plain English. Not code. Not commands. Just words. This forces you to actually understand the process before trying to automate it.</p>
+      <ul>
+        <li>What should the maintenance routine check?</li>
+        <li>What should happen when it finds something?</li>
+        <li>How will you be notified?</li>
+        <li>What is your approval process before anything gets updated?</li>
+        <li>What is the update process — local test first, then PR, then deploy?</li>
+      </ul>
+      <p>For Spark, this became the <a href="maintenance-workflow.html" target="_blank" style="color:var(--primary);font-weight:600;">Maintenance Workflow page</a> — written entirely in plain English before a single routine was created. That page became the reference guide for everything that followed.</p>
+      <div class="info">
+        💡 Creating a documentation page first is not extra work. It is the work. If you cannot explain the process clearly enough to write it down, you do not understand it well enough to automate it yet.
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num amber">🧪</div>
+        <div class="phase-title">Phase 3: Test (before implementing)</div>
+        <span class="phase-label amber">See it yourself first</span>
+      </div>
+      <p>This is the most important phase and the one most people skip. Before setting up any automation, manually go through the process yourself at least once so you can see exactly what happens.</p>
+      <ul>
+        <li>Manually check your packages for updates — what does the output look like?</li>
+        <li>Manually create a test GitHub Issue — does the notification email arrive?</li>
+        <li>Apply a test update on a local branch — does the app still work?</li>
+        <li>Open a PR — what does the review process feel like?</li>
+      </ul>
+      <p>For Spark, this meant running the routine manually before relying on the daily schedule. The first test revealed a critical discovery: remote cloud routines do not have npm installed, so the original instructions using <code>npm outdated</code> and <code>npm audit</code> silently failed. The manual test caught this before it became a habit of false confidence.</p>
+      <div class="warn">
+        ⚠️ If you skip this phase, you will set up automation that appears to work (green tick, no errors) but actually does nothing. You will only find out weeks later when you realize no emails ever arrived.
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num blue">📄</div>
+        <div class="phase-title">Phase 4: Document (second time)</div>
+        <span class="phase-label blue">Update from reality</span>
+      </div>
+      <p>After testing, you will always discover something that was wrong or missing in your first draft. Go back and update your documentation to reflect what you actually learned.</p>
+      <ul>
+        <li>Did the process work exactly as you described in Phase 2? If not, update it.</li>
+        <li>Did you discover any limitations? (Like: remote routines cannot run npm commands)</li>
+        <li>Did the notification email actually arrive? Was it at the right address?</li>
+        <li>Were there any steps that were unclear or needed more detail?</li>
+      </ul>
+      <p>For Spark, this phase meant updating the workflow page multiple times: correcting the routine instructions to use web APIs instead of npm commands, fixing the email notification explanation, clarifying the branching process, and adding the direct GitHub issues link.</p>
+      <div class="note">
+        Good documentation is never finished on the first try. The second version, written after real testing, is always better than the first.
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num green">⚙️</div>
+        <div class="phase-title">Phase 5: Implement</div>
+        <span class="phase-label green">Now automate it</span>
+      </div>
+      <p>Only now, after you have thought it through, documented it, tested it, and updated your docs, are you ready to set up the actual automation. At this point you are not guessing. You know exactly what you are building and why.</p>
+      <ul>
+        <li>Set up the routine with the tested, corrected instructions</li>
+        <li>Connect the right repository</li>
+        <li>Set the schedule (daily at 9:00 AM)</li>
+        <li>Choose Remote so it runs even when your machine is off</li>
+      </ul>
+      <p>Because you tested first, the instructions you paste into the routine are already proven to work. You are not experimenting with live automation — you are just scheduling something you already confirmed works.</p>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num amber">🧪</div>
+        <div class="phase-title">Phase 6: Test (after implementing)</div>
+        <span class="phase-label amber">Confirm the automation works</span>
+      </div>
+      <p>After the routine is live, trigger it manually one more time to confirm the automated version behaves exactly the same as when you ran it manually in Phase 3.</p>
+      <ul>
+        <li>Does the GitHub Issue get created with the right title and body?</li>
+        <li>Does the email arrive at the right address?</li>
+        <li>Does the scheduled run fire at the right time?</li>
+        <li>Is the Runs log showing green ticks?</li>
+      </ul>
+      <p>Once you see the automated run produce the same result as your manual test, you can trust the system. From this point forward, it runs every day on its own and you only need to act when an email lands in your inbox.</p>
+      <div class="note">
+        This final test is your sign-off. It is the moment you go from "I think this works" to "I have seen it work with my own eyes."
+      </div>
+    </div>
+
+    <!-- Why testing twice -->
+    <div class="g-h2">🧪 Why Testing Appears Twice</div>
+    <p>Most workflows show testing only at the end. This one puts it in the middle too, and that is the key difference.</p>
+
+    <table class="g-table">
+      <thead>
+        <tr>
+          <th>Phase 3 test (before implementing)</th>
+          <th>Phase 6 test (after implementing)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>You are the one doing the steps manually</td>
+          <td>The automation is doing the steps for you</td>
+        </tr>
+        <tr>
+          <td>Catches problems before they get baked into automation</td>
+          <td>Confirms the automation does what you manually confirmed works</td>
+        </tr>
+        <tr>
+          <td>You see the real output with your own eyes</td>
+          <td>You verify the automated output matches what you saw manually</td>
+        </tr>
+        <tr>
+          <td>Builds your own understanding of the process</td>
+          <td>Gives you confidence to trust the system going forward</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Shareable note -->
+    <div class="share-box">
+      <h3>This applies to any app, not just Spark</h3>
+      <p>The tech stack will be different. The packages will be different. The tools might be different. But the process — Think, Document, Test, Document, Implement, Test — stays the same regardless of what you are building or maintaining. Share this page with anyone setting up their own maintenance workflow.</p>
+    </div>
+
+    <div class="g-footer">
+      Spark - Social App | General Maintenance Workflow Idea<br>
+      by <strong>Andrew D</strong> · Web Enthusiast · <a href="https://www.andrewdaugdaug.com" target="_blank" style="color:var(--primary);">www.andrewdaugdaug.com</a>
+    </div>
+  </div>
+
+</body>
+</html>
