@@ -1,0 +1,33 @@
+# Supabase Keep-Alive
+#
+# Prevents the free-tier Supabase project from being auto-paused for
+# inactivity by making a small database query twice a week.
+#
+# Secrets used (already configured in repo settings):
+#   SUPABASE_URL       — project URL
+#   SUPABASE_ANON_KEY  — anon/public key (RLS allows SELECT on messages)
+
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Mondays and Thursdays at 06:00 UTC — well within the 7-day limit
+    - cron: '0 6 * * 1,4'
+  workflow_dispatch:   # allows manual runs from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query Supabase to keep project active
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          echo "Pinging Supabase project..."
+          curl --silent --fail --show-error \
+            "$SUPABASE_URL/rest/v1/messages?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -o /dev/null
+          echo "Done — project activity registered."
