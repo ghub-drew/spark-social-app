@@ -58,7 +58,7 @@ const supabase = require('../database');
 const logger = require('../logger');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'social-app-secret-key-change-in-prod';
-const ADMIN_PASSWORD = 'nissi';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 app.use(express.json());
 
@@ -87,6 +87,10 @@ function adminAuth(req, res, next) {
 // ── Auth ────────────────────────────────────────────────────────────────────────
 
 app.post('/api/admin/login', (req, res) => {
+  if (!ADMIN_PASSWORD) {
+    logger.error('ADMIN_PASSWORD env var is not set, admin login disabled');
+    return res.status(503).json({ error: 'Admin login is not configured' });
+  }
   if (req.body.password !== ADMIN_PASSWORD) {
     logger.warn('Failed admin login attempt');
     return res.status(401).json({ error: 'Wrong password' });

@@ -1,3 +1,6 @@
+// Load .env for local development (Vercel injects env vars itself)
+try { process.loadEnvFile('.env'); } catch {}
+
 const express = require('express');
 const http = require('http');
 let Server;
@@ -396,11 +399,15 @@ app.post('/api/chat/upload', authMiddleware, uploadChat.single('file'), async (r
 });
 
 // ── Admin ──────────────────────────────────────────────────────────────────
-const ADMIN_PASSWORD = 'nissi';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 app.post('/api/admin/login', (req, res) => {
+  if (!ADMIN_PASSWORD) {
+    logger.error('ADMIN_PASSWORD env var is not set, admin login disabled');
+    return res.status(503).json({ error: 'Admin login is not configured' });
+  }
   if (req.body.password !== ADMIN_PASSWORD) {
-    logger.warn('Failed admin login attempt', `provided: "${req.body.password}"`);
+    logger.warn('Failed admin login attempt');
     return res.status(401).json({ error: 'Wrong password' });
   }
   logger.info('Admin logged in');
